@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+import time
+import gpstime
+import argparse
+
+from chirpotle.tools.beaconclock import next_beacon_ts, calc_ping_slots, BEACON_PERIOD
+
+parser = argparse.ArgumentParser(description="""
+Displays current beacon timing.
+
+This tool shows the time of the next beacon and a progress bar for the current
+beacon period.
+
+Optionally, the --devaddr and --pingnb arguments can be used to display the
+downlink ping windows for a certain end device on top of the progress bar.
+""")
+parser.add_argument('--devaddr', dest='dev_addr',
+    help='Device Address (MSB, hex), if ping slots should be displayed')
+parser.add_argument('--pingnb', dest='ping_nb', default=4, type=int,
+    help='Number of ping slots configured for the device (power of 2)')
+args = parser.parse_args()
+
+dev_addr = None
+if args.dev_addr is not None:
+    dev_addr = [int(args.dev_addr[n:n+2], 16) for n in range(0,8,2)]
+
+if __name__ == '__main__':
+    try:
+        last_remain = -1
+        while True:
+            t_next_gps = next_beacon_ts(gps=True)
+            t_next = int(gpstime.gps2unix(t_next_gps))
+            t_now = int(time.time())
+            t_last_gps = t_next_gps - BEACON_PERIOD
+            sec_remaining = max(0, t_next - t_now)
+            if last_remain < sec_remaining:
+                print("\nNext Beacon: %s" % time.ctime(t_next), end='')
+                print("   Current Beacon ID: %d" % t_last_gps, end='')
+                if dev_addr is not None:
+                    print("   [↓]: DevAddr=%s PingNb=%d" % (args.dev_addr, args.ping_nb))
+                    slots = list(int(s - t_last_gps) for s in calc_ping_slots(
+                        dev_addr, args.ping_nb, beacon_ts=t_last_gps, gps=True))
+                    print("".join("↓" if n in slots else " " for n in range(128)))
+                else:
+                    print()
+            print((BEACON_PERIOD-1-sec_remaining) * "█", "▒", sec_remaining * "░",
+                sep="", end="\r")
+            time.sleep(-time.time()%1)
+            last_remain = sec_remaining
+    except KeyboardInterrupt:
+        pass

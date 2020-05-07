@@ -1,0 +1,290 @@
+# This file contains parameters for some preconfigured boards, so that the
+# wiring between the modem and the microcontroller is already set up by just
+# calling:
+#   PRECONF=xyz make all flash
+#
+
+# ------------------------------------------------------------------------------
+# native-raspi: Raspberry Pi Native, with Dragino LoRa GPS Hat
+# ------------------------------------------------------------------------------
+# Specs: http://wiki.dragino.com/index.php?title=Lora/GPS_HAT
+# Notes: - The following connections are created by attaching the HAT to the Pi:
+#           -  1 (3v3)           -  2 (5v)
+#           -  6 (GND)           -  7 (GPIO7/DIO0)
+#           - 11 (GPIO0/Reset)   - 19 (MISO)
+#           - 21 (MOSI)          - 23 (SCK)
+#           - 24 (NSS)*
+#          * Note that this is not one of the hardware chip-enable lines of the
+#            Pi.
+#        - If the wiring from above is used, launch the application with the
+#          following parameters:
+#            --spi=0:0:/dev/spidev0.0 --gpio=/dev/gpiochip0 --uart-tty=<tty>
+ifeq ($(PRECONF),native-raspi)
+	TARGET_ARCH  = arm-linux-gnueabihf
+	LORA_SPI_BUS ?= "SPI_DEV(0)"
+	LORA_SPI_CS  ?= "GPIO_PIN(0, 25)"
+	LORA_GPIO_RESET ?= "GPIO_PIN(0, 17)"
+	# Interrupts aren't fully supported by now, so we don't assign GPIO7.
+
+	INTERFACE    ?= uart
+
+	# On the native module, the shell isn't blocking the UART anyway, so we can
+	# enable the shell
+	# USEMODULE += shell
+	# USEMODULE += shell_commands
+	# USEMODULE += ps
+endif
+
+# ------------------------------------------------------------------------------
+# lora-feather-m0: Adafruit Feather M0 with LoRa Modem
+# ------------------------------------------------------------------------------
+# Specs: https://www.adafruit.com/product/3178
+# Notes: - By default, only the DIO0 pin is wired. Using jumper wires, the
+#          following connections should be made: IO3 -> GPIO 5
+#        - RIOT does by now not support UART using the Micro USB jack on the
+#          feather. This has two implications:
+#          - For flashing you need to double-press the reset button, so that the
+#            LED starts making pulses
+#          - To talk to the daemon, you need to attach an FTDI or some other
+#            3.3 V serial adapter to RX, TX and GND of the feather while
+#            powering it from battery or the integrated Micro USB jack
+#            Alternatively, if you have a FTDI with 3.3V logic level that also
+#            breaks out the 5V rail from the USB connector, you can also use
+#            that to power the Feather via the pin labled USB. However, read the
+#            warnings about USB backpowering on Adafruit's product page first:
+#            https://learn.adafruit.com/adafruit-feather-m0-radio-with-lora-radio-module/power-management
+ifeq ($(PRECONF),lora-feather-m0)
+	BOARD           = feather-m0
+
+	# Only one SPI bus
+	LORA_SPI_BUS    ?= "SPI_DEV(0)"
+
+	# These connections are routed directly on the PCB of the feather
+	LORA_SPI_CS     ?= "GPIO_PIN(PA,6)"
+	LORA_GPIO_RESET ?= "GPIO_PIN(PA,8)"
+	LORA_GPIO_DIO0  ?= "GPIO_PIN(PA,9)"
+
+	# These connection can/should be made additionally, e.g. using jumper wires:
+	# Modem DIO3 ("D3" on the PCB's bottom side) to controller's PA15 ("5" on
+	# the PCB)
+	LORA_GPIO_DIO3   ?= "GPIO_PIN(PA,15)"
+
+	LORA_GPIO_SNIFFER ?= "GPIO_PIN(PA,20)"
+	LORA_GPIO_JAMMER  ?= "GPIO_PIN(PA,7)"
+
+	# Interface is uart, and when have only one serial port, so no shell.
+	INTERFACE               ?= uart
+	LORA_UART_DAEMON_DEVICE ?= "UART_DEV(0)"
+
+	# Null module for STDIO, so UART_DEV(0) remains usable for the communication
+	# of TPy with the board
+	USEMODULE += stdio_null
+endif
+
+# ------------------------------------------------------------------------------
+# lopy4: ESP32-based board with integrated LoRa/Sigfox modem by pycom
+# ------------------------------------------------------------------------------
+# Specs: https://docs.pycom.io/.gitbook/assets/lopy4-pinout.pdf
+# "lopy4" isn't an actual RIOT board by now, but we remap this shortcut to a
+# generic ESP32 board.
+# No additional connections have to be made to run the node (besides connecting
+# Vin and GND), however, a USB-to-Serial is required for flashing and to read
+# the logfile.
+#
+# Flashing procedure
+#  Required Hardware:
+#   USB-Serial-Adapter with 3.3V logic and 5V power source, jumper wires
+#  Wiring:
+#  - Connect GND of LoPy, USB adapter and Power source as common ground
+#  - Wire 5V to Vin of the LoPy
+#  - Connect RX of the adapter to U0TXD of the LoPy
+#  - Connect TX of the adapter to U0RXD of the LoPy
+#  - Have a wire (or button on a breadboard) at hand to pull GPIO0 to ground. No
+#    need for pull up/pull down resistors here.
+#  Flashing
+#  - Read the note below about backing up the Pycom firmware. Don't proceed/be
+#    careful if the ESP32 is configured for encrypted flash. This guide doesn't
+#    cover that.
+#  - Power up the device, pull GPIO0 low, reset it. The Lopy should now be in
+#    low-level bootloader mode. You can verify that by listening to the serial
+#    connection during reset at 115200 baud. Don't forget to release the port
+#    afterwards.
+#  - Build and flash the lora_controller app:
+#    WIFI_SSID=... WIFI_PSK=... BOARD=lopy4 make all flash
+#  - Remove the wire for GPIO0, reset the board
+#  - Done. You can check the serial output at 115200 baud to verify everything
+#    is working fine.
+#
+# Caution:
+#  This will override the Pycom software stack (so you don't get a REPL after
+#  flashing the device).
+#  If you want to keep your firmware, use the following procedure:
+#  - Before flashing the RIOT application:
+#    - Get Espressif's esptool:
+#      https://github.com/espressif/esptool
+#    - Wire the serial adapter like shown above
+#    - Wire GPIO0 to GND, keep it connected. Press the reset button on the LoPy.
+#      Then run the esptool to read the whole flash memory
+#      esptool.py --chip esp32 --baud 921600 --before no_reset --after no_reset read_flash 0 0x1000000 lopy-image.bin
+#    - Once the downloading process has started, you may disconnect the GPIO0
+#      wire. If the connection isn't stable, use a lower baud rate (e.g. 115200)
+#  - To get back to the Pycom firmware:
+#    - Again, wire the serial adapter
+#    - Navigate to the directory with lopy-image.bin
+#    - With GPIO0 connected to ground, reset the ESP32, keep GPIO0 low
+#    - Run the following command.
+#      esptool.py --chip esp32 --baud 921600 --before no_reset --after no_reset write_flash 0 lopy-image.bin
+#    - Remove the GPIO0 wiring, then reset the ESP32. You should be back in REPL
+ifeq ($(PRECONF),lopy4)
+	# Use the generic wroom-32 board as basis
+	BOARD           = esp32-wroom-32
+
+	# Pycom doesn't stick to the default SPI pins, so we redefine the whole VSPI
+	# bus here based on the the pinout map
+	LORA_SPI_BUS    ?= "SPI_DEV(0)"
+	CFLAGS          += -DSPI0_SCK=GPIO5
+	CFLAGS          += -DSPI0_MISO=GPIO19
+	CFLAGS          += -DSPI0_MOSI=GPIO27
+	LORA_SPI_CS     ?= GPIO18
+
+	# All interrupt lines of the SX1276 are connected to GPIO23 of the ESP32
+	# through a diode, so we get all interrupts on the same input pin:
+	# Source: https://forum.pycom.io/post/20448 (official comment)
+	LORA_GPIO_DIO0  ?= GPIO23
+	LORA_GPIO_DIO3  ?= GPIO23
+
+	LORA_GPIO_SNIFFER ?= GPIO4
+	LORA_GPIO_JAMMER  ?= GPIO15
+
+	# We use the TCP interface over WiFi
+	INTERFACE       ?= tcp
+
+	# Allow jammer trigger via UDP
+	USEMODULE += lora_modem_jammer_udp
+
+	# Assert that WIFI_SSID and WIFI_PSK have been provided and pass them to the
+	# compiler
+ifndef WIFI_SSID
+$(error Missing variable: WIFI_SSID)
+endif
+ifndef WIFI_PSK
+$(error Missing variable: WIFI_PSK)
+endif
+	USEMODULE += esp_wifi
+	CFLAGS += -DWITH_WIFI
+	# The esp_wifi module has its own macros for the credentials
+	CFLAGS += -DESP_WIFI_SSID=\"$(WIFI_SSID)\"
+	CFLAGS += -DESP_WIFI_PASS=\"$(WIFI_PSK)\"
+ifdef WIFI_IPV6
+	CFLAGS += -DWIFI_IPV6=\"$(WIFI_IPV6)\"
+endif
+
+	# We're using the TCP interface, so we can enable the shell
+	USEMODULE += shell
+	USEMODULE += shell_commands
+	USEMODULE += ps
+
+	# Allow pinging the module
+	USEMODULE += gnrc_icmpv6_echo
+endif
+
+ifeq ($(PRECONF),lopy4-uart)
+	# Use the generic wroom-32 board as basis
+	BOARD           = esp32-wroom-32
+
+	# Pycom doesn't stick to the default SPI pins, so we redefine the whole VSPI
+	# bus here based on the the pinout map
+	LORA_SPI_BUS    ?= "SPI_DEV(0)"
+	CFLAGS          += -DSPI0_SCK=GPIO5
+	CFLAGS          += -DSPI0_MISO=GPIO19
+	CFLAGS          += -DSPI0_MOSI=GPIO27
+	LORA_SPI_CS     ?= GPIO18
+
+	# All interrupt lines of the SX1276 are connected to GPIO23 of the ESP32
+	# through a diode, so we get all interrupts on the same input pin:
+	# Source: https://forum.pycom.io/post/20448 (official comment)
+	LORA_GPIO_DIO0  ?= GPIO23
+	LORA_GPIO_DIO3  ?= GPIO23
+
+	LORA_GPIO_SNIFFER ?= GPIO4
+
+	# We use the TCP interface over WiFi
+	INTERFACE       ?= uart
+	LORA_UART_DAEMON_DEVICE ?= "UART_DEV(0)"
+	USEMODULE += stdio_null
+endif
+
+# ------------------------------------------------------------------------------
+# esp32-generic: Generic ESP32 board manually wired to a transceiver
+# ------------------------------------------------------------------------------
+# Setup is very similar to the LoPy, but you can use any ESP32 DevBoard and
+# connect a LoRa Transceiver to it, like the [Dragino LoRa Bee](https://wiki.dragino.com/index.php?title=Lora_BEE)
+#
+# The main differences to the LoPy are, that we have a Reset Pin and DIO0 and
+# DIO3 aren't wired through diodes to the same, but to different input pins (you
+# can use the diode variant, but it's more complicated).
+ifeq ($(PRECONF),esp32-generic)
+	# Use the generic wroom-32 board as basis
+	BOARD           = esp32-wroom-32
+
+	# For simplicity: Same SPI pins as for the ESP32
+	LORA_SPI_BUS    ?= "SPI_DEV(0)"
+	CFLAGS          += -DSPI0_SCK=GPIO5
+	CFLAGS          += -DSPI0_MISO=GPIO19
+	CFLAGS          += -DSPI0_MOSI=GPIO27
+	CFLAGS          += -DSPI0_MOSI=GPIO27
+	LORA_SPI_CS     ?= GPIO18
+	LORA_GPIO_RESET ?= GPIO21
+
+	LORA_GPIO_DIO0  ?= GPIO23
+	LORA_GPIO_DIO3  ?= GPIO22
+
+	LORA_GPIO_SNIFFER ?= GPIO4
+	LORA_GPIO_JAMMER  ?= GPIO15
+
+	# We use the TCP interface over WiFi
+	INTERFACE       ?= tcp
+
+	# Allow jammer trigger via UDP
+	USEMODULE += lora_modem_jammer_udp
+
+	# Assert that WIFI_SSID and WIFI_PSK have been provided and pass them to the
+	# compiler
+ifndef WIFI_SSID
+$(error Missing variable: WIFI_SSID)
+endif
+ifndef WIFI_PSK
+$(error Missing variable: WIFI_PSK)
+endif
+	USEMODULE += esp_wifi
+	CFLAGS += -DWITH_WIFI
+	# The esp_wifi module has its own macros for the credentials
+	CFLAGS += -DESP_WIFI_SSID=\"$(WIFI_SSID)\"
+	CFLAGS += -DESP_WIFI_PASS=\"$(WIFI_PSK)\"
+ifdef WIFI_IPV6
+	CFLAGS += -DWIFI_IPV6=\"$(WIFI_IPV6)\"
+endif
+
+	# We're using the TCP interface, so we can enable the shell
+	USEMODULE += shell
+	USEMODULE += shell_commands
+	USEMODULE += ps
+
+	# Allow pinging the module
+	USEMODULE += gnrc_icmpv6_echo
+endif
+
+# Pass preconf-specific options down to the docker container, if builing with
+# docker.
+ifdef PRECONF
+DOCKER_VOLUMES_AND_ENV += -e 'PRECONF=$(PRECONF)'
+endif
+ifdef WIFI_SSID
+DOCKER_VOLUMES_AND_ENV += -e 'WIFI_SSID=$(WIFI_SSID)'
+endif
+ifdef WIFI_PSK
+DOCKER_VOLUMES_AND_ENV += -e 'WIFI_PSK=$(WIFI_PSK)'
+endif
+ifdef WIFI_IPV6
+DOCKER_VOLUMES_AND_ENV += -e 'WIFI_IPV6=$(WIFI_IPV6)'
+endif

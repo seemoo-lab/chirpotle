@@ -1,0 +1,18 @@
+# Pseudo-Module to enable the UDP jammer
+PSEUDOMODULES += lora_modem_jammer_udp
+
+ifneq (,$(filter lora_daemon,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(EXTERNAL_MODULES_BASE)/lora_daemon/include
+endif
+
+ifneq (,$(filter lora_if_uart,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(EXTERNAL_MODULES_BASE)/lora_if_uart/include
+endif
+
+ifneq (,$(filter lora_if_rest,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(EXTERNAL_MODULES_BASE)/lora_if_rest/include
+endif
+
+ifneq (,$(filter lora_modem,$(USEMODULE)))
+  USEMODULE_INCLUDES += $(EXTERNAL_MODULES_BASE)/lora_modem/include
+endif

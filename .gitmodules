@@ -1,0 +1,6 @@
+[submodule "submodules/RIOT"]
+	path = submodules/RIOT
+	url = https://github.com/fhessel/RIOT.git
+[submodule "submodules/tpy"]
+	path = submodules/tpy
+	url = https://github.com/seemoo-lab/tpy.git

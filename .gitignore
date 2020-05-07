@@ -1,0 +1,13 @@
+# Python cache files and directories
+**/*.pyc
+**/__pycache__/
+*.egg-info/
+build/
+dist/
+
+# VS Code config
+**/.vscode/
+
+# Local configuration and virtual environment
+/env/
+/conf/

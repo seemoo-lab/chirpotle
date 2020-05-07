@@ -1,0 +1,31 @@
+ifneq (,$(filter lora_daemon,$(USEMODULE)))
+  USEMODULE += ubjson
+  USEMODULE += xtimer
+endif
+
+ifneq (,$(filter lora_if_uart,$(USEMODULE)))
+  FEATURE_REQUIRED = periph_uart
+  USEMODULE += lora_daemon
+  USEMODULE += pipe
+endif
+
+ifneq (,$(filter lora_if_tcp,$(USEMODULE)))
+  USEMODULE += lora_daemon
+  USEMODULE += gnrc_netdev_default
+  USEMODULE += auto_init_gnrc_netif
+  USEMODULE += gnrc_ipv6_default
+  USEMODULE += gnrc_tcp
+endif
+
+ifneq (,$(filter lora_modem,$(USEMODULE)))
+  FEATURES_REQUIRED += periph_spi
+  USEMODULE += xtimer
+endif
+
+ifneq (,$(filter lora_modem_null,$(USEMODULE)))
+  USEMODULE += xtimer
+endif
+
+ifneq (,$(filter lora_modem_jammer_udp,$(USEMODULE)))
+USEMODULE += gnrc_sock_udp
+endif
