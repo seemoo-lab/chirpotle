@@ -4,3 +4,9 @@
 [submodule "submodules/tpy"]
 	path = submodules/tpy
 	url = https://github.com/seemoo-lab/tpy.git
+[submodule "submodules/xtensa-esp32-elf"]
+	path = submodules/xtensa-esp32-elf
+	url = https://github.com/gschorcht/xtensa-esp32-elf.git
+[submodule "submodules/esp-idf"]
+	path = submodules/esp-idf
+	url = https://github.com/espressif/esp-idf.git

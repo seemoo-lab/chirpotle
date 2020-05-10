@@ -123,19 +123,53 @@ function chirpotle_deploy {
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
-  # Build and bundle node
+  # Build and Bundle the TPy Node
+  # -----------------------------
   make -C "$REPODIR/submodules/tpy/node" sdist
   if [[ "$?" != "0" ]]; then
     echo "Building TPy Node failed." >&2
     exit 1
   fi
 
+  # Build the companion application for various toolchains
+  # ------------------------------------------------------
+  # Toolchain for ESP32
+  export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
+  export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
+  APPDIR="$REPODIR/node/companion-app/riot-apps/chirpotle-companion"
+  mkdir -p "$APPDIR/dist"
+
+  # Build LoPy4 (UART mode)
+  PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
+  if [[ "$?" != "0" ]]; then
+    echo "Building the companion application failed for (LoPy4, uart)." >&2
+    exit 1
+  fi
+  (mkdir -p "$APPDIR/dist/lopy4-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
+    "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
+  if [[ "$?" != "0" ]]; then
+    echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
+    exit 1
+  fi
+
   # Deploy
+  # ------
+  export CONFDIR="$CONFDIR"
+  export CONFFILE="$CONFFILE" # require for the lookup of node configuration files during deployment
+
+  # Plain TPy
   tpy deploy -d "$CONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
+  if [[ "$?" != "0" ]]; then
+    echo "Deploying TPy to the nodes failed. Check the output above." >&2
+    exit 1
+  fi
 
   # Customize TPy for ChirpOTLE
-  export CONFDIR="$CONFDIR"
   tpy script -d "$CONFFILE" -s "$REPODIR/scripts/remote-install.sh"
+  if [[ "$?" != "0" ]]; then
+    echo "Deploying the ChirpOTLE TPy customization to the nodes failed. Check the output above." >&2
+    exit 1
+  fi
 
 } # end of chirpotle_deploy
 
@@ -247,6 +281,18 @@ function chirpotle_install {
   (cd "$REPODIR" && git submodule update --init submodules/tpy)
   if [[ $? != 0 ]]; then echo "Could not initialize the submodule in submodules/tpy" >&2; exit 1; fi
 
+  # Load RIOT if not yet installed
+  (cd "$REPODIR" && git submodule update --init submodules/RIOT)
+  if [[ $? != 0 ]]; then echo "Could not initialize the submodule in submodules/RIOT" >&2; exit 1; fi
+
+  # Load ESP IDF if not yet installed
+  (cd "$REPODIR" && git submodule update --init submodules/esp-idf && cd "submodules/esp-idf" && git submodule init && git submodule update)
+  if [[ $? != 0 ]]; then echo "Could not initialize the submodule in submodules/esp-idf" >&2; exit 1; fi
+
+  # Load xtensa compiler if not yet installed
+  (cd "$REPODIR" && git submodule update --init submodules/xtensa-esp32-elf)
+  if [[ $? != 0 ]]; then echo "Could not initialize the submodule in submodules/xtensa-esp32-elf" >&2; exit 1; fi
+
   # Create the virtual environment
   $PYTHON -m venv "$ENVDIR"
   if [[ $? != 0 ]]; then echo "Creating the virtual environment failed." >&2; exit 1; fi
@@ -260,6 +306,10 @@ function chirpotle_install {
   
   # Install libraries and controller
   (cd "$REPODIR/controller/chirpotle" && python setup.py $INSTALLMODE)
+  if [[ $? != 0 ]]; then echo "Installing requirements failed. Check the output above." >&2; exit 1; fi
+
+  # Other tools required by the controller
+  pip install pyserial # Flashing of devices
   if [[ $? != 0 ]]; then echo "Installing requirements failed. Check the output above." >&2; exit 1; fi
 
 } # end of chirpotle_install

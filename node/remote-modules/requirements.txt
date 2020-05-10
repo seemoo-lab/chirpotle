@@ -1,2 +1,3 @@
 py_ubjson==0.13.0
 pyserial==3.4
+esptool==2.8
