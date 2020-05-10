@@ -166,15 +166,15 @@ function chirpotle_deploy {
   # Deploy
   # ------
   export CONFDIR="$CONFDIR"
-  export CONFFILE="$CONFFILE" # require for the lookup of node configuration files during deployment
+  export CONFFILE="$CONFFILE" # require original file for the lookup of node configuration files during deployment
+  TMPCONFFILE="$CONFFILE"
   if [[ "$INCLUDE_LOCALHOST" == "0" ]]; then
     TMPCONFFILE="/tmp/$CONFIGNAME-$$.tmp"
     "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
-    export CONFFILE="$TMPCONFFILE"
   fi
 
   # Plain TPy
-  tpy deploy -d "$CONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
+  tpy deploy -d "$TMPCONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
   if [[ "$?" != "0" ]]; then
     echo "Deploying TPy to the nodes failed. Check the output above." >&2
     if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
@@ -182,7 +182,7 @@ function chirpotle_deploy {
   fi
 
   # Customize TPy for ChirpOTLE
-  tpy script -d "$CONFFILE" -s "$REPODIR/scripts/remote-install.sh"
+  tpy script -d "$TMPCONFFILE" -s "$REPODIR/scripts/remote-install.sh"
   if [[ "$?" != "0" ]]; then
     echo "Deploying the ChirpOTLE TPy customization to the nodes failed. Check the output above." >&2
     if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi

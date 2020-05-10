@@ -6,8 +6,8 @@ import sys
 # Call: get-nodeconf.py conffile.conf hostname
 
 c = configparser.ConfigParser()
+c.read(sys.argv[1])
 try:
-    print(sys.argv)
     conf=[c[s]['conf'] for s in c.sections() if c[s]['host']==sys.argv[2]][0]
     print(conf)
 except:
