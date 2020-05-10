@@ -80,6 +80,7 @@ function chirpotle_confeditor {
 function chirpotle_deploy {
   # Default parameters
   CONFIGNAME="default"
+  INCLUDE_LOCALHOST=0
 
   # Parameter parsing
   while [[ $# -gt 0 ]]
@@ -92,14 +93,15 @@ function chirpotle_deploy {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh deploy [--conf <config name>] [--help]"
+          echo "  Usage: chirpotle.sh deploy [--conf <config name>] [--help] [--include-localhost]"
           echo ""
           echo "  Setup a virtual environment and install ChirpOTLE and its dependencies."
           echo "  Use the global --env command to specify a custom location for the"
           echo ""
           echo "  IMPORTANT NOTE: The tool will install ChirpOTLE node using root in the"
-          echo "    /opt folder of all target hosts. Make sure that your SSH key is"
-          echo "    deployed on all nodes as authorized_key for user root."
+          echo "    /opt folder of all target hosts and use pip to install Python modules"
+          echo "    globally. Make sure that your SSH key is deployed on all nodes as"
+          echo "    authorized_key for user root and global installation suits your setup."
           echo ""
           echo "  -c, --conf"
           echo "    The configuration that will be deployed (defaults to \"default\")"
@@ -107,7 +109,16 @@ function chirpotle_deploy {
           echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
           echo "  -h, --help"
           echo "    Show this help and quit."
+          echo "  --include-localhost"
+          echo "    By default, the deployment process will skip nodes with their host"
+          echo "    property set to \"localhost\", \"127.0.0.1\" or \"::1\", to not install"
+          echo "    the software globally (assuming you don't want that on yourcontroller)."
+          echo "    This option disables this check."
           exit 0
+        ;;
+        --include-localhost)
+          INCLUDE_LOCALHOST=1
+          shift
         ;;
         *)
           echo "Unexpected argument: $KEY" >&2
@@ -156,11 +167,17 @@ function chirpotle_deploy {
   # ------
   export CONFDIR="$CONFDIR"
   export CONFFILE="$CONFFILE" # require for the lookup of node configuration files during deployment
+  if [[ "$INCLUDE_LOCALHOST" == "0" ]]; then
+    TMPCONFFILE="/tmp/$CONFIGNAME-$$.tmp"
+    "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
+    export CONFFILE="$TMPCONFFILE"
+  fi
 
   # Plain TPy
   tpy deploy -d "$CONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
   if [[ "$?" != "0" ]]; then
     echo "Deploying TPy to the nodes failed. Check the output above." >&2
+    if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
     exit 1
   fi
 
@@ -168,14 +185,17 @@ function chirpotle_deploy {
   tpy script -d "$CONFFILE" -s "$REPODIR/scripts/remote-install.sh"
   if [[ "$?" != "0" ]]; then
     echo "Deploying the ChirpOTLE TPy customization to the nodes failed. Check the output above." >&2
+    if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
     exit 1
   fi
 
+  if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
 } # end of chirpotle_deploy
 
 function chirpotle_deploycheck {
   # Default parameters
   CONFIGNAME="default"
+  INCLUDE_LOCALHOST=0
 
   # Parameter parsing
   while [[ $# -gt 0 ]]
@@ -188,14 +208,15 @@ function chirpotle_deploycheck {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh deploycheck [--conf <config name>] [--help]"
+          echo "  Usage: chirpotle.sh deploycheck [--conf <config name>] [--help] [--include-localhost]"
           echo ""
           echo "  Checks that the remote nodes fulfill all requirements to run the ChirpOTLE"
           echo "  node, e.g. SSH access and Python installation"
           echo ""
           echo "  IMPORTANT NOTE: The tool will install ChirpOTLE node using root in the"
-          echo "    /opt folder of all target hosts. Make sure that your SSH key is"
-          echo "    deployed on all nodes as authorized_key for user root."
+          echo "    /opt folder of all target hosts and use pip to install Python modules"
+          echo "    globally. Make sure that your SSH key is deployed on all nodes as"
+          echo "    authorized_key for user root and global installation suits your setup."
           echo ""
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
@@ -203,7 +224,16 @@ function chirpotle_deploycheck {
           echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
           echo "  -h, --help"
           echo "    Show this help and quit."
+          echo "  --include-localhost"
+          echo "    By default, the deployment process will skip nodes with their host"
+          echo "    property set to \"localhost\", \"127.0.0.1\" or \"::1\", to not install"
+          echo "    the software globally (assuming you don't want that on yourcontroller)."
+          echo "    This option disables this check."
           exit 0
+        ;;
+        --include-localhost)
+          INCLUDE_LOCALHOST=1
+          shift
         ;;
         *)
           echo "Unexpected argument: $KEY" >&2
@@ -216,11 +246,21 @@ function chirpotle_deploycheck {
   # Validate config name
   CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
 
+  # Create temporary config without the localhosts
+  if [[ "$INCLUDE_LOCALHOST" == "0" ]]; then
+    TMPCONFFILE="/tmp/$CONFIGNAME-$$.tmp"
+    "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
+    CONFFILE="$TMPCONFFILE"
+  fi
+
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
   # Run check
   tpy script -d "$CONFFILE" -s "$REPODIR/scripts/remote-checkdep.sh"
+  RC=$?
+  if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
+  exit $RC
 }
 
 function chirpotle_install {
@@ -412,6 +452,7 @@ function chirpotle_run {
 function chirpotle_restartnodes {
   # Default parameters
   CONFIGNAME="default"
+  INCLUDE_LOCALHOST=0
 
   # Parameter parsing
   while [[ $# -gt 0 ]]
@@ -424,7 +465,7 @@ function chirpotle_restartnodes {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh [...] restartnodes [--conf <config name>] [--help]"
+          echo "  Usage: chirpotle.sh [...] restartnodes [--conf <config name>] [--help] [--include-localhost]"
           echo ""
           echo "  (Re)start all ChirpOTLE nodes which are configured in a configuration."
           echo ""
@@ -434,6 +475,11 @@ function chirpotle_restartnodes {
           echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
           echo "  -h, --help"
           echo "    Show this help and quit."
+          echo "  --include-localhost"
+          echo "    By default, the deployment process will skip nodes with their host"
+          echo "    property set to \"localhost\", \"127.0.0.1\" or \"::1\", to not install"
+          echo "    the software globally (assuming you don't want that on yourcontroller)."
+          echo "    This option disables this check."
           exit 0
         ;;
         *)
@@ -446,10 +492,20 @@ function chirpotle_restartnodes {
   # Validate config name and get absolute path
   CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
 
+  # Create temporary config without the localhosts
+  if [[ "$INCLUDE_LOCALHOST" == "0" ]]; then
+    TMPCONFFILE="/tmp/$CONFIGNAME-$$.tmp"
+    "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
+    CONFFILE="$TMPCONFFILE"
+  fi
+
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
   tpy restart -d "$CONFFILE"
+  RC=$?
+  if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
+  exit $RC
 } # end of chirpotle_tpy
 
 function chirpotle_tpy {
@@ -468,7 +524,7 @@ function chirpotle_usage {
   echo "    deploy       - Deploy ChirpOTLE to nodes"
   echo "    deploycheck  - Check requirements on ChirpOTLE nodes"
   echo "    help         - Show this information"
-  echo "    install      - Install dependencies in a virtual environment"
+  echo "    install      - Install controller on this host in a virtual environment"
   echo "    interactive  - Run an interactive evaluation session"
   echo "    localnode    - Start a local instance of ChirpOTLE node"
   echo "    restartnodes - (Re)start the remote ChirpOTLE nodes"

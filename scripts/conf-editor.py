@@ -185,6 +185,12 @@ node profile, you must run "chirpotle deploy" after editing the configuration.
                     if nodename in ninfo.keys():
                         print("Node with name %s already exists." % nodename)
                     nodename = Input("🏷️  Name of the node: ").launch()
+                print('''
+Note: You may use "localhost", "127.0.0.1" or "::1" as hostname, but nodes with
+  these hostnames will be excluded from deployment by default. You either need
+  to use "chirpotle.sh localnode" to run the node manually or deploy with the
+  --include-localhost option being enabled (see "chirpotle.sh deploy --help").
+                ''')
                 hostname = Input("🖥️  Hostname or IP: ").launch()
                 hostcfg = select_node_config(conf, "⚙️  Select node profile:")
                 ctrl[nodename] = {
