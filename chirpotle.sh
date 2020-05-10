@@ -218,6 +218,7 @@ function chirpotle_deploycheck {
           echo "    globally. Make sure that your SSH key is deployed on all nodes as"
           echo "    authorized_key for user root and global installation suits your setup."
           echo ""
+          echo "  Optional arguments:"
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
@@ -282,6 +283,7 @@ function chirpotle_install {
           echo "  Setup a virtual environment and install ChirpOTLE and its dependencies."
           echo "  Use the global --env command to specify a custom location for the"
           echo ""
+          echo "  Optional arguments:"
           echo "  -d, --dev"
           echo "    Do a development install. This will allow you to edit the libraries"
           echo "    and have the changes immediately available."
@@ -343,6 +345,10 @@ function chirpotle_install {
   # Install TPy
   (cd "$REPODIR/submodules/tpy/controller" && python setup.py $INSTALLMODE)
   if [[ $? != 0 ]]; then echo "Installing TPy Controller failed. Check the output above." >&2; exit 1; fi
+
+  # Install TPy Node for localnode
+  (cd "$REPODIR/submodules/tpy/node" && python setup.py $INSTALLMODE && pip install -r "$REPODIR/node/remote-modules/requirements.txt")
+  if [[ $? != 0 ]]; then echo "Installing TPy Node failed. Check the output above." >&2; exit 1; fi
   
   # Install libraries and controller
   (cd "$REPODIR/controller/chirpotle" && python setup.py $INSTALLMODE)
@@ -371,6 +377,9 @@ function chirpotle_interactive {
         -h|--help)
           echo "  Usage: chirpotle.sh [...] interactive [--conf <config name>] [--help]"
           echo ""
+          echo "  Get an interactive Python REPL with nodes and control objects already set up."
+          echo ""
+          echo "  Optional arguments:"
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
@@ -399,11 +408,72 @@ function chirpotle_interactive {
 } # end of chirpotle_interactive
 
 function chirpotle_localnode {
-  LOCALNODE="" # TODO: Set default config file
+  # Default parameters
+  NODECONF=""
 
-  # TODO: Parameter parsing
+  while [[ $# -gt 0 ]]
+  do
+    KEY="$1"
+    case "$KEY" in
+        -c|--conf)
+          CONFIGNAME="$2"
+          shift
+          shift
+        ;;
+        -h|--help)
+          echo "  Usage: chirpotle.sh [...] chirpotle [--help] <node-profile>"
+          echo ""
+          echo "  Run a ChirpOTLE node on your controller. This function allows you running a"
+          echo "  local node without running the usual deploy process on your local machine, and"
+          echo "  without installing all tools globally. Make sure that your configuration still"
+          echo "  contains an entry for localhost. The \"deploy\" and \"restartnodes\" task will"
+          echo "  ignore entries for localhost, if you do not use the --include-localhost flag."
+          echo ""
+          echo "  Note: If you're connecting an MCU to your local machine and do not use the"
+          echo "  default deployment process, you need to flash the companion application"
+          echo "  manually. See node/companion-application/riot-apps/chirpotle-companion for"
+          echo "  details."
+          echo ""
+          echo "  Required arguments:"
+          echo "  node-profile"
+          echo "    Name of the node profile to use. Edit them using \"chirpotle.sh confeditor\"."
+          echo "    Basically refers to a file in your conf/nodeconf folder (without the file"
+          echo "    extension)."
+          echo ""
+          echo "  Optional arguments:"
+          echo "  --help"
+          echo "    Show this help and quit."
+          exit 0
+        ;;
+        *)
+          if [[ -z "$NODECONF" ]]; then
+            NODECONF="$KEY"
+            shift
+          else
+            echo "Unexpected argument: $KEY" >&2
+            echo "Call chirpotle.sh install --help for usage information." >&2
+            exit 1
+          fi
+        ;;
+    esac
+  done
 
-  # TODO: Run localnode
+  # Validate node configuration
+  if [[ -z "$NODECONF" ]]; then echo "No node configuration was specified. See \"chirpotle.sh localnode --help\" for details."; exit 1; fi
+  NODECONFFILE="$CONFDIR/nodeconf/$NODECONF.conf"
+  if [[ ! -f "$NODECONFFILE" ]]; then echo "Node configuration \"$NODECONF\" does not exist."; exit 1; fi
+
+  # Replace the additional modules dir
+  TMPCONFFILE="/tmp/node-$$.conf"
+  sed -E "s#^module_path *=.*\$#module_path = $REPODIR/node/remote-modules/#" "$NODECONFFILE" > "$TMPCONFFILE"
+
+  # Enter virtual environment
+  source "$ENVDIR/bin/activate"
+
+  # Run the node in foreground
+  tpynode run -c "$TMPCONFFILE"
+
+  if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
 } # end of chirpotle_localnode
 
 # Run a script in the virtual environment
@@ -434,6 +504,7 @@ function chirpotle_run {
           echo "  The first unknown argument is treated as script name, and all following"
           echo "  arguments are passed to the script."
           echo ""
+          echo "  Optional arguments:"
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
@@ -485,6 +556,7 @@ function chirpotle_restartnodes {
           echo ""
           echo "  (Re)start all ChirpOTLE nodes which are configured in a configuration."
           echo ""
+          echo "  Optional arguments:"
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
