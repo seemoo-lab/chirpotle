@@ -388,13 +388,13 @@ function chirpotle_interactive {
   done
 
   # Validate config name
-  CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
+  export CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
 
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
   # Run the script
-  "$REPODIR/scripts/interactive-session.py" "$CONFFILE"
+  "$REPODIR/scripts/interactive-session.py"
 
 } # end of chirpotle_interactive
 
@@ -410,10 +410,11 @@ function chirpotle_localnode {
 function chirpotle_run {
   # Default parameters
   CONFIGNAME="default"
+  POSITIONAL=()
+  SCRIPTNAME=""
 
   # Parameter parsing
-  while [[ $# -gt 0 ]]
-  do
+  while [[ $# -gt 0 ]] && [[ -z "$SCRIPTNAME" ]]; do
     KEY="$1"
     case "$KEY" in
         -c|--conf)
@@ -422,7 +423,16 @@ function chirpotle_run {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh [...] run [--conf <config name>] [--help] <script.py>"
+          echo "  Usage: chirpotle.sh [...] run [--conf <config name>] [--help] <script.py> [scriptargs...]"
+          echo ""
+          echo "  Setup the framework and run a script. The devices can be accessed in the"
+          echo "  script using the following snippet:"
+          echo ""
+          echo "      from chirpotle.context import tpy_from_context"
+          echo "      tc, devices = tpy_from_context()"
+          echo ""
+          echo "  The first unknown argument is treated as script name, and all following"
+          echo "  arguments are passed to the script."
           echo ""
           echo "  -c, --conf"
           echo "    The configuration that will be used (defaults to \"default\")"
@@ -433,19 +443,25 @@ function chirpotle_run {
           exit 0
         ;;
         *)
-          # TODO: positional args
+          # First "unknown" argument is script name ...
+          SCRIPTNAME="$KEY"
+          shift
         ;;
     esac
   done
+  # ... all other arguments (if any) are passed to the script as positional args
+  if [[ $# -gt 0 ]]; then
+    POSITIONAL+="$@"
+  fi
 
   # Validate config name and get absolute path
-  CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
+  export CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
 
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
   # Run the script
-  # TODO: Call script with conf file, args, ...
+  python "$SCRIPTNAME" "${POSITIONAL[@]}"
 
 } # end of chirpotle_run
 

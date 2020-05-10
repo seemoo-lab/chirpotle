@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 import crcmod
 from datetime import datetime
 from gpstime import gpstime

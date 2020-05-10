@@ -1,10 +1,9 @@
 #!/usr/bin/env -S python -i
-import tpycontrol
 import sys
 import chirpotle
+from chirpotle.context import tpy_from_context
 
-devices = tpycontrol.Devices("devices.conf" if len(sys.argv)<2 else sys.argv[1])
-tc = tpycontrol.TPyControl(devices)
+tc, devices = tpy_from_context()
 
 print()
 print("TPy Variables: (stored globally)")

@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 from enum import Enum
 
 from ..util import setWithMask, getWithMask, bytesToFreq, freqToBytes

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import queue
 import time
 import threading
@@ -6,7 +5,7 @@ import traceback
 from enum import Enum
 from typing import Any, Callable, Dict, List, Tuple
 from .helpers import calc_lora_airtime, seq_eq
-from lorawanmsg.base import LoRaWANMessage, MType
+from chirpotle.dissect.base import LoRaWANMessage, MType
 
 # Frames with the same payload arriving withing 500ms are considered duplicates.
 # This should also take care of removing the frames sent by the exit nodes.

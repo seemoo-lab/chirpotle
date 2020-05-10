@@ -2,7 +2,7 @@ import gpstime
 import time
 import sys
 
-from lorawanmsg.util import aes128_encrypt
+from chirpotle.dissect.util import aes128_encrypt
 
 BEACON_PERIOD=128
 

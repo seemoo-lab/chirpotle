@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 import math
 import time
-from lorawanmsg.base import LoRaWANMessage
+from chirpotle.dissect.base import LoRaWANMessage
 from typing import List
 
 def lora_iterframes(module):

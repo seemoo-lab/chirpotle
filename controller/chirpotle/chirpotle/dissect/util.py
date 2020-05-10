@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 from typing import List, Optional, Sequence
 from math import log, ceil
 from Cryptodome.Cipher import AES
