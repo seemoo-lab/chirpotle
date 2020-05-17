@@ -241,9 +241,9 @@ configuration should be used.
                     "port": 42337,
                     "tmpdir": "/tmp",
                 }
-                c = ctrl_edit(conf, new_conf, name)
-                if c is not None:
-                    conf['ctrl'][name] = c
+                edited_conf,edited_name = ctrl_edit(conf, new_conf, name)
+                if edited_conf is not None:
+                    conf['ctrl'][name] = edited_conf
             elif res == choices[-1]: # go back
                 running = False
             else:
