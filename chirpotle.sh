@@ -521,9 +521,10 @@ function chirpotle_run {
     esac
   done
   # ... all other arguments (if any) are passed to the script as positional args
-  if [[ $# -gt 0 ]]; then
-    POSITIONAL+="$@"
-  fi
+  while [[ $# -gt 0 ]]; do
+    POSITIONAL+=("$1")
+    shift
+  done
 
   # Validate config name and get absolute path
   export CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
