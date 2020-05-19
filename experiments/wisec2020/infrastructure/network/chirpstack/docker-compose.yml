@@ -1,0 +1,52 @@
+version: "3.4"
+
+services:
+  loraserver:
+    image: local/chirpstack-network-server:3.6.0
+    volumes:
+      - ./configuration/loraserver:/etc/chirpstack-network-server
+
+  appserver:
+    image: local/chirpstack-application-server:3.7.0
+    ports:
+      - 8080:8080
+    volumes:
+      - ./configuration/lora-app-server:/etc/chirpstack-application-server
+
+  gatewaybridge:
+    image: local/chirpstack-gateway-bridge:3.5.0
+    ports:
+      - 1700:1700/udp
+    volumes:
+      - ./configuration/lora-gateway-bridge:/etc/chirpstack-gateway-bridge
+
+  geoserver:
+    image: local/chirpstack-geolocation-server:3.3.1
+    volumes:
+      - ./configuration/lora-geo-server:/etc/chirpstack-geolocation-server
+
+  postgresql:
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
+      - postgresqldata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:5-alpine
+    volumes:
+      - redisdata:/data
+
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+
+volumes:
+  postgresqldata:
+    external: true
+    name: loraserver-postgresqldata
+  redisdata:
+    external: true
+    name: loraserver-redisdata

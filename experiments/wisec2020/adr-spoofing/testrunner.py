@@ -66,7 +66,7 @@ DUT_CS_ED = rc.EndDevice({
   # App must exist.
   "applicationID": "1",
   "description": "Created by test automation",
-  "deviceProfileID": "9f5b9af2-998c-476e-bf36-bb23c6f43c65",
+  "deviceProfileID": "f0af2f5c-ce25-4f44-bbd8-cddb2dcd13b1",
   "skipFCntCheck": False,
   "referenceAltitude": 0,
   "variables": {},

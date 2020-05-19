@@ -1,0 +1,103 @@
+Readme for reproducibility submission of paper ID 121
+
+Default user in this VM: chirpotle / Password: chirpotle
+Root user in this VM:    root / Password: chirpotle
+
+A) Source code info
+Repository: https://github.com/seemoo-lab/chirpotle
+List of Programming Languages:
+ - Bash (Framework management)
+ - Python 3 (Controller, Evaluation)
+ - C (Code on field nodes)
+Compiler Info: [full details of compiler and version]
+Packages/Libraries Needed (Debian package names, already installed here):
+ - bash
+ - build-essential
+ - git
+ - python3 (Python 3.7.3)
+ - python3-pip (PIP 18.1)
+ - python3-venv
+ - ssh
+ Other software is managed by the framework in a virtual environment and will
+ be downloaded in the required version during installation.
+
+To also re-run the whole experiment, a complete LoRaWAN network is needed. This
+requires additional software to be installed on this machine:
+ - ChirpStack (3.6, via docker-compose)
+ - docker
+ - docker-compose
+ - openvpn (optional, not installed here)
+
+B) Datasets info
+Repository: https://github.com/seemoo-lab/chirpotle
+Data sets are part of the repository, stored with the code in experiments/wisec2020
+
+C) Hardware Info
+
+Controller Node (can be replaced by this VM)
+  C1) Processor
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+  C3) Memory
+   - 1 GB LPDDR2 SDRAM
+  C4) Secondary Storage
+   - SD Card: SanDisk Ultra MicroSDHC 32GB
+  C5) Network (only to re-run the experiments)
+   - Ethernet
+   - OpenVPN server (to get all nodes in the same subnet)
+   - Internet connection (we used a connection with 200 MBit/s uplink, 20 MBit/s downlink, but much less is required)
+
+Field Node A (not required for only re-evaluating our measurements)
+  C1) Processor
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+  C3) Memory
+   - 1 GB LPDDR2 SDRAM
+  C4) Secondary Storage
+   - SD Card: SanDisk Ultra MicroSDHC 32GB
+  C5) Network
+   - Ethernet
+   - OpenVPN client (connected to the controller node)
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
+  Peripherals
+   - Dragino PG1301 LoRa Concentrator HAT
+     Software from: https://github.com/fhessel/dragino_pi_gateway_fwd (Branch: fix/gpstime-without-pps)
+   - FTDI FT232RL USB-to-UART Module, connected via USB
+   - PyCom LoPy 4, connected via the FTDI module
+
+Field Node B (not required for only re-evaluating our measurements)
+  C1) Processor
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+  C3) Memory
+   - 1 GB LPDDR2 SDRAM
+  C4) Secondary Storage
+   - SD Card: SanDisk Ultra MicroSDHC 32GB
+  C5) Network
+   - Ethernet
+   - OpenVPN client (connected to the controller node)
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
+  Peripherals
+   - FTDI FT232RL USB-to-UART Module, connected via USB
+   - PyCom LoPy 4, connected via the FTDI module
+   - ST Nucleo L476 development board, connected via USB
+   - SX1276MB1xAS LoRa evaluation board, connected to the L476
+
+Node for Time Measurements (not required for only re-evaluating our measurements)
+  C1) Processor
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+  C3) Memory
+   - 1 GB LPDDR2 SDRAM
+  C4) Secondary Storage
+   - SD Card: SanDisk Ultra MicroSDHC 32GB
+  C5) Network
+   - Ethernet
+   - OpenVPN client (connected to the controller node)
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
+  Peripherals
+   
+
+D) Experimentation Info
+D1) Scripts and how-tos to generate all necessary data or locate datasets
+[Ideally, there is a script called: ./prepareData.sh]
+D2) Scripts and how-tos to prepare the software for system
+[Ideally, there is a script called: ./prepareSoftware.sh]
+D3) Scripts and how-tos for all experiments executed for the paper
+[Ideally, there is a script called: ./runExperiments.sh]

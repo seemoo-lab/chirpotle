@@ -51,7 +51,7 @@ DUT_CS_ED = rc.EndDevice({
   "applicationID": "1",
   "description": "Created by test automation",
   # Has to be a ClassB-enabled device profile
-  "deviceProfileID": "183fbc66-b09e-4bab-9b23-b91e99c6e07f",
+  "deviceProfileID": "6edcccfe-0b69-4de6-b031-4d529f02a2b3",
   "skipFCntCheck": True,
   "referenceAltitude": 0,
   "variables": {},
