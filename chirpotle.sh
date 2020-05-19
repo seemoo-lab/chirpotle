@@ -632,21 +632,14 @@ function chirpotle_usage {
   exit $RC
 }
 
-# Basic setup. Check if we have the required tools available on PATH, otherwise
-# abort and instruct the user to install them using the software manager of the
-# host OS
-chirpotle_check_requirements
-VERSION=$("$PYTHON" "$REPODIR/controller/chirpotle/setup.py" "--version")
-echo "ChirpOTLE - A LoRaWAN Security Evaluation Framework"
-echo "            Controller Version $VERSION"
-echo ""
-
 # Main command selection. Pass global arguments up to the command keyword, then
 # continue with the command-specific sub-parser
 ENVDIR="$REPODIR/env"
 CONFDIR="$REPODIR/conf"
 ACTION=
 RC=0
+PRINTVER=1 # Print version, can be disabled by --noversion
+CHECKREQ=1 # Check requirements, can be disabled by --skipcheck
 while [[ $# -gt 0 ]] && [[ -z "$ACTION" ]]
 do
   case "$1" in
@@ -689,6 +682,7 @@ do
     --help|help)
       shift
       ACTION=chirpotle_usage
+      PRINTVER=1
     ;;
     -c|--confdir)
       CONFDIR="$2"
@@ -700,12 +694,34 @@ do
       shift
       shift
     ;;
+    --skipcheck)
+      CHECKREQ=0
+      shift
+    ;;
+    --noversion)
+      PRINTVER=0
+      shift
+    ;;
     *)
       ACTION=chirpotle_usage
       RC=1
     ;;
   esac
 done
+
+
+# Basic setup. Check if we have the required tools available on PATH, otherwise
+# abort and instruct the user to install them using the software manager of the
+# host OS
+if [[ "$CHECKREQ" == "1" ]]; then
+  chirpotle_check_requirements
+fi
+if [[ "$PRINTVER" == "1" ]]; then
+  VERSION=$("$PYTHON" "$REPODIR/controller/chirpotle/setup.py" "--version")
+  echo "ChirpOTLE - A LoRaWAN Security Evaluation Framework"
+  echo "            Controller Version $VERSION"
+  echo ""
+fi
 
 # Default to usage info with RC=1
 if [[ -z "$ACTION" ]]; then
