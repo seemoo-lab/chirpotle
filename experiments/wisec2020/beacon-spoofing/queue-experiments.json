@@ -1,0 +1,722 @@
+[
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 4096,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 12288,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 8192,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 2 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 16384,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 4 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 24576,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 6 symbols step size",
+    "ready": false
+  },
+  {
+    "step_size": 32768,
+    "step_max": 173056,
+    "comment": "-3dB atennuator on gateway antenna, 8 symbols step size",
+    "ready": false
+  }
+]

@@ -1,0 +1,110 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}[
+		node distance=0,
+	]
+	\pgfplotsset{
+		scale only axis,
+		xmin=-0.5,
+		xmax=5.5,
+		compat=1.3,
+		height=3.5cm,
+		width=6cm,
+	}
+	\useasboundingbox (-1.6,-0.35) rectangle (7.4,4.7);
+
+	\begin{axis}[
+			ymin=-129,
+			ymax=-120,
+			xtick distance=1,
+			axis x line*=top,
+			axis y line*=left,
+			xtick={0,1,2,3,4,5},
+			xticklabels={DR0, DR1, DR2, DR3, DR4,DR5},
+			ylabel=RSSI (\si{\dBm}),
+			xlabel=Data Rate (EU868),
+			ytick={-120,-122,-124,-126,-128},
+			ybar,
+			bar width=6pt,
+		]
+
+			\addplot+ [
+				fill=white,
+				draw=black,
+				error bars/.cd,
+				y dir=both,
+				y explicit,
+				error bar style={black},
+			] table[
+				x expr=\thisrow{datarate}-0.15,
+				y=rssi_mean,
+				y error=rssi_std,
+				col sep=comma,
+			] {../channel-baseline/data/channel-aggregated-freq.csv};
+	\end{axis}
+
+	\begin{axis}[
+		axis y line*=right,
+		axis x line=none,
+		ymin=-21,
+		ymax=0,
+		ytick={0,-5,-10,-15,-20},
+		ylabel=SNR (\si{\dB}),
+		ybar,
+		bar width=6pt,
+		legend cell align={left},
+		legend columns=3,
+		legend style={
+			at={(axis cs: 5.5, -21)},
+			anchor=south east,
+			draw=none,
+			inner sep=0,
+		},
+	]
+
+		\addlegendimage{}\addlegendentry{RSSI}
+		\addplot+ [
+				fill=gray,
+				draw=black,
+				error bars/.cd,
+				y dir=both,
+				y explicit,
+				error bar style={black},
+			] table[
+				x expr=\thisrow{datarate}+0.15,
+				y=snr_mean,
+				y error=snr_std,
+				col sep=comma,
+			] {../channel-baseline/data/channel-aggregated-freq.csv};
+		\addlegendentry{SNR}
+        \coordinate (dr0) at (axis cs: 0, 0);
+        \coordinate (dr1) at (axis cs: 1, 0);
+        \coordinate (dr2) at (axis cs: 2, 0);
+        \coordinate (dr3) at (axis cs: 3, 0);
+        \coordinate (dr4) at (axis cs: 4, 0);
+        \coordinate (dr5) at (axis cs: 5, 0);
+        \coordinate (bleft) at (axis cs: -0.5, -21);
+        \coordinate (bright) at (axis cs: 5.5, -21);
+        \draw [black,dotted,very thick] (axis cs:  0.05, -20.0) -- node [above,scale=0.7] {min. SNR} (axis cs: 0.35, -20.0);
+        \draw [black,dotted,very thick] (axis cs:  1.05, -17.5) -- (axis cs: 1.35, -17.5);
+        \draw [black,dotted,very thick] (axis cs:  2.05, -15.0) -- (axis cs: 2.35, -15.0);
+        \draw [black,dotted,very thick] (axis cs:  3.05, -12.5) -- (axis cs: 3.35, -12.5);
+        \draw [black,dotted,very thick] (axis cs:  4.05, -10.0) -- (axis cs: 4.35, -10.0);
+        \draw [black,dotted,very thick] (axis cs:  5.05,  -7.5) -- (axis cs: 5.35,  -7.5);
+
+	\end{axis}
+
+	\draw (bleft) -- (bright);
+	\node [annotation,below] (firstrr) at (dr0|-bleft) {$99.3\%$};
+	\node [annotation,below] at (dr1|-bleft) {$99.3\%$};
+	\node [annotation,below] at (dr2|-bleft) {$99.0\%$};
+	\node [annotation,below] at (dr3|-bleft) {$95.3\%$};
+	\node [annotation,below] at (dr4|-bleft) {$28.0\%$};
+	\node [annotation,below] at (dr5|-bleft) {$0\%$};
+	\node [left=of firstrr,align=right,annotation,yshift=4,execute at begin node=\setlength{\baselineskip}{8pt}] {Receive\\Rate};
+
+\end{tikzpicture}
+\end{document}

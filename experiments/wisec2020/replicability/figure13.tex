@@ -1,0 +1,85 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}
+	\begin{groupplot}[
+		group style={
+			group size=3 by 2,
+			vertical sep=.5cm,
+			horizontal sep=.5cm},
+		height=3.8cm,
+		width=6.5cm]
+		\pgfplotsinvokeforeach{1,2,3,4,6,8}{
+			\nextgroupplot[
+					xmin=-1,
+					% We calculate the number of periods here. We need to use 
+					% 173056us as basis because the attacks were measured with
+					% the (wrong) air time formula from Semtech's specs
+					xmax={1+ceil(173056/4096/#1)+1},
+					ymin=0,
+					ymax=100,
+					yticklabel=\ifthenelse{\equal{1}{#1}\OR\equal{4}{#1}}{\pgfmathprintnumber\tick\%}{},
+					xticklabel=\pgfmathprintnumber\tick,
+					stack plots=y,
+					area style,
+					unbounded coords=jump,
+			]
+				\ifthenelse{\equal{1}{#1}}{
+					\node [above] at (axis cs:{(1+ceil(173056/4096/#1)+1)/2-0.5},0) [thin,draw=black,align=center,scale=0.7,fill=white,inner sep=1pt,outer sep=5pt] {\hspace{2pt}\strut{}$\Delta t_{step}$ = 1 symbol\hspace{2pt}};
+				}{
+					% {(1+ceil(173056/4096/#1)+1)/3*2-0.66}
+					\node [above left] at (axis cs:{(1+ceil(173056/4096/#1)+1},0) [thin,draw=black,align=center,scale=0.7,fill=white,inner sep=1pt,outer sep=5pt] {\hspace{2pt}\strut{}#1 symbols\hspace{2pt}};
+				}
+				\draw [dotted,thick] (axis cs: {ceil(152576/4096/#1)},0) -- node (bcnline#1) {} (axis cs: {ceil(152576/4096/#1)},100);
+				\draw [dashed,thick] (axis cs: {ceil(173056/4096/#1)},0) -- node (stopline#1) {} (axis cs: {ceil(173056/4096/#1)},100);
+				\draw [dashed,thick] (axis cs: 0,0) -- node (startline#1) {} (axis cs: 0,100);
+				\addplot[
+					draw=black,
+					fill=gray,
+				]
+				table[
+					mark=none,
+					x=period,
+					y expr=\thisrow{received}*100,
+					discard if not={step_size}{#1},
+					col sep=comma,
+				]{../beacon-spoofing/data/beacon-status.csv}
+				\closedcycle;
+
+				\addplot[
+					draw=black,
+					pattern=north west lines,
+					pattern color=gray,
+				]
+				table[
+					mark=none,
+					x=period,
+					y expr=\thisrow{spoofed}*100,
+					discard if not={step_size}{#1},
+					col sep=comma,
+				]{../beacon-spoofing/data/beacon-status.csv}
+				\closedcycle;
+				
+		}
+	\end{groupplot}
+
+	\node [right=0 of startline1,scale=0.7,xshift=-5,fill=white,inner sep=1pt,outer sep=2pt] {\rotatebox{90}{drifting starts}};
+	\node [left=0 of bcnline1,scale=0.7,xshift=5,fill=white,inner sep=1pt,outer sep=2pt] {\rotatebox{90}{beacon length reached}};
+	\node [left=0 of stopline1,scale=0.7,xshift=5,fill=white,inner sep=1pt,outer sep=2pt] {\rotatebox{90}{drifting stops}};
+
+	% common axis lables
+	\path (group c1r1.north west) -- node [above] [rotate=90,yshift=1cm] {Beacon Status at ED (n=20)} (group c1r2.south west);
+	\path (group c1r2.south west) -- node [above] [yshift=-1cm] {Beacon Period (relative to start of attack)} (group c3r2.south east);
+
+	% Improvised legend
+	\node (lostlbl) [above left=0 of group c3r1.north east] {{\strut}ED lost beacon};
+	\node (losticon) [left=0 of lostlbl,draw=black,fill=white,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (spoofedlbl) [left=of losticon] {{\strut}ED received spoofed beacon};
+	\node (spoofedicon) [left=0 of spoofedlbl,draw=black,pattern=north west lines,pattern color=gray,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (recvlbl) [left=of spoofedicon] {{\strut}ED received valid beacon};
+	\node (recvicon) [left=0 of recvlbl,fill=gray,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	
+\end{tikzpicture}
+\end{document}

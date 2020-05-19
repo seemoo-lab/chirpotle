@@ -1,0 +1,96 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}[
+	y=-1cm,
+	node distance=0,
+]
+\pgfmathsetmacro{\xed}{1}
+\pgfmathsetmacro{\xatk}{3.5}
+\pgfmathsetmacro{\xatkleft}{\xatk-0.5}
+\pgfmathsetmacro{\xatkright}{\xatk+0.5}
+\pgfmathsetmacro{\xgw}{6}
+\pgfmathsetmacro{\rxdelay}{0.9}
+\pgfmathsetmacro{\offsettop}{0.6}
+\pgfmathsetmacro{\tprocessing}{0.5}
+\pgfmathsetmacro{\symbheight}{0.1}
+\pgfmathsetmacro{\frameheight}{0.3}
+\pgfmathsetmacro{\framewidth}{0.3}
+
+\pgfmathsetmacro{\ylen}{\offsettop+3*\frameheight+\tprocessing+\rxdelay+0.4}
+
+% Arrows and labels for ED, Attacker and GW
+\draw [->,thick] (\xed, 0)
+	node [draw,fill=white] (toped) {{\strut}End Device}
+	-- (\xed, \ylen);
+\draw [->,thick] (\xatkleft,0) -- (\xatkleft, \ylen);
+\draw [->,thick] (\xatkright,0) -- (\xatkright, \ylen);
+\node [thick,draw,fill=white] (topatk) at (\xatk, 0) {{\strut}Attacker};
+\draw [->,thick] (\xgw, 0)
+	node [draw,fill=white] (topgw) {{\strut}Gateway}
+	-- (\xgw, \ylen);
+
+% First TX
+\pgfmathsetmacro{\frametop}{\offsettop}
+\tikzdrawframe{\xed}{\frametop}{black}{tx1_a_ed}{1}
+\node [left=of tx1_a_ed_preamble.south west,annotation] {$up_n$};
+\tikzdrawframe{\xatkleft}{\frametop}{gray}{tx1_a_atk}{1}
+\node [inner sep=0] (jam) at ({\xatkright+1/4*(\xgw-\xatkright)},\frametop) {\includegraphics[scale=0.5]{icons/icon-flash}};
+\node [annotation] (jam_lbl) [right=-.2 of jam] {jammed};
+\draw [txarrow] (tx1_a_ed_preamble.north east) -- (tx1_a_atk_preamble.north west);
+\draw [txarrow,shorten >=.1cm] (tx1_a_atk_preamble.north west) -- (jam|-tx1_a_atk_preamble.north);
+
+% RX windows
+\tikzdrawwindow{\xed}{\frametop+\frameheight+\rxdelay}{rx1window}
+\node [right=of rx1window,scale=0.7] {rx1 window};
+\draw[decoration={brace,raise=2pt,mirror},decorate] 
+(rx1window.west |- tx1_a_ed_payload.south west) -- node[left,xshift=-3pt] {$d_{rx_1}$} (rx1window.north west);
+\tikzdrawwindow{\xed}{\frametop+\frameheight+2*\rxdelay}{rx2window}
+\node [right=of rx2window,scale=0.7] {rx2 window};
+\draw[decoration={brace,raise=2pt,mirror},decorate] 
+(rx1window.north west) -- node[left,xshift=-3pt] {$d_{rx_2}$} (rx2window.north west);
+
+% Replay of TX
+\pgfmathsetmacro{\frametop}{\frametop+\frameheight+\tprocessing}
+\tikzdrawframe{\xatkright}{\frametop}{black}{tx1_b_atk}{1}
+\node [left=of tx1_b_atk_preamble.south west,annotation] {$up_n'$};
+\tikzdrawframe{\xgw}{\frametop}{gray}{tx1_b_gw}{1}
+\draw [txarrow] (tx1_b_atk_preamble.45) -- (tx1_b_gw_preamble.135);
+\draw (tx1_a_atk_payload.south east) edge[bend right=15] [->] node[annotation,below left,pos=0.97] {replay} (tx1_b_atk_preamble.north west);
+\draw[decoration={brace,raise=2pt},decorate] 
+(tx1_b_gw_preamble.north east|-tx1_a_atk_payload.south east) -- node[right,xshift=3pt] {$t_{processing}$} (tx1_b_gw_preamble.north east);
+\draw [dotted] (tx1_b_gw_preamble.north east|-tx1_a_atk_payload.south east) -- (tx1_a_atk_payload.south east);
+\draw[decoration={brace,raise=2pt},decorate] 
+(tx1_b_gw_preamble.north east) -- node[right,xshift=3pt] {$t_{uplink}$} (tx1_b_gw_payload.south east);
+
+% RX
+\pgfmathsetmacro{\frametop}{\frametop+\frameheight+\rxdelay}
+\tikzdrawframe{\xgw}{\frametop}{black}{rx_a_gw}{1}
+\node [below left=of rx_a_gw_preamble.west,annotation] {$down_n$};
+\draw [txarrow] (rx_a_gw_preamble.north west) -- (toped|-rx_a_gw_preamble.north) node [annotation,above right,align=left] {misses both rx windows};
+\draw[decoration={brace,raise=2pt},decorate] 
+(tx1_b_gw_payload.south east) -- node[right,xshift=3pt] {$d_{rx1}$} (rx_a_gw_preamble.north east);
+\draw[decoration={brace,raise=2pt},decorate] 
+(rx_a_gw_preamble.north east) -- node[right,xshift=3pt] {$t_{downlink}$} (rx_a_gw_payload.south east);
+
+% Legend
+\node (legendtoptmp) at(\xed,\ylen+0.2) {};
+\node (legendtop) at(toped.west|-legendtoptmp) {};
+
+% rx frame
+\node [right=of legendtop,draw,fill=white,rectangle,minimum width=4*1,minimum height=3] (legend_tx_preamble) {};
+\node [draw,fill=black,rectangle,minimum width=10*1,minimum height=3] (legend_tx_payload) [right=of legend_tx_preamble] {};
+\node (legend_tx_label) [right=of legend_tx_payload,annotation] {frame sent};
+
+\node [right=.5 of legend_tx_label,draw,fill=white,rectangle,minimum width=4*1,minimum height=3] (legend_rx_preamble) {};
+\node [draw,fill=gray,rectangle,minimum width=10*1,minimum height=3] (legend_rx_payload) [right=of legend_rx_preamble] {};
+\node [right=of legend_rx_payload,annotation] {frame received};
+\draw[decoration={brace,raise=2pt},decorate]
+(legend_rx_preamble.south east) -- node[below left,xshift=3pt,yshift=-2pt,scale=0.8] {\strut{}preamble} (legend_rx_preamble.south west);
+\draw[decoration={brace,raise=2pt},decorate]
+(legend_rx_payload.south east) -- node[below right,xshift=-3pt,yshift=-2pt,scale=0.8] {\strut{}payload} (legend_rx_payload.south west);
+
+\end{tikzpicture}
+\end{document}

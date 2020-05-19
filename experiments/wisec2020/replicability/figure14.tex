@@ -1,0 +1,98 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}
+	\pgfmathsetmacro{\lineshift}{0.1}
+	\pgfplotsset{
+		plotstyle/.style={thick,opacity=.75,mark options={thin,solid},error bars/.cd,y dir=both,y explicit,error bar style={solid}},
+	}
+
+	\begin{axis}[
+		height=4.8cm,
+		width=\columnwidth-1.5cm,
+		xmin=-1.5,
+		xmax=15.5,
+		ymin=-10,
+		ymax=10,
+		unbounded coords=jump,
+		xtick distance=1,
+		xlabel=Beacon Periods with Drifting,
+		ylabel=Beacon SNR (\si{\dB}) at ED,
+		cycle list/Dark2,
+		legend cell align={left},
+		legend columns=1,
+		legend style={
+			at={(1.01,1)},
+			anchor=north west,
+		},
+		]
+		\addlegendimage{empty legend}
+		\addlegendentry{\hspace{-.6cm}$\Delta t_{step}$}
+		\addlegendimage{empty legend}
+		\addlegendentry{\hspace{-.6cm}\scriptsize{(symbols)}}
+
+		\addplot+ [dotted,mark=+,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*2.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{1},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{1}
+
+		\addplot+ [dotted,mark=star,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*0.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{2},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{2}
+
+		\addplot+ [dotted,mark=x,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*1.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{3},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{3}
+
+		\addplot+ [mark=+,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*1.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{4},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{4}
+
+		\addplot+ [mark=star,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*0.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{6},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{6}
+
+		\addplot+ [mark=x,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*2.5,
+			y=snr_mean,
+			y error=snr_std,
+			discard if not={step_size}{8},
+			col sep=comma
+		] {../beacon-spoofing/data/beacon-status.csv};
+		\addlegendentry{8}
+
+	\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,1682 @@
+[
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 1,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 10,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 3,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 2,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 1,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  },
+  {
+    "initial_dr": 0,
+    "preceding_uplinks": 20,
+    "whtype_phase1": "downlink_delayed",
+    "comment": "-3dB atennuator on gateway antenna, unconfirmed uplinks, 13dB installation margin",
+    "ready": false
+  }
+]

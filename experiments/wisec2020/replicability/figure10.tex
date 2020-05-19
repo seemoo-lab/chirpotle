@@ -1,0 +1,64 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\DTLloaddb[noheader=false]{trigfile}{../adr-spoofing/data/adr_trig.csv}
+
+\begin{document}
+\begin{tikzpicture}[
+	y=-1cm,
+]
+	\pgfmathsetmacro{\barheight}{0.33}
+	\pgfmathsetmacro{\lineheight}{.66}
+	\DTLforeach*{trigfile}{\whtype=whtype, \dr=datarate, \direct=direct, \indirect=indirect, \failed=failed}{
+		\ifthenelse{\whtype=1}{
+			\pgfmathsetmacro{\xoffset}{0}
+			% Downlink-delayed
+			\draw (\xoffset,{\dr*\lineheight+\barheight/2})
+				node (barddleft\dr) [inner sep=0, outer sep=0] {}
+				[fill=gray]
+				rectangle ({\xoffset+\direct/20},{\dr*\lineheight-\barheight/2});
+			\draw ({\xoffset+\direct/20},{\dr*\lineheight+\barheight/2})
+				[pattern=north west lines,pattern color=gray]
+				rectangle ({\xoffset+(\direct+\indirect)/20},{\dr*\lineheight-\barheight/2});
+			\draw ({\xoffset+(\direct+\indirect)/20},{\dr*\lineheight-\barheight/2})
+				[fill=white]
+				rectangle ({\xoffset+(\direct+\indirect+\failed)/20},{\dr*\lineheight+\barheight/2}) node (barddright\dr) [inner sep=0, outer sep=0] {};
+		}{
+			% rx2
+			\pgfmathsetmacro{\xoffset}{3.75}
+			\draw (\xoffset,{\dr*\lineheight+\barheight/2})
+				node (barrx2left\dr) [inner sep=0, outer sep=0] {}
+				[fill=gray]
+				rectangle ({\xoffset+\direct/20},{\dr*\lineheight-\barheight/2});
+			\draw ({\xoffset+\direct/20},{\dr*\lineheight+\barheight/2})
+				[pattern=north west lines,pattern color=gray]
+				rectangle ({\xoffset+(\direct+\indirect)/20},{\dr*\lineheight-\barheight/2});
+			\draw ({\xoffset+(\direct+\indirect)/20},{\dr*\lineheight-\barheight/2})
+				[fill=white]
+				rectangle ({\xoffset+(\direct+\indirect+\failed)/20},{\dr*\lineheight+\barheight/2}) node (barrx2right\dr) [inner sep=0, outer sep=0] {};
+		}
+	}
+	\draw node at (-.5,\lineheight*0) [align=right] {DR0};
+	\draw node at (-.5,\lineheight*1) [align=right] {DR1};
+	\draw node at (-.5,\lineheight*2) [align=right] {DR2};
+	\draw node at (-.5,\lineheight*3) [align=right] {DR3};
+	\draw node at (1.5,-.85*\lineheight) {\strut{}downlink-delayed wormhole};
+	\draw node at (5.25,-.85*\lineheight) {\strut{}rx2 wormhole};
+
+	\draw node [below=0 of barddleft3] {0\%};
+	\draw node [below=0 of barddright3] {100\%};
+	\draw node [below=0 of barrx2left3] {0\%};
+	\draw node [below=0 of barrx2right3] {100\%};
+
+	% Improvised legend
+	\node (failedlbl) [above=2*\lineheight of barrx2right3,scale=0.85,xshift=-22pt] {{\strut}none (failed)};
+	\node (failedicon) [left=0 of failedlbl,fill=white,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (indirectlbl) [left=0.25 of failedicon,scale=0.85] {{\strut}other frame};
+	\node (indirecticon) [left=0 of indirectlbl,pattern=north west lines,pattern color=gray,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (directlbl) [left=0.25 of indirecticon,scale=0.85] {{\strut}wormhole frame};
+	\node (directicon) [left=0 of directlbl,fill=gray,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (adrlbl) [above right=0 of directicon.north west,scale=0.85,inner sep=0] {{\strut}LinkADRReq in: };
+
+\end{tikzpicture}
+\end{document}

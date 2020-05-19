@@ -1,0 +1,61 @@
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\usepgfplotslibrary{colorbrewer}
+\usepackage{datatool}
+\usepackage{ifthen}
+% Curly braces
+\usetikzlibrary{arrows.meta,decorations.pathreplacing,angles,quotes,patterns}
+% Relative positioning
+\usetikzlibrary[positioning]
+
+\usepackage[binary-units]{siunitx}
+\DeclareSIUnit\dBm{\dB\text{m}}
+
+\tikzset{annotation/.style={scale=0.85,fill=white,inner sep=1,outer sep=3}}
+\tikzset{txarrow/.style={-{Latex[scale=1.5]},dashed}}
+
+\makeatletter
+\def\pgfplots@stacked@diff{}
+\makeatother
+
+\definecolor{inkscape-royalblue}{RGB}{65,105,225}
+\definecolor{inkscape-firebrick}{RGB}{178,34,34}
+\definecolor{inkscape-forestgreen}{RGB}{85,155,85}
+\definecolor{inkscape-khaki}{RGB}{240,230,140}
+\definecolor{inkscape-lightsteelblue}{RGB}{176,196,222}
+
+\definecolor{verylightgray}{gray}{0.85}
+\definecolor{lightgray}{gray}{0.75}
+\definecolor{darkgray}{gray}{0.5}
+
+% x, y, color, prefix for node names, scaling
+\newcommand{\tikzdrawframe}[5]{
+	\node [draw,fill=white,rectangle,minimum height=4*#5,minimum width=3] (#4_preamble) at (#1,#2) {};
+	\node [draw,fill=#3,rectangle,minimum height=10*#5,minimum width=3] (#4_payload) [below=of #4_preamble] {};
+}
+
+% x, y, node name
+\newcommand{\tikzdrawwindow}[3]{
+	\node [draw,dotted,fill=white,rectangle,minimum height=4,minimum width=10] (#3) at (#1,#2) {};
+}
+
+% from https://tex.stackexchange.com/a/178632
+\pgfplotsset{
+	discard if not/.style 2 args={
+		x filter/.code={
+			\edef\tempa{\thisrow{#1}}
+			\edef\tempb{#2}
+			\ifx\tempa\tempb
+			\else
+			\def\pgfmathresult{inf}
+			\fi
+		}
+	}
+}
+
+\DeclareSymbolFont{symbolsb}{OMS}{cmsy}{m}{n}
+\SetSymbolFont{symbolsb}{bold}{OMS}{cmsy}{b}{n}
+\DeclareSymbolFontAlphabet{\mathcal}{symbolsb}

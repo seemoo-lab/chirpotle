@@ -1,0 +1,117 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\DTLloaddb[noheader=false]{rx2timingfile}{../adr-spoofing/data/timing_info_rx2.csv}
+
+\begin{document}
+\begin{tikzpicture}[
+	y=-1cm,
+]
+	\pgfmathsetmacro{\barheight}{0.33}
+	\pgfmathsetmacro{\scaling}{333}
+	\pgfmathsetmacro{\mindata}{5} % minimum entries per block for drawing
+	\pgfmathsetmacro{\yoffset}{-2*\barheight}
+
+	\DTLforeach*{rx2timingfile}{
+		\dr=datarate,
+		\proca=proc1_mean,
+		\procan=proc1_n,
+		\procastd=proc1_std,
+		\procb=proc2_mean,
+		\procbn=proc2_n,
+		\procbstd=proc2_std,
+		\uplink=uplink_mean,
+		\downlink=downlink_mean,
+		\downlinkn=downlink_n,
+		\rxda=rxdelay1_mean,
+		\rxdastd=rxdelay1_std,
+		\rxdan=rxdelay1_n,
+		\rxdb=rxdelay2_mean,
+		\rxdbstd=rxdelay2_std}{
+
+		\pgfmathsetmacro{\xoffset}{0}
+		\pgfmathsetmacro{\yoffset}{\yoffset+1.75*\barheight}
+
+		% Label
+		\node at (\xoffset, {\yoffset+0.5*\barheight}) (lblanchor\dr) {};
+		\node [left=0.3 of lblanchor\dr,align=right,inner sep=0, outer sep=0] {DR\dr};
+
+		% First processing time
+		\pgfmathsetmacro{\xoffset}{\xoffset+\proca/\scaling}
+		\draw [|-|] (\xoffset-0.5*\procastd/\scaling,\yoffset+0.5*\barheight)
+			-- (\xoffset+0.5*\procastd/\scaling,\yoffset+0.5*\barheight);
+
+		% Replay of uplink
+		\draw [pattern=north west lines,pattern color=gray] (\xoffset, \yoffset) rectangle ({\xoffset+\uplink/\scaling}, \yoffset+\barheight);
+		\node at (\xoffset, \yoffset+\barheight) (uplink\dr) {};
+		\pgfmathsetmacro{\xoffset}{\xoffset+\uplink/\scaling}
+		\node at (\xoffset, \yoffset+\barheight) (uplinkstart\dr) {};
+		\node at (\xoffset+\uplink/\scaling/2, \yoffset+\barheight) (uplinkcenter\dr) {};
+
+		% rxdelay 1
+			\pgfmathsetmacro{\xoffset}{\xoffset+\rxda/\scaling}
+
+		% downlink
+		\ifthenelse{\downlinkn>5}{
+			\draw [fill=gray] (\xoffset, \yoffset) rectangle ({\xoffset+\downlink/\scaling}, \yoffset+\barheight);
+			\node at ({\xoffset+\downlink/\scaling}, \yoffset+\barheight) (downlink\dr) {};
+			\node at (\xoffset, \yoffset+\barheight) (downlinkend\dr) {};
+			\pgfmathsetmacro{\xoffset}{\xoffset+\downlink/\scaling}
+		}{
+			\ifthenelse{\dr=1}{
+				% pseudo-frame for DR1
+				\draw [fill=gray] (2200/\scaling, \yoffset) -- ({(\proca+\uplink+1000)/\scaling}, \yoffset) |- (2200/\scaling, \yoffset+\barheight);
+			}{}
+		}
+
+		% Processing and waiting time
+		\ifthenelse{\procbn>\mindata}{
+			\pgfmathsetmacro{\xoffset}{\xoffset+\procb/\scaling}
+		}{}
+
+		% Replay fo downlink
+		\ifthenelse{\procbn>\mindata}{
+			\pgfmathsetmacro{\xoffset}{\rxdb/\scaling}
+			\draw [pattern=north west lines,pattern color=gray] (2200/\scaling, \yoffset) -- (\xoffset, \yoffset) |- node (downlinkright\dr) {} (2200/\scaling, \yoffset+\barheight);
+			\draw [|-|] (\xoffset-0.5*\rxdbstd/\scaling,\yoffset+0.5*\barheight)
+				-- (\xoffset+0.5*\rxdbstd/\scaling,\yoffset+0.5*\barheight);
+			\node at (\xoffset, \yoffset+\barheight) (downlinkrep\dr) {};
+			\node at (\xoffset+0.1, \yoffset+\barheight) (downlinkrepstart\dr) {};
+		}{}
+
+	}
+
+	% Axis
+	\draw [->] (-0.3,0-\barheight+0.1) -- node [below=-.05,scale=0.8,pos=.95] {$t$ (\si{\milli\second})} (2200/\scaling, 0-\barheight+0.1);
+	\foreach \xval in {0,500,1000,1500,2000}{
+		\draw (\xval/\scaling,0-\barheight+0.1) -- node (axis\xval) [above=.025,scale=0.8] {\num{\xval}} (\xval/\scaling,0-\barheight);
+	}
+
+	% t0, rx1, rx2
+	\node [above=0.1 of axis0,align=center,scale=0.8] {$t_0$};
+	\node [above=0.1 of axis1000,align=center,scale=0.8] {$rx_1$};
+	\node [above=0.1 of axis2000,align=center,scale=0.8] {$rx_2$};
+	\draw [dotted] (0, \yoffset+\barheight) -- (0, -\barheight);
+	\draw [dotted] (1000/\scaling, \yoffset+\barheight) -- (1000/\scaling, -\barheight);
+	\draw [dotted] (2000/\scaling, \yoffset+\barheight) -- (2000/\scaling, -\barheight);
+
+	% lables
+	\node [below=0 of uplinkcenter5,inner sep=0,scale=0.8,xshift=-3] {\strut{}$up_n'$};
+	\node [below=0 of downlink5,inner sep=0,scale=0.8] {\strut{}$down_n$};
+	\node [below=0 of downlinkrep5,inner sep=0,scale=0.8,xshift=6] {\strut{}$down_n'$};
+	\draw[decoration={brace,raise=2pt,mirror,aspect=0.2},decorate]
+		(0,\yoffset+\barheight) -- node[below left,yshift=-2pt,xshift=3pt,scale=0.8] {$t_{proc_1}$} (uplinkstart5);
+	\draw[decoration={brace,raise=2pt,mirror},decorate]
+		(uplink5) -- node[below,yshift=-2pt,scale=0.8] {$d_{rx_1}$} (downlink5);
+	\draw[decoration={brace,raise=2pt,mirror},decorate]
+		(downlinkend5) -- node[below,yshift=-2pt,scale=0.8] {$t_{proc_2}$} (downlinkrepstart5);
+	
+	% Improvised legend
+	\node (atklbl) [above=1.15 of downlinkright5,scale=0.85,xshift=-13pt] {{\strut}sent by attacker};
+	\node (atkicon) [left=0 of atklbl,pattern=north west lines,pattern color=gray,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+	\node (netlbl) [left=0.25 of atkicon,scale=0.85] {{\strut}sent by network};
+	\node (neticon) [left=0 of netlbl,fill=gray,draw=black,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
+
+\end{tikzpicture}
+\end{document}

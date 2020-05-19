@@ -1,0 +1,101 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}
+	\pgfmathsetmacro{\lineshift}{0.1}
+	\tikzset{
+		plotstyle/.style={thick,opacity=.75,mark options={thin,solid}},
+	}
+
+	\begin{axis}[
+		height=4.8cm,
+		width=\columnwidth-1.5cm,
+		xmin=-1,
+		xmax=15, % might require adjustment
+		ymin=0,
+		ymax=100,
+		unbounded coords=jump,
+		yticklabel={\pgfmathprintnumber\tick\%},
+		xtick distance=1,
+		xlabel=Beacon Periods with Drifting,
+		ylabel=Downlink Availability,
+		cycle list/Dark2,
+		legend cell align={left},
+		legend columns=1,
+		legend style={
+			at={(1.01,1)},
+			anchor=north west,
+		},
+		]
+		\addlegendimage{empty legend}
+		\addlegendentry{\hspace{-.6cm}$\Delta t_{step}$}
+		\addlegendimage{empty legend}
+		\addlegendentry{\hspace{-.6cm}\scriptsize{(symbols)}}
+
+		\addplot+ [dashed,mark=+,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*2.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{1},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{1}
+
+		\addplot+ [dashed,mark=star,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*0.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{2},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{2}
+
+		\addplot+ [dashed,mark=x,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*1.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{3},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{3}
+
+		\addplot+ [mark=+,plotstyle]
+		table[
+			x expr=\thisrow{period}-\lineshift*1.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{4},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{4}
+
+		\addplot+ [mark=star,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*0.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{6},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{6}
+
+		\addplot+ [mark=x,plotstyle]
+		table[
+			x expr=\thisrow{period}+\lineshift*2.5,
+			y expr=\thisrow{availability}*100,
+			discard if not={step_size}{8},
+			col sep=comma
+		] {../beacon-spoofing/data/downlink-availability.csv};
+		\addlegendentry{8}
+
+		\addplot+[
+			mark=none,
+			black,
+			dashed,
+			forget plot,
+		] coordinates {(0,0) (0,100)}
+		node[pos=0.33,right] {\rotatebox{90}{spoofing starts}};
+
+	\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage[binary-units]{siunitx}
+\usepackage{csvsimple}
+\usepackage{booktabs}
+
+\begin{document}
+\begin{tabular}{rrr}
+	\toprule
+	Preceding Uplinks & Number of Transactions (mean, SD) & \multicolumn{1}{c}{$n$} \\
+	\midrule
+	\csvreader[
+	head to column names,
+	late after line = \\
+	]{../adr-spoofing/data/adr_rampup_aggregated.csv}{}{
+		\num{\inituplinks} & $\requplinksmean \pm \requplinksstd $ & \num{\n}
+	}
+	\bottomrule
+\end{tabular}
+\end{document}

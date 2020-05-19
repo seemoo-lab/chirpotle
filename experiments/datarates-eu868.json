@@ -1,0 +1,72 @@
+[
+  {
+    "name": "DR0",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 12,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 59,
+    "bitrate": 250
+  },{
+    "name": "DR1",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 11,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 59,
+    "maxmacpayloadlen-norepeater": 59,
+    "bitrate": 440
+  },{
+    "name": "DR2",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 10,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 59,
+    "maxmacpayloadlen-norepeater": 59,
+    "bitrate": 980
+  },{
+    "name": "DR3",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 9,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 123,
+    "maxmacpayloadlen-norepeater": 123,
+    "bitrate": 1760
+  },{
+    "name": "DR4",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 8,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 230,
+    "maxmacpayloadlen-norepeater": 250,
+    "bitrate": 3125
+  },{
+    "name": "DR5",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 7,
+      "bandwidth": 125
+    },
+    "maxmacpayloadlen": 230,
+    "maxmacpayloadlen-norepeater": 250,
+    "bitrate": 5470
+  },{
+    "name": "DR6",
+    "region": "EU868",
+    "config": {
+      "spreadingfactor": 7,
+      "bandwidth": 250
+    },
+    "maxmacpayloadlen": 230,
+    "maxmacpayloadlen-norepeater": 250,
+    "bitrate": 11000
+  }
+]

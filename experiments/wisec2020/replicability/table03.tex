@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage[binary-units]{siunitx}
+\usepackage{csvsimple}
+\usepackage{booktabs}
+
+\begin{document}
+\begin{tabular}{crcr}
+    \toprule
+    \multicolumn{2}{c}{$\Delta t_{step}$} & \multicolumn{2}{c}{full beacon length reached after} \\
+    symbols & \multicolumn{1}{c}{time} & beacon periods & \multicolumn{1}{c}{time} \\
+    \midrule
+    \csvreader[
+    head to column names,
+    late after line = \\
+    ]{../beacon-spoofing/data/beacon-eval-params.csv}{}{\num{\dtsymb} & \SI{\dtms}{\milli\second} & \num{\reqperiods} & \reqtime~min }
+    \bottomrule
+\end{tabular}
+\end{document}

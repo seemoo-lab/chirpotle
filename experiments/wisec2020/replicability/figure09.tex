@@ -1,0 +1,39 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}
+	% End Device
+	\node (icon_ed) {\includegraphics[scale=0.5]{icons/icon-end-device}};
+	\node [annotation] (text_ed) [below=-0.2 of icon_ed] {End Device};
+
+	% Gateway
+	\node (icon_gw) [right=3cm of icon_ed] {\includegraphics[scale=0.5]{icons/icon-gateway}};
+	\node [annotation] (text_gw) [below=-0.2 of icon_gw] {Gateway};
+
+	% Attacker node near End Device
+	\node (icon_atk_ed) [left=0.5cm of icon_ed] {\includegraphics[scale=0.5]{icons/icon-attacker-node}};
+	\node [annotation] (text_atk_ed) [below=-0.2 of icon_atk_ed] {Node\textsubscript{ED}};
+
+	% Attacker node near Gateway
+	\node (icon_atk_gw) [right=0.5cm of icon_gw] {\includegraphics[scale=0.5]{icons/icon-attacker-node}};
+	\node [annotation] (text_atk_gw) [below=-0.2 of icon_atk_gw] {Node\textsubscript{GW}};
+	
+	% Attacker controller
+	\node (icon_atk_ctrl) [below=0.15cm of text_gw] {\includegraphics[scale=0.5]{icons/icon-attacker-controller}};
+	\node [annotation] (text_atk_ctrl) [below=-0.2 of icon_atk_ctrl] {Controller};
+
+	% Attacker communication
+	\draw [<->,inkscape-firebrick] (text_atk_ed) |- node [black] [annotation,above,pos=0.7] {Internet, via VPN} (icon_atk_ctrl);
+	\draw [<->,inkscape-firebrick] (text_atk_gw) |- (icon_atk_ctrl);
+
+	% Network Server
+	\node (icon_ns) [above=.25cm of icon_atk_gw] {\includegraphics[scale=0.5]{icons/icon-network-server}};
+	\node [annotation] (text_ns) [below=-0.2 of icon_ns] {Network Server};
+	
+	% LoRaWAN communication
+	\draw [<->,dashed] (icon_ed) -- node [black] [annotation,above] {LoRaWAN} (icon_gw);
+	\draw [<->] (icon_gw) |- node [black] [annotation,left,align=right,pos=0.33] {Packet Forwarder\\Protocol} (icon_ns);
+\end{tikzpicture}
+\end{document}

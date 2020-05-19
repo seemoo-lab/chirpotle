@@ -1,0 +1,47 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}[
+	node distance=0.2cm
+]
+\tikzset{
+	fieldnode/.style = {rectangle,minimum width=2cm, inner sep=0, outer sep=0},
+	controller/.style = {rectangle,minimum width=2cm, inner sep=3, outer sep=1,draw},
+}
+
+% Field nodes
+\node[fieldnode] (fieldnode0) [align=center,scale=0.7] {\includegraphics[scale=0.714]{icons/icon-attacker-node}\\ChirpOTLE node};
+
+\node[fieldnode] (fieldnode1) [right=1cm of fieldnode0,align=center,scale=0.7] {\includegraphics[scale=0.714]{icons/icon-attacker-node}\\ChirpOTLE node};
+
+\node[fieldnode] (fieldnode2) [right=1cm of fieldnode1,align=center,scale=0.7] {\includegraphics[scale=0.714]{icons/icon-attacker-node}\\ChirpOTLE node};
+
+% Pseudo field nodes
+\node (pseudofieldnode0) [left=of fieldnode0] {\dots};
+\node (pseudofieldnode1) [right=of fieldnode2] {\dots};
+
+% Controller
+\node[controller] (controller) [above=.7cm of fieldnode1,align=center,scale=0.7] {\includegraphics[scale=0.714]{icons/icon-attacker-controller}\\controller node};
+
+% Controller <-> Field nodes
+\draw [<->] (controller.south west) -- (fieldnode0);
+\draw [<->] (controller.south) -- (fieldnode1.north);
+\draw [<->] (controller.south east) -- (fieldnode2);
+
+% Configuration
+\node (configgfx) [left=1.2cm of controller] {\includegraphics[scale=0.5]{icons/icon-page}};
+\node [annotation] (configlbl) [below=-0.1cm of configgfx] {node configuration};
+\draw [->] (configgfx) -- (controller.west);
+
+\node (interactivegfx) [above left=of controller,yshift=0.7cm] {\includegraphics[scale=0.5]{icons/icon-head}};
+\node [annotation] (interactivelbl) [below=-0.1cm of interactivegfx] {interactive evaluation};
+\draw [<->, shorten <=.5cm] (interactivegfx.south) -- (controller.north west);
+
+\node (scriptsgfx) [above right=of controller,yshift=0.7cm] {\includegraphics[scale=0.5]{icons/icon-pages}};
+\node [annotation] (scriptslbl) [below=-0.1cm of scriptsgfx] {scripted experiments};
+\draw [->, shorten <=.5cm] (scriptsgfx.south) -- (controller.north east);
+
+\end{tikzpicture}
+\end{document}

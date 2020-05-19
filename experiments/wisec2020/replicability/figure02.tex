@@ -1,0 +1,45 @@
+\documentclass[tikz]{standalone}
+
+\input{common}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzset{
+	block/.style={rectangle,minimum width=3cm,minimum height=.5cm},
+	ctrlblock/.style={block,draw=black,fill=gray!20!white},
+	rtblock/.style={block,draw=black},
+	dblsize/.style={minimum width=6.5cm},
+}
+
+\node [ctrlblock] (repl) {\strut{}REPL};
+\node [ctrlblock] (script) [right=.5cm of repl] {\strut{}script.py};
+
+\path (repl) -- node [ctrlblock, dblsize] (controlinterface) [below=.65cm] {Control Interface} (script);
+\draw [<->] (repl) -- (repl|-controlinterface.north);
+\draw [->] (script) -- (script|-controlinterface.north);
+
+\node [ctrlblock] (loranode0) [below=1.5cm of repl] {\strut{}ChirpOTLE Node};
+\node [ctrlblock] (loranode1) [below=1.5cm of script] {\strut{}ChirpOTLE Node};
+\draw [<->] (loranode0|-controlinterface.south) -- node [right,align=center,minimum width=3.5cm] {RPC/TCP} (loranode0);
+\draw [<->] (loranode1|-controlinterface.south) -- (loranode1);
+
+\node[rtblock] (companion0) [below=.5cm of loranode0] {Companion App};
+\node[rtblock] (companion1) [below=.5cm of loranode1] {Companion App};
+\draw [<->] (loranode0) --  node [right,align=center,minimum width=3.5cm] {serial interface} (companion0);
+\draw [<->] (loranode1) --(companion1);
+
+\node[rtblock] (lora0) [below=.5cm of companion0] {LoRa Transceiver};
+\node[rtblock] (lora1) [below=.5cm of companion1] {LoRa Transceiver};
+\draw[<->] (companion0) --  node [right,align=center,minimum width=3.5cm] {SPI} (lora0);
+\draw[<->] (companion1) -- (lora1);
+
+% Right braces: Domains
+\draw[decoration={brace,raise=2pt},decorate]  (script.north east) -- node[below,xshift=3pt,rotate=90,pos=.37] {control domain} (loranode1.south east);
+\draw[decoration={brace,raise=2pt},decorate]  (companion1.north east) -- node[below,xshift=3pt,rotate=90,pos=0.25] {real-time domain} (lora1.south east);
+
+% Left braces: Location
+\draw[decoration={brace,raise=2pt,mirror},decorate]  (repl.north west) -- node[above,xshift=-3pt,rotate=90,pos=.7] {single instance} (controlinterface.south west);
+\draw[decoration={brace,raise=2pt,mirror},decorate]  (loranode0.north west) -- node[above,xshift=-3pt,rotate=90] {per field node} (lora0.south west);
+
+\end{tikzpicture}
+\end{document}

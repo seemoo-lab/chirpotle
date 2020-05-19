@@ -1,0 +1,9 @@
+**/results/*.json
+**/results/*.log
+**/logs/*.log
+**/data/*.csv
+**/replicability/*.aux
+**/replicability/*.fdb_latexmk
+**/replicability/*.fls
+**/replicability/*.log
+**/replicability/*.pdf
