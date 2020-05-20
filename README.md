@@ -185,7 +185,8 @@ To run one of the example scripts, you can use the `run` task with a python scri
 
 ## System Requirements
 
-(tbd)
+Most of the software that is required to run the framework is managed by the framework in the virtual environment.
+However, some preparations have to be made to bootstrap the management.
 
 ### Controller
 
@@ -202,7 +203,12 @@ The framework was tested on Debian Buster, but it should work on most other Linu
 
 ### Nodes
 
-(tbd)
+Calling `./chirpotle.sh deploy` will install the framework globally on the node using an SSH connection as user `root`.
+Therefore, the public SSH key of the user running the ChirpOTLE controller must be added to root's `authorized_keys` file on the node.
+Furthermore, you need to install Python3 with pip on each node.
+
+You can check if your nodes meet the requirements by calling `./chirpotle.sh deploycheck`.
+The output will also suggest quick fixes in case some of the requirements are not met.
 
 ## Development
 
