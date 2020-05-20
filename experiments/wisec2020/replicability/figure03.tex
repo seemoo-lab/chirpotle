@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	y=-1cm,
 	node distance=0,
@@ -93,4 +94,5 @@
 (legend_rx_payload.south east) -- node[below right,xshift=-3pt,yshift=-2pt,scale=0.8] {\strut{}payload} (legend_rx_payload.south west);
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

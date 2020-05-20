@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}
 	% How many spoofed beacons should be drawn?
 	\pgfmathsetmacro{\stepcount}{6}
@@ -77,4 +78,5 @@
 	\node (atklbl) [left=0.25 of trueicon,scale=0.85] {{\strut}spoofed beacon frame};
 	\node (atkicon) [left=0 of atklbl,fill=gray,draw=gray,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
 \end{tikzpicture}
+\end{minipage}
 \end{document}

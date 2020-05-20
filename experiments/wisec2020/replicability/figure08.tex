@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 		node distance=0,
 	]
@@ -107,4 +108,5 @@
 	\node [left=of firstrr,align=right,annotation,yshift=4,execute at begin node=\setlength{\baselineskip}{8pt}] {Receive\\Rate};
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

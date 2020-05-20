@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}
 	% End Device
 	\node (icon_ed) {\includegraphics[scale=0.5]{icons/icon-end-device}};
@@ -36,4 +37,5 @@
 	\draw [<->,dashed] (icon_ed) -- node [black] [annotation,above] {LoRaWAN} (icon_gw);
 	\draw [<->] (icon_gw) |- node [black] [annotation,left,align=right,pos=0.33] {Packet Forwarder\\Protocol} (icon_ns);
 \end{tikzpicture}
+\end{minipage}
 \end{document}

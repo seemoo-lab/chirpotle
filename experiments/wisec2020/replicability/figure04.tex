@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	y=-1cm,
 	node distance=0,
@@ -94,4 +95,5 @@
 (rx_b_atk_preamble.north east) -- node[right,xshift=6pt,inner sep=1,fill=white] {$t_{downlink'}$} (rx_b_atk_payload.south east);
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

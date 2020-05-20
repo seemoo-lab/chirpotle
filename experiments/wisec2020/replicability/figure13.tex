@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{7in}
 \begin{tikzpicture}
 	\begin{groupplot}[
 		group style={
@@ -82,4 +83,5 @@
 	\node (recvicon) [left=0 of recvlbl,fill=gray,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
 	
 \end{tikzpicture}
+\end{minipage}
 \end{document}

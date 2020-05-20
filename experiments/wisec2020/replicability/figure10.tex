@@ -1,10 +1,10 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
-
 \DTLloaddb[noheader=false]{trigfile}{../adr-spoofing/data/adr_trig.csv}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	y=-1cm,
 ]
@@ -61,4 +61,5 @@
 	\node (adrlbl) [above right=0 of directicon.north west,scale=0.85,inner sep=0] {{\strut}LinkADRReq in: };
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

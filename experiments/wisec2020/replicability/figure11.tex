@@ -1,10 +1,10 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
-
 \DTLloaddb[noheader=false]{rx2timingfile}{../adr-spoofing/data/timing_info_rx2.csv}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	y=-1cm,
 ]
@@ -114,4 +114,5 @@
 	\node (neticon) [left=0 of netlbl,fill=gray,draw=black,draw=black,minimum height=.25cm,minimum width=.25cm,inner sep=0, outer sep=0] {};
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

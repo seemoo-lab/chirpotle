@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}
 \tikzset{
 	block/.style={rectangle,minimum width=3cm,minimum height=.5cm},
@@ -42,4 +43,5 @@
 \draw[decoration={brace,raise=2pt,mirror},decorate]  (loranode0.north west) -- node[above,xshift=-3pt,rotate=90] {per field node} (lora0.south west);
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

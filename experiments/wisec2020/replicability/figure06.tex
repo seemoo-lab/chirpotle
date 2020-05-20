@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	y=-1cm,
 	node distance=0,
@@ -117,4 +118,5 @@
 (tx2_b_gw_payload.south east) -- node[right,xshift=3pt] {$d_{rx1}$} (rx2_a_gw_preamble.north east);
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

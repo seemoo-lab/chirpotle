@@ -6,4 +6,5 @@
 **/replicability/*.fdb_latexmk
 **/replicability/*.fls
 **/replicability/*.log
+**/replicability/*.out
 **/replicability/*.pdf

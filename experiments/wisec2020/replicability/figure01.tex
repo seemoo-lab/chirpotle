@@ -1,8 +1,9 @@
-\documentclass[tikz]{standalone}
+\documentclass[sigconf]{acmart}
 
 \input{common}
 
 \begin{document}
+\begin{minipage}{85mm}
 \begin{tikzpicture}[
 	node distance=0.2cm
 ]
@@ -44,4 +45,5 @@
 \draw [->, shorten <=.5cm] (scriptsgfx.south) -- (controller.north east);
 
 \end{tikzpicture}
+\end{minipage}
 \end{document}

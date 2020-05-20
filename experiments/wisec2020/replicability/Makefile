@@ -40,7 +40,7 @@ table03.pdf:: ../beacon-spoofing/data/beacon-eval-params.csv
 # Cleaning:
 .PHONY: clean-intermediates
 clean-intermediates:
-	@rm -f *.log *.fls *.fdb_latexmk *.aux
+	@rm -f *.out *.log *.fls *.fdb_latexmk *.aux
 
 .PHONY: clean-data
 clean-data:
