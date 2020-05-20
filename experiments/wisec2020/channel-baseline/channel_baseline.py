@@ -7,11 +7,11 @@ import traceback
 from chirpotle import rc
 
 # end device configuration
-DUT_HOST = "loranode1.local"
+DUT_HOST = "loranode2.local"
 DUT_PORT = 9999
 
 # network server
-NUT_API_URL = "http://localhost:8080/api"
+NUT_API_URL = "http://loramaster.local:8080/api"
 NUT_API_USER = "admin"
 NUT_API_PASS = "admin"
 

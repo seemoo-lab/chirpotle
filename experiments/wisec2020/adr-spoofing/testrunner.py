@@ -46,7 +46,7 @@ def datarate(id):
 # https://pyserial.readthedocs.io/en/latest/examples.html#tcp-ip-serial-bridge
 
 # TCP-to-serial endpoint
-DUT_HOST = "loranode1.local"
+DUT_HOST = "loranode2.local"
 DUT_PORT = 9999
 
 # The Chirpstack Server (see section below) must know the device attributes that
@@ -100,7 +100,7 @@ DUT_TIMEOUT_NOSWITCH = 360
 # retrieve the frames that reached the server, we need access to the API.
 # This is usually available on the same port as the (HTTP) web interface of the
 # Chirpstack server, at the /api endpoint:
-NUT_API_URL = "http://localhost:8080/api"
+NUT_API_URL = "http://loramaster.local:8080/api"
 # User and password of a Chirpstack user that can create and delete devices
 NUT_API_USER = "admin"
 NUT_API_PASS = "admin"
@@ -109,10 +109,10 @@ NUT_API_PASS = "admin"
 # ------------------------------------------------------------------------------
 # As the attacker creates a wormhole, we need nodes both at the end device and
 # and the gateway.
-TPY_NODE_ED="loranode1"
-TPY_MODULE_ED="lopy"
-TPY_NODE_GW="lorawangw2"
-TPY_MODULE_GW="lopy"
+TPY_NODE_ED="nodeed"
+TPY_MODULE_ED="lora"
+TPY_NODE_GW="nodegw"
+TPY_MODULE_GW="lora"
 
 # Frequency used by the attacker
 ATK_FREQ = 868300000
@@ -131,7 +131,7 @@ ATK_CH_RX2  = CH_RX2_DEFAULT
 # to a node running the riot-apps/frame_timer app to get GPS timestamps for the
 # frames.
 
-FTIMER_HOST="loranode2.local"
+FTIMER_HOST="loranode3.local"
 FTIMER_PORT=9999
 
 # Configuration: Logging

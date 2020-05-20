@@ -1,17 +1,54 @@
 Readme for reproducibility submission of paper ID 121
+=====================================================
 
-Default user in this VM: chirpotle / Password: chirpotle
-Root user in this VM:    root / Password: chirpotle
+About this VM
+-------------
+
+User Credentials:
+  Default user in this VM: chirpotle / Password: chirpotle
+  Root user in this VM:    root / Password: chirpotle
+
+Content:
+  - Copy of the ChirpOTLE framework's repository at ~/Desktop/chirpotle
+    The framework is already configured according to the setup instructions
+    (see chirpotle/README.md)
+  - Pre-configured installation of ChirpStack on localhost:8080
+    (see chirpotle/experiments/wisec2020/infrastructure/network/README.md for
+    further information)
+  - Required build tools for post-processing
+
+Our experiments in general followed these steps:
+  1) Setup network
+  2) Configure framework
+  3) Run experiment
+  4) Post-process results for single run of experiments
+  5) Aggregate results
+  6) Create figures and tables based on aggregated results
+
+While the VM is prepared to run steps 1-3, they require a real-world LoRaWAN
+testbed similar to ours (see also Section C) of this readme). Therefore, we
+also provide the results of step 1-3 as data sets to verify only the post-
+processing pipeline and generation of figures.
 
 A) Source code info
+-------------------
 Repository: https://github.com/seemoo-lab/chirpotle
 List of Programming Languages:
- - Bash (Framework management)
- - Python 3 (Controller, Evaluation)
- - C (Code on field nodes)
-Compiler Info: [full details of compiler and version]
+ - Bash (framework management)
+ - Python 3.7 (controller, evaluation)
+ - C (code on field nodes, firmware for device under test)
+Compiler Info:
+ - For building the companion application on ESP32-based boards:
+  - GCC for xtensa, 5.2.0, modified version for RIOT by Gunar Schorcht
+    https://github.com/gschorcht/xtensa-esp32-elf (414d1f3)
+ - For building the firmware for the device under test:
+  - CMake 3.13.4
+  - GCC for arm-none-eabi, 7.3.1
+ - For creating the figures:
+  - TeXlive, Debian version 2018.20190227-2
+  - LaTeXmk, 4.6.1
 Packages/Libraries Needed (Debian package names, already installed here):
- - bash
+ - bash (Version 5.0.3)
  - build-essential
  - git
  - python3 (Python 3.7.3)
@@ -20,23 +57,42 @@ Packages/Libraries Needed (Debian package names, already installed here):
  - ssh
  Other software is managed by the framework in a virtual environment and will
  be downloaded in the required version during installation.
+ (In this VM, the installation task has been run already)
 
 To also re-run the whole experiment, a complete LoRaWAN network is needed. This
 requires additional software to be installed on this machine:
  - ChirpStack (3.6, via docker-compose)
- - docker
- - docker-compose
+   see chirpotle/experiments/wisec2020/infrastructure/network/README.md for
+   more information on building the specific network server version we used.
+ - docker (19.03.9)
+ - docker-compose (1.25.5)
  - openvpn (optional, not installed here)
 
 B) Datasets info
+----------------
 Repository: https://github.com/seemoo-lab/chirpotle
-Data sets are part of the repository, stored with the code in experiments/wisec2020
+Data sets are part of the repository, stored with the code in
+chirpotle/experiments/wisec2020
+
+In this VM, you find the data sets in the following folders
+ADR Spoofing:
+  ~/Desktop/chirpotle/experiments/wisec2020/adr-spoofing/results
+Beacon Spoofing:
+  ~/Desktop/chirpotle/experiments/wisec2020/beacon-spoofing/results
+Channel Baseline:
+  ~/Desktop/chirpotle/experiments/wisec2020/channel-baseline/results
 
 C) Hardware Info
+----------------
+We summarize the whole hardware that we used here, but to only replicate steps
+4-6 of the experimental evaluation, you will only need the "Controller Node",
+which can be replaced by this VM.
 
-Controller Node (can be replaced by this VM)
+Controller Node
+  Hostname: loramaster.local
   C1) Processor
-   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz),
+     operating in headless mode
   C3) Memory
    - 1 GB LPDDR2 SDRAM
   C4) Secondary Storage
@@ -44,11 +100,14 @@ Controller Node (can be replaced by this VM)
   C5) Network (only to re-run the experiments)
    - Ethernet
    - OpenVPN server (to get all nodes in the same subnet)
-   - Internet connection (we used a connection with 200 MBit/s uplink, 20 MBit/s downlink, but much less is required)
+   - Internet connection (we used a connection with 200 MBit/s uplink,
+     20 MBit/s downlink, but much less is required)
 
-Field Node A (not required for only re-evaluating our measurements)
+Field Node A (not required post-processing)
+  Hostname: loranode1.local
   C1) Processor
-   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz),
+     operating in headless mode
   C3) Memory
    - 1 GB LPDDR2 SDRAM
   C4) Secondary Storage
@@ -56,16 +115,24 @@ Field Node A (not required for only re-evaluating our measurements)
   C5) Network
    - Ethernet
    - OpenVPN client (connected to the controller node)
-   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much
+     less is required)
   Peripherals
    - Dragino PG1301 LoRa Concentrator HAT
-     Software from: https://github.com/fhessel/dragino_pi_gateway_fwd (Branch: fix/gpstime-without-pps)
+     Software from: https://github.com/fhessel/dragino_pi_gateway_fwd
+     (Branch: fix/gpstime-without-pps)
+     See chirpotle/experiments/wisec2020/infrastructure/network/README.md for
+     setup instructions
    - FTDI FT232RL USB-to-UART Module, connected via USB
    - PyCom LoPy 4, connected via the FTDI module
+     See chirpotle/node/companion-app/riot-apps/chirpotle-companion/Makefile.preconf
+     for wiring instructions (section lopy4-uart)
 
-Field Node B (not required for only re-evaluating our measurements)
+Field Node B (not required for post-processing)
+  Hostname: loranode2.local
   C1) Processor
-   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz),
+     operating in headless mode
   C3) Memory
    - 1 GB LPDDR2 SDRAM
   C4) Secondary Storage
@@ -73,16 +140,21 @@ Field Node B (not required for only re-evaluating our measurements)
   C5) Network
    - Ethernet
    - OpenVPN client (connected to the controller node)
-   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much
+     less is required)
   Peripherals
    - FTDI FT232RL USB-to-UART Module, connected via USB
    - PyCom LoPy 4, connected via the FTDI module
+     See chirpotle/node/companion-app/riot-apps/chirpotle-companion/Makefile.preconf
+     for wiring instructions (section lopy4-uart)
    - ST Nucleo L476 development board, connected via USB
    - SX1276MB1xAS LoRa evaluation board, connected to the L476
 
-Node for Time Measurements (not required for only re-evaluating our measurements)
+Node for Time Measurements (not required for post-processing)
+  Hostname: loranode3.local
   C1) Processor
-   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz), operating in headless mode
+   - Raspberry Pi 3 Model B+ (BCM2837B0, ARMv8, 64 bit, 4 Cores@1.4GHz),
+     operating in headless mode
   C3) Memory
    - 1 GB LPDDR2 SDRAM
   C4) Secondary Storage
@@ -90,14 +162,40 @@ Node for Time Measurements (not required for only re-evaluating our measurements
   C5) Network
    - Ethernet
    - OpenVPN client (connected to the controller node)
-   - Internet connection (exceeding the SoCs network bandwidth, but again, much less is required)
-  Peripherals
-   
+   - Internet connection (exceeding the SoCs network bandwidth, but again, much
+     less is required)
+  Peripherals:
+   - Custom board made of ESP32 development board, two SX1276 LoRa transceivers
+     and a Quectel L80 GPS receiver. More details at:
+     chirpotle/node/companion-app/riot-apps/frame-timer/README.md
 
 D) Experimentation Info
+-----------------------
 D1) Scripts and how-tos to generate all necessary data or locate datasets
-[Ideally, there is a script called: ./prepareData.sh]
+  The data sets from our experiments are provided as compressed files, see
+  section B).
+
 D2) Scripts and how-tos to prepare the software for system
-[Ideally, there is a script called: ./prepareSoftware.sh]
+  # Navigate to the repository:
+  cd ~/Desktop/chirpotle
+  # Install the framework:
+  ./chirpotle.sh install
+
+  If required, more information on the installation of the framework can be
+  found in the repositories root README.md.
+
 D3) Scripts and how-tos for all experiments executed for the paper
-[Ideally, there is a script called: ./runExperiments.sh]
+  To run all post-processing from start to end, we provide a Makefile:
+    # Navigate to working directory
+    cd ~/Desktop/chirpotle/experiments/wisec2020/replicability
+    # Build figures and tables
+    make all
+    # Show them
+    evince *.pdf
+
+  To get more insights in the process, this "replicability" directory also
+  contains a README.md listing the data sources for each figure and table.
+  The experiments/wisec2020/README.md explains the steps of the post-
+  processing pipeline.
+  There you will also find information on how to re-run the whole
+  experiment, if desired.

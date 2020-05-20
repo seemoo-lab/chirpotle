@@ -30,7 +30,7 @@ from beacon_spoofing import BeaconDriftAttack
 # https://pyserial.readthedocs.io/en/latest/examples.html#tcp-ip-serial-bridge
 
 # TCP-to-serial endpoint
-DUT_HOST = "loranode1.local"
+DUT_HOST = "loranode2.local"
 DUT_PORT = 9999
 
 # The Chirpstack Server (see section below) must know the device attributes that
@@ -80,7 +80,7 @@ DUT_CLASSB_TIMEOUT = 900
 # retrieve the frames that reached the server, we need access to the API.
 # This is usually available on the same port as the (HTTP) web interface of the
 # Chirpstack server, at the /api endpoint:
-NUT_API_URL = "http://localhost:8080/api"
+NUT_API_URL = "http://loramaster.local:8080/api"
 # User and password of a Chirpstack user that can create and delete devices
 NUT_API_USER = "admin"
 NUT_API_PASS = "admin"
@@ -89,8 +89,8 @@ NUT_API_PASS = "admin"
 # ------------------------------------------------------------------------------
 # For the beacon drifting attack, we need a single attacker node near the
 # gateway. TPy should already be running on that node:
-TPY_NODE="loranode1"
-TPY_MODULE="lopy"
+TPY_NODE="nodeed"
+TPY_MODULE="lora"
 
 # Content of the spoofed beacon
 BCN_INFO=[0xBA, 0xD0, 0x00, 0xBE, 0xAC, 0x00]

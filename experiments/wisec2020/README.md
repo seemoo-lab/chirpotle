@@ -56,17 +56,19 @@ In case you did not explicitly run the data postprocessing, the `Makefile` will 
 
 ### Re-Run Experiments
 
-We also provide the code to re-run the whole experiments from scratch, but as with all practical experimentation, this requires the hardware, a suitable testbed (LoRaWAN is an LPWAN, so nodes must usually be placed some hundred meters apart, **at least**), and time (in the order of ten days when running 24/7).
+We also provide the code to re-run the whole experiments from scratch, but as with all practical experimentation, this requires the hardware, a suitable testbed (LoRaWAN is an LPWAN, so nodes must usually be placed **at least** some hundred meters apart), and time (in the order of ten days when running 24/7).
 
 The minimal configuration would be as follows, with the Gateway being an attacker node as well, and the device under test also being connected to an attacker node:
 
 * 1× Gateway
+   * **Hostname:** `loranode1.local`
    * 1× Raspberry Pi 3, Model B+, 3A@5V power supply
    * 1× Dragino PG1301 LoRaWAN Concentrator HAT
    * 1× Pycom LoPy 4
    * 1× FTDI232R
    * 1× Custom adapter-board to connect LoPy 4 and FTDI232R
 * 1× Field Node
+   * **Hostname:** `loranode2.local`
    * 1× Raspberry Pi 3, Model B+
    * 1× Pycom LoPy 4
    * 1× FTDI232R
@@ -74,6 +76,7 @@ The minimal configuration would be as follows, with the Gateway being an attacke
    * 1× ST Nucleo L476 Development Board
    * 1× SX1276MB1xAS LoRa Evaluation Board
 * 1× Node for measuring frame times (ADR experiment)
+   * **Hostname:** `loranode3.local`
    * 1× Raspberry Pi 3, Model B+
    * 1× ESP32 WROOM DevBoard
    * 2× Standalone RFM95W
@@ -85,3 +88,51 @@ We used a setup with an OpenVPN server running on an additional Raspberry Pi at 
 Furthermore, the LoRaWAN network server was located off-site from the gateway, also to create more realistic conditions regarding reaction times.
 This, however, requires more hardware than the minimal setup.
 
+You get the following topology:
+
+```
+  +-------------------+        +----------------+                  +--------------------+        +----------------+   +--------------------+
+  | Raspberry Pi 3B+  |--SPI---| Dragino PG1301 |                  | Raspberry Pi 3B+   |--USB---| LoPy 4         |   | Raspberry Pi 3B+   |
+  | loranode1.local   |--UART--|                |                  | loranode2.local    |        +----------------+   | loranode3.local    |        +-----------------+
+  |                   |        +----------------+                  |                    |                             |                    |        | Frame Timer     |
+  | ChirpOTLE Control |                            <- distance ->  | tpynode            |        +----------------+   |                    |        |  ESP32          |
+  | ChirpStackNS      |        +----------------+                  | serial-to-tcp:9999-+--USB---| ST Nucleo 476  |   | serial-to-tcp:9999-+--USB---|  2× SX1276      |
+  | lora_pkt_fwd      |--USB---| LoPy 4         |                  |                    |        +----------------+   |                    |        |  1× Quectel L80 |
+  | tpynode           |        +----------------+                  +--------------------+                             +--------------------+        +-----------------+
+  +-------------------+                                             |                                                  |
+     |                                                              |                                                  |
+ ----+---Ethernet--------------| Internet/VPN |---------------------+----------------Ethernet--------------------------+------------------------------------------------
+```
+
+**Configure the test network:** See the documentation in the [`infrastructure`](infrastructure/README.md) folder on how to setup the network, the gateway and the end device.
+
+**Checking Configuration:** After installing the framework (`chirpotle.sh install`), you have some example framework configurations readily prepared.
+Start the configuration editor by calling `chirpotle.sh confeditor` and check that the `wisec2020` configuration is present and matches your setup.
+Otherwise you can adjust it (e.g. replace hostnames by IPs. In that case, make also sure to replace hostnames in the `adr_spoofing.py`, `beacon_spoofing.py` and `channel_baseline.py` scripts later).
+
+**Check preconditions:** To run the framework on all Raspberry Pis make sure that SSH keys are distributed correctly and required software (Python 3) is installed.
+Run the following command to automatically check preconditions on the nodes before installing TPy on them:
+
+```bash
+./chirpotle.sh deploycheck --conf wisec2020
+```
+
+**Deploy code to nodes:** If the previous command was successful, you can deploy and start the nodes.
+Run the following command on the controller:
+
+```bash
+./chirpotle.sh deploy --conf wisec2020
+./chirpotle.sh restardnodes --conf wisec2020
+```
+
+To forward the serial connections on loranode2 and loranode3 via TCP, you can use [a script provided by `pyserial`](https://pyserial.readthedocs.io/en/latest/examples.html#tcp-ip-serial-bridge) (make sure to `apt install python3-serial` before).
+
+**Run the experiments:** With this setup, you should be ready to re-run our experiments in your network.
+To launch the experiments, use the `chirpotle run` command, e.g. for ADR spoofing:
+
+```bash
+cd experiments/wisec2020/adr-spoofing
+../../../chirpotle.sh run --conf wisec2020 run adr_spoofing.py
+```
+
+For more details on a spefific experiment, please refer to the README in the corresponding subdirectory and the documentation in the corresponding Python file (in particula for configuration changes).

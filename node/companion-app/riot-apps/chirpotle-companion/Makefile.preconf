@@ -188,6 +188,12 @@ endif
 	USEMODULE += gnrc_icmpv6_echo
 endif
 
+# ------------------------------------------------------------------------------
+# lopy4-uart: ESP32-based board with integrated LoRa/Sigfox modem (UART mode)
+# ------------------------------------------------------------------------------
+# Setup is similar to the default "lopy4" configuration above, but the first
+# UART device is not used for logging but for communication with the Python
+# module on the host
 ifeq ($(PRECONF),lopy4-uart)
 	# Use the generic wroom-32 board as basis
 	BOARD           = esp32-wroom-32
