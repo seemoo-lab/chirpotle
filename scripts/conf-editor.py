@@ -59,6 +59,7 @@ def write_config(confdir, config):
     :param confdir: Directory to write to (should contain hostconf and nodeconf)
     :apram config: Config to write
     """
+    # Controller configurations
     ctrldir = os.path.join(confdir, "hostconf")
     host_confs = os.listdir(ctrldir)
     conf_to_write = [c+".conf" for c in config['ctrl'].keys()]
@@ -73,8 +74,21 @@ def write_config(confdir, config):
         if os.path.isfile(abs_ctd):
             print("Removing %s" % abs_ctd)
             os.unlink(abs_ctd)
-
-    # TODO: Write node profiles
+    # Node profiles
+    nodedir = os.path.join(confdir, "nodeconf")
+    node_confs = os.listdir(nodedir)
+    conf_to_write = [c+".conf" for c in config['node'].keys()]
+    conf_to_delete = [c for c in node_confs if c not in conf_to_write]
+    for conf in config['node']:
+        abs_conf = os.path.join(nodedir, conf+".conf")
+        with open(abs_conf,'w') as conffile:
+            print("Writing %s" % abs_conf)
+            config['node'][conf].write(conffile)
+    for ctd in conf_to_delete:
+        abs_ctd = os.path.join(nodedir, ctd)
+        if os.path.isfile(abs_ctd):
+            print("Removing %s" % abs_ctd)
+            os.unlink(abs_ctd)
 
 def ctrl_get_nodeinfo(ctrl):
     """
@@ -267,18 +281,272 @@ def select_node_config(conf, prompt=None):
     ).launch()
     return "/opt/chirpotle/nodeconf/%s.conf" % res
 
+def node_get_moduleinfo(node):
+    """
+    Parse the modules configured for a node and return three tuples:
+    - one for the LoRa modules
+    - one for the HackRF modules
+    - one for unknown modules
+    """
+    loras = dict()
+    hackrfs = dict()
+    unknowns = dict()
+    for s in [s for s in node.sections() if s!="TPyNode"]:
+        name = s
+        module = node[s]['module'] if 'module' in node[s] else s
+        if name in loras.keys() or name in hackrfs.keys() or \
+                name in unknowns.keys():
+            raise ValueError("Duplicate module name: %s" % name)
+        if module == 'LoRa':
+            loras[name] = {
+                "name": name,
+                "type": node[s]['conntype'],
+                "dev": node[s]['dev'],
+                "firmware": node[s]['firmware'] if "firmware" in node[s] \
+                    else 'no firmware',
+            }
+        elif module == 'HackRF':
+            hackrfs[name] = {
+                "name": name,
+                "dir": node[s]['capture_dir'],
+            }
+        else:
+            unknowns[name] = {
+                "module": module,
+                "name": name,
+            }
+    return (loras, hackrfs, unknowns)
+
+def prompt_conntype():
+    """
+    Prompts for a connection type of a LoRa module
+    """
+    conntype = Bullet(
+        prompt="How is the module connected?",
+        choices = ["Serial (UART)", "SPI"],
+        **default_props
+    ).launch()
+    if conntype == "SPI":
+        print('''
+Select the SPI device to use. If you have for example a Raspberry Pi, this will
+usually be /dev/spidev0.0 or /dev/spidev0.1 depending on the CS pin you use.
+(Have a look at the pinout for that
+        ''')
+        dev = Input("🔌  SPI device to use: ").launch()
+        return {"conntype": "spi", "dev": dev}
+    else:
+        print('''
+Select the UART device to use. For a USB-to-Serial adapter, this is usually
+something like /dev/ttyUSB0, for an MCU with integrated USB support, you might
+see something like /dev/ttyACM0, and for a physical serial interface of your
+host (serial port on the Raspberry Pi GPIO header) it's often /dev/ttyS0.
+        ''')
+        dev = Input("🔌  UART device to use: ").launch()
+        print('''
+Select the firmware to use on the external MCU. Connect all external devices
+before you run "chirpotle.sh deploy", then the framework will take care of
+flashing the firmware automatically. If you want to do that manually, select
+"None".
+            ''')
+        firmwares = {
+            "LoPy 4 via UART": "lopy4-uart",
+        }
+        firmware = Bullet(
+            prompt="Which firmware should be flashed to the MCU?",
+            choices = [*firmwares.keys(), "None"],
+            **default_props
+        ).launch()
+        mod = {
+            "conntype":"uart",
+            "dev": dev
+        }
+        if firmware in firmwares.keys():
+            mod["firmware"]=firmwares[firmware]
+        return mod
+
+def create_module(node):
+    """
+    Create a new module and return (module data, name)
+    """
+    (loras,hackrfs,unknowns) = node_get_moduleinfo(node)
+    names_in_use = [*loras.keys(),*hackrfs.keys(),*unknowns.keys()]
+    modulename = ""
+    while modulename=="" or modulename in names_in_use:
+        if modulename in names_in_use:
+            print("Module %s already exists." % modulename)
+        modulename = Input("🏷️  Name of the module: ").launch()
+    mtype = Bullet(prompt = "Module Type", choices=["LoRa", "HackRF"],
+        **default_props).launch()
+    if mtype == "LoRa":
+        conntype = prompt_conntype()
+        return ({
+            **conntype,
+            "module": "LoRa",
+        }, modulename)
+    else:
+        print('''
+You need to specify a temporary directory to store your capture files. Note that
+the directory will not be cleaned automatically. So you may either use a local
+path (like tmp/hackrf) to keep your files or the global temprorary directory to
+remove them if space is low (/tmp/)
+        ''')
+        capture_dir = Input("📁  Directory for capture files: ").launch()
+        return ({
+            "capture_dir": capture_dir,
+            "module": "HackRF",
+        }, modulename)
+
+def node_edit(conf, node, nodename):
+    """
+    Edit a node profile
+    :param conf: The overall configuration
+    :param node: The node profile to edit
+    :param nodename: The current name of the node profile
+    """
+    newname=nodename
+    try:
+        running = True
+        while running:
+            (loras,hackrfs,unknowns) = node_get_moduleinfo(node)
+            print_header("Node Profile: " + nodename)
+            print('''
+You can edit the node profile by adding or removing modules. Each module
+represents a peripheral that is connected to the node, either an MCU running the
+companion application or an SDR.
+For the MCUs connected via serial interface, you can select if you want to flash
+a firmware during the "chirpotle.sh deploy".
+            ''')
+            choices = [
+                *["🔌  LoRa Module: {name} ({type}, {dev} ({firmware}))"
+                    .format(**v) for v in loras.values()],
+                *["📻  HackRF: {name} (dir={dir})"
+                    .format(**v) for v in hackrfs.values()],
+                *["❓  Unknown Module: {name} ({module})"
+                    .format(**v) for v in unknowns.values()],
+                "➕ Add module",
+                "🏷️  Rename this node profile",
+                "Delete this node profile",
+                "Go back"
+            ]
+            res = Bullet(
+                choices = choices,
+                **default_props
+            ).launch()
+            if res == choices[-1]: # go back
+                running = False
+                return (node, newname)
+            elif res == choices[-2]: # delete profile
+                used_in = set()
+                for ctrlname in conf['ctrl'].keys():
+                    ctrl = conf['ctrl'][ctrlname]
+                    for s in ctrl.sections():
+                        if s!=['DEFAULT'] and 'conf' in ctrl[s] and \
+                                ctrl[s]['conf'].strip() \
+                                == "/opt/chirpotle/nodeconf/%s.conf" % newname:
+                            used_in.add(ctrlname)
+                if len(used_in)>0:
+                    print()
+                    print("⚠️  Cannot delete this profile, it is still used" + \
+                        " in the following configurations:")
+                    for c in used_in:
+                        print(" - %s" % c)
+                else:
+                    return (node, None)
+            elif res == choices[-3]: # rename
+                n = ""
+                while n == "" or (n!=nodename and n in conf['node'].keys()):
+                    if (n!=""):
+                        print("The node profile %s already exists." % n)
+                    n = Input("Enter new name: ").launch()
+                # Update references
+                for ctrlname in conf['ctrl'].keys():
+                    ctrl = conf['ctrl'][ctrlname]
+                    for s in ctrl.sections():
+                        if s!=['DEFAULT'] and 'conf' in ctrl[s] and \
+                                ctrl[s]['conf'].strip() \
+                                == "/opt/chirpotle/nodeconf/%s.conf" % newname:
+                            ctrl[s]['conf'] = \
+                                "/opt/chirpotle/nodeconf/%s.conf" % n
+                newname = n
+            elif res == choices[-4]: # add module
+                print_header("Add New Module")
+                newmodule,modulename = create_module(node)
+                if newmodule is not None:
+                    node[modulename] = newmodule
+            else: # Delete module
+                mnames = [m["name"] for m in
+                    [*loras.values(),*hackrfs.values(),*unknowns.values()]]
+                idx = choices.index(res)
+                mname = mnames[idx]
+                res = Bullet(
+                    prompt="Delete module %s?" % mname,
+                    choices=["No", "Yes"],
+                    **default_props,
+                ).launch()
+                if res == "Yes":
+                    node.remove_section(mname)
+    except KeyboardInterrupt:
+        return (None, None)
+
 def node_list(conf):
     """
     List node configurations and pick one for edit
     """
-    print("not implemented")
-    # TODO: Implement node editor
+    running = True
+    icon="⚙️  Node Profile: "
+    while running:
+        try:
+            choices = [
+                *[icon + c for c in conf['node'].keys()],
+                "➕  Create new node profile",
+                "Go back"
+            ]
+            print_header("Node Profiles")
+            print('''
+Here you see the currently available node profiles. A node profile describes the
+hardware that is attached to a single node, i.e. which external MCUs are
+connected to the node, which ports and firmware they use etc.
+Within a configuration, multiple nodes can use the same profile, and node
+profiles can be shared between configurations (e.g. if you want to have configs
+with a subset of your nodes).
+            ''')
+            res = Bullet(choices = choices, **default_props).launch()
+            if res == choices[-2]: # New config
+                name = ""
+                while name=="" or name in conf['node'].keys():
+                    if name!="":
+                        print("Node profile %s already exists." % name)
+                    name = Input("\nEnter a name for the node profile: "
+                        ).launch()
+                new_conf = configparser.ConfigParser()
+                new_conf["TPyNode"] = {
+                    "module_path": "/opt/chirpotle/modules/",
+                    "logfile": "/var/log/tpynode.log",
+                    "pidfile": "/var/run/tpynode.pid",
+                    "host": "0.0.0.0",
+                    "port": "42337",
+                }
+                edited_conf,edited_name = node_edit(conf, new_conf, name)
+                if edited_conf is not None:
+                    conf['node'][name] = edited_conf
+            elif res == choices[-1]: # go back
+                running = False
+            else:
+                confname = res[len(icon):]
+                (editres, newname) = node_edit(conf, copy_conf(
+                    conf['node'][confname]), confname)
+                if editres is not None:
+                    del conf['node'][confname]
+                    if newname is not None:
+                        conf['node'][newname] = editres
+        except KeyboardInterrupt:
+            running = False
 
 def main_menu(conf):
     def quit_menu(_): return True
     choices = {
         "📝  List/edit controller configurations": ctrl_list,
-        #TODO: uncomment "⚙️   List/edit node profiles": node_list,
+        "⚙️   List/edit node profiles": node_list,
         "Save changes and quit": quit_menu,
     }
     running = True
