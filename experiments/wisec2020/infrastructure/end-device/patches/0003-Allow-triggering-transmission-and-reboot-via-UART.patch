@@ -1,0 +1,125 @@
+From 7354bcb94086f60d8edc1e90236d12492b5f71b2 Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:18:30 +0100
+Subject: [PATCH 03/14] Allow triggering transmission and reboot via UART
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 22 ++++++++++++++++++-
+ src/apps/LoRaMac/classB/NucleoL476/main.c | 26 ++++++++++++++++++++++-
+ 2 files changed, 46 insertions(+), 2 deletions(-)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 87af5812..59c1613d 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -24,6 +24,7 @@
+ /*! \file classA/NucleoL476/main.c */
+ 
+ #include <stdio.h>
++#include "uart.h"
+ #include "utilities.h"
+ #include "board.h"
+ #include "gpio.h"
+@@ -31,6 +32,8 @@
+ #include "Commissioning.h"
+ #include "NvmCtxMgmt.h"
+ 
++extern Uart_t Uart2;
++
+ #ifndef ACTIVE_REGION
+ 
+ #warning "No active region defined, LORAMAC_REGION_EU868 will be used as default."
+@@ -42,7 +45,7 @@
+ /*!
+  * Defines the application data transmission duty cycle. 5s, value in [ms].
+  */
+-#define APP_TX_DUTYCYCLE                            5000
++#define APP_TX_DUTYCYCLE                            7200000
+ 
+ /*!
+  * Defines a random delay for application data transmission duty cycle. 1s,
+@@ -1189,6 +1192,23 @@ int main( void )
+             }
+             case DEVICE_STATE_SLEEP:
+             {
++                
++                uint8_t c = 0;
++                if (UartGetChar(&Uart2, &c) == 0) {
++                    if (c == 't') {
++                        // Schedule next packet transmission
++                        TxDutyCycleTime = 0;
++
++                        // Schedule next packet transmission
++                        DeviceState = DEVICE_STATE_SEND;
++                        NextTx = true;
++                        TimerStop(&TxNextPacketTimer);
++                    }
++                    else if (c == 'r') {
++                        BoardResetMcu();
++                    }
++                }
++
+                 if( NvmCtxMgmtStore( ) == NVMCTXMGMT_STATUS_SUCCESS )
+                 {
+                     printf( "\r\n###### ===== CTXS STORED ==== ######\r\n" );
+diff --git a/src/apps/LoRaMac/classB/NucleoL476/main.c b/src/apps/LoRaMac/classB/NucleoL476/main.c
+index 0ec7b4b0..55860cd7 100644
+--- a/src/apps/LoRaMac/classB/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classB/NucleoL476/main.c
+@@ -24,6 +24,7 @@
+ /*! \file classB/NucleoL476/main.c */
+ 
+ #include <stdio.h>
++#include "uart.h"
+ #include "utilities.h"
+ #include "board.h"
+ #include "gpio.h"
+@@ -31,6 +32,8 @@
+ #include "Commissioning.h"
+ #include "NvmCtxMgmt.h"
+ 
++extern Uart_t Uart2;
++
+ #ifndef ACTIVE_REGION
+ 
+ #warning "No active region defined, LORAMAC_REGION_EU868 will be used as default."
+@@ -47,7 +50,7 @@
+ /*!
+  * Defines the application data transmission duty cycle. 30s, value in [ms].
+  */
+-#define APP_TX_DUTYCYCLE                            30000
++#define APP_TX_DUTYCYCLE                            7200000
+ 
+ /*!
+  * Defines a random delay for application data transmission duty cycle. 5s,
+@@ -1439,6 +1442,27 @@ int main( void )
+             }
+             case DEVICE_STATE_SLEEP:
+             {
++                uint8_t c = 0;
++                if (UartGetChar(&Uart2, &c) == 0) {
++                    if (c == 't') {
++                        // Schedule next packet transmission
++                        //TxDutyCycleTime = 0;
++
++                        // Schedule next packet transmission
++                        //DeviceState = DEVICE_STATE_SEND;
++                        //NextTx = true;
++                        //TimerStop(&TxNextPacketTimer);
++                        
++                        TimerStop(&TxNextPacketTimer);
++                        TxDutyCycleTime = 5;
++                        TimerSetValue( &TxNextPacketTimer, TxDutyCycleTime );
++                        TimerStart( &TxNextPacketTimer );
++                    }
++                    else if (c == 'r') {
++                        BoardResetMcu();
++                    }
++                }
++
+                 if( NvmCtxMgmtStore( ) == NVMCTXMGMT_STATUS_SUCCESS )
+                 {
+                     printf( "\r\n###### ===== CTXS STORED ==== ######\r\n" );
+-- 
+2.20.1
+

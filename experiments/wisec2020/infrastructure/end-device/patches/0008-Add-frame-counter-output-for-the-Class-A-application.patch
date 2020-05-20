@@ -1,0 +1,32 @@
+From 4e29da743f11016159a85b89601a6d9ee3c3d49a Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Sun, 26 Jan 2020 15:28:33 +0100
+Subject: [PATCH 08/14] Add frame counter output for the Class A application
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 83984e69..97d4954c 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -601,6 +601,7 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+     }
+     
+     printf( "@@@>TX\r\n" );
++    printf( "FCNT=%lu\r\n", mcpsConfirm->UpLinkCounter );
+     printf( "CLASS=%c\r\n", "ABC"[mibReq.Param.Class] );
+     printf( "PORT=%d\r\n", AppData.Port );
+     printf( "TX_POWER=%d\r\n", mcpsConfirm->TxPower );
+@@ -857,6 +858,7 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
+     printf( "RX SNR      : %d\r\n", mcpsIndication->Snr );
+ 
+     printf( "@@@>RX\r\n" );
++    printf( "FCNT=%lu\r\n", mcpsIndication->DownLinkCounter );
+     printf( "DR=%d\r\n", mcpsIndication->RxDatarate );
+     printf( "RSSI=%d\r\n", mcpsIndication->Rssi );
+     printf( "SNR=%d\r\n", mcpsIndication->Snr );
+-- 
+2.20.1
+

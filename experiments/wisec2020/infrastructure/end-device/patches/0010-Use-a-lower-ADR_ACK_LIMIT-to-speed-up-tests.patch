@@ -1,0 +1,25 @@
+From 5516208f67ef25597f105f78982f68192f712515 Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Sun, 26 Jan 2020 18:28:51 +0100
+Subject: [PATCH 10/14] Use a lower ADR_ACK_LIMIT to speed up tests
+
+---
+ src/mac/region/RegionEU868.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/mac/region/RegionEU868.h b/src/mac/region/RegionEU868.h
+index b6fbf855..819242c2 100644
+--- a/src/mac/region/RegionEU868.h
++++ b/src/mac/region/RegionEU868.h
+@@ -122,7 +122,7 @@
+ /*!
+  * ADR Ack limit
+  */
+-#define EU868_ADR_ACK_LIMIT                         64
++#define EU868_ADR_ACK_LIMIT                         32
+ 
+ /*!
+  * ADR Ack delay
+-- 
+2.20.1
+

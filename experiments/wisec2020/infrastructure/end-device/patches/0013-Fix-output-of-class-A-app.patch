@@ -1,0 +1,34 @@
+From 9dd4c02332e33e82226c2663e30859e68108ad51 Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Mon, 3 Feb 2020 13:44:15 +0100
+Subject: [PATCH 13/14] Fix output of class A app
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 43d28b75..2f32c4cc 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -608,7 +608,7 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+     printf( "Dr=%d\r\n", mcpsConfirm->Datarate );
+     printf( "DATA=" );
+     PrintHexBuffer( AppData.Buffer, AppData.BufferSize );
+-    printf( "FREQ=%lu\r\n", freq );
++    printf( "\r\nFREQ=%lu\r\n", freq );
+     if( AppData.MsgType == LORAMAC_HANDLER_CONFIRMED_MSG ) {
+         printf( "TYPE=CONFIRMED\r\nACK=%s\r\n", ( mcpsConfirm->AckReceived != 0 ) ? "1" : "0" );
+     } else {
+@@ -871,7 +871,7 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
+     printf( "SNR=%d\r\n", mcpsIndication->Snr );
+     printf( "DATA=" );
+     PrintHexBuffer( mcpsIndication->Buffer, mcpsIndication->BufferSize );
+-    printf( "WINDOW=%s\r\n", slotStrings[mcpsIndication->RxSlot] );
++    printf( "\r\nWINDOW=%s\r\n", slotStrings[mcpsIndication->RxSlot] );
+     printf( "PORT=%d\r\n", mcpsIndication->Port );
+ 
+     printf( "@@@<RX\r\n" );
+-- 
+2.20.1
+

@@ -1,0 +1,60 @@
+From 5ea8d5713cc71d40f98881d7c86146da87196a1c Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Sun, 26 Jan 2020 17:33:11 +0100
+Subject: [PATCH 09/14] Add ADR and ADRACKReq to tx log of Class A app
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 7 +++++++
+ src/mac/LoRaMac.c                         | 2 ++
+ src/mac/LoRaMac.h                         | 4 ++++
+ 3 files changed, 13 insertions(+)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 97d4954c..f50b61ca 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -614,6 +614,13 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+     } else {
+         printf( "TYPE=UNCONFIRMED\r\n" );
+     }
++    mibGet.Type  = MIB_ADR;
++    if( LoRaMacMibGetRequestConfirm( &mibGet ) == LORAMAC_STATUS_OK )
++    {
++        int adrEnable = mibGet.Param.AdrEnable ? 1 : 0;
++        printf( "ADR=%u\r\n", adrEnable );
++    }
++    printf( "ADRACKREQ=%u\r\n", mcpsConfirm->AdrAckReq);
+     printf( "@@@<TX\r\n" );
+ 
+     printf( "\r\n" );
+diff --git a/src/mac/LoRaMac.c b/src/mac/LoRaMac.c
+index aebb7cb8..002345a5 100644
+--- a/src/mac/LoRaMac.c
++++ b/src/mac/LoRaMac.c
+@@ -2606,6 +2606,8 @@ LoRaMacStatus_t Send( LoRaMacHeader_t* macHdr, uint8_t fPort, void* fBuffer, uin
+     // Prepare the frame
+     status = PrepareFrame( macHdr, &fCtrl, fPort, fBuffer, fBufferSize );
+ 
++    MacCtx.McpsConfirm.AdrAckReq = fCtrl.Bits.AdrAckReq;
++
+     // Validate status
+     if( ( status == LORAMAC_STATUS_OK ) || ( status == LORAMAC_STATUS_SKIPPED_APP_DATA ) )
+     {
+diff --git a/src/mac/LoRaMac.h b/src/mac/LoRaMac.h
+index a55752c8..b3f698a5 100644
+--- a/src/mac/LoRaMac.h
++++ b/src/mac/LoRaMac.h
+@@ -823,6 +823,10 @@ typedef struct sMcpsConfirm
+      * The uplink channel related to the frame
+      */
+     uint32_t Channel;
++    /*!
++     * Whether ADRAckReq was set for this frame
++     */
++    uint8_t AdrAckReq;
+ }McpsConfirm_t;
+ 
+ /*!
+-- 
+2.20.1
+

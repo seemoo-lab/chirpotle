@@ -1,0 +1,39 @@
+From a5599c771297fcda878ff8971221c061ffe3396d Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:16:28 +0100
+Subject: [PATCH 02/14] Disable duty-cycle enforcement
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 2 +-
+ src/apps/LoRaMac/classB/NucleoL476/main.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 30173696..87af5812 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -1081,7 +1081,7 @@ int main( void )
+                 LoRaMacMibSetRequestConfirm( &mibReq );
+ 
+ #if defined( REGION_EU868 ) || defined( REGION_RU864 ) || defined( REGION_CN779 ) || defined( REGION_EU433 )
+-                LoRaMacTestSetDutyCycleOn( LORAWAN_DUTYCYCLE_ON );
++                LoRaMacTestSetDutyCycleOn( false );
+ #endif
+                 mibReq.Type = MIB_SYSTEM_MAX_RX_ERROR;
+                 mibReq.Param.SystemMaxRxError = 20;
+diff --git a/src/apps/LoRaMac/classB/NucleoL476/main.c b/src/apps/LoRaMac/classB/NucleoL476/main.c
+index 9dca892a..0ec7b4b0 100644
+--- a/src/apps/LoRaMac/classB/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classB/NucleoL476/main.c
+@@ -1260,7 +1260,7 @@ int main( void )
+                 LoRaMacMibSetRequestConfirm( &mibReq );
+ 
+ #if defined( REGION_EU868 ) || defined( REGION_RU864 ) || defined( REGION_CN779 ) || defined( REGION_EU433 )
+-                LoRaMacTestSetDutyCycleOn( LORAWAN_DUTYCYCLE_ON );
++                LoRaMacTestSetDutyCycleOn( false );
+ #endif
+                 mibReq.Type = MIB_SYSTEM_MAX_RX_ERROR;
+                 mibReq.Param.SystemMaxRxError = 20;
+-- 
+2.20.1
+

@@ -1,0 +1,265 @@
+From 6b0f45606c7f45adaeef45469a7b55df80ece68b Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:22:15 +0100
+Subject: [PATCH 04/14] Print structured status information to UART
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 36 +++++++++++++++
+ src/apps/LoRaMac/classB/NucleoL476/main.c | 53 +++++++++++++++++++++++
+ src/mac/LoRaMac.c                         | 16 +++++++
+ 3 files changed, 105 insertions(+)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index 59c1613d..83984e69 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -566,8 +566,10 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+     printf( "DATA RATE   : DR_%d\r\n", mcpsConfirm->Datarate );
+ 
+     mibGet.Type  = MIB_CHANNELS;
++    uint32_t freq = 0;
+     if( LoRaMacMibGetRequestConfirm( &mibGet ) == LORAMAC_STATUS_OK )
+     {
++        freq = mibGet.Param.ChannelList[mcpsConfirm->Channel].Frequency;
+         printf( "U/L FREQ    : %lu\r\n", mibGet.Param.ChannelList[mcpsConfirm->Channel].Frequency );
+     }
+ 
+@@ -597,6 +599,21 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+         }
+         printf("\r\n");
+     }
++    
++    printf( "@@@>TX\r\n" );
++    printf( "CLASS=%c\r\n", "ABC"[mibReq.Param.Class] );
++    printf( "PORT=%d\r\n", AppData.Port );
++    printf( "TX_POWER=%d\r\n", mcpsConfirm->TxPower );
++    printf( "Dr=%d\r\n", mcpsConfirm->Datarate );
++    printf( "DATA=" );
++    PrintHexBuffer( AppData.Buffer, AppData.BufferSize );
++    printf( "FREQ=%lu\r\n", freq );
++    if( AppData.MsgType == LORAMAC_HANDLER_CONFIRMED_MSG ) {
++        printf( "TYPE=CONFIRMED\r\nACK=%s\r\n", ( mcpsConfirm->AckReceived != 0 ) ? "1" : "0" );
++    } else {
++        printf( "TYPE=UNCONFIRMED\r\n" );
++    }
++    printf( "@@@<TX\r\n" );
+ 
+     printf( "\r\n" );
+ }
+@@ -839,6 +856,17 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
+     printf( "RX RSSI     : %d\r\n", mcpsIndication->Rssi );
+     printf( "RX SNR      : %d\r\n", mcpsIndication->Snr );
+ 
++    printf( "@@@>RX\r\n" );
++    printf( "DR=%d\r\n", mcpsIndication->RxDatarate );
++    printf( "RSSI=%d\r\n", mcpsIndication->Rssi );
++    printf( "SNR=%d\r\n", mcpsIndication->Snr );
++    printf( "DATA=" );
++    PrintHexBuffer( mcpsIndication->Buffer, mcpsIndication->BufferSize );
++    printf( "WINDOW=%s\r\n", slotStrings[mcpsIndication->RxSlot] );
++    printf( "PORT=%d\r\n", mcpsIndication->Port );
++
++    printf( "@@@<RX\r\n" );
++
+     printf( "\r\n" );
+ }
+ 
+@@ -874,6 +902,10 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
+                 LoRaMacMibGetRequestConfirm( &mibGet );
+                 printf( "DATA RATE   : DR_%d\r\n", mibGet.Param.ChannelsDatarate );
+                 printf( "\r\n" );
++                
++                printf( "@@@!JOINED\r\n" );
++                printf( "@@@!JOINED-OTAA\r\n" );
++
+                 // Status is OK, node has joined the network
+                 DeviceState = DEVICE_STATE_SEND;
+             }
+@@ -965,6 +997,7 @@ int main( void )
+     DeviceState = DEVICE_STATE_RESTORE;
+ 
+     printf( "###### ===== ClassA demo application v1.0.RC1 ==== ######\r\n\r\n" );
++    printf("@@@!REBOOT\r\n");
+ 
+     while( 1 )
+     {
+@@ -1149,6 +1182,9 @@ int main( void )
+                     printf( " %02X", AppSKey[i] );
+                 }
+                 printf( "\n\r\n" );
++                
++                printf( "@@@!JOINED\r\n" );
++                printf( "@@@!JOINED-ABP\r\n" );
+ 
+                 mibReq.Type = MIB_NETWORK_ACTIVATION;
+                 mibReq.Param.NetworkActivation = ACTIVATION_TYPE_ABP;
+diff --git a/src/apps/LoRaMac/classB/NucleoL476/main.c b/src/apps/LoRaMac/classB/NucleoL476/main.c
+index 55860cd7..bc2921a1 100644
+--- a/src/apps/LoRaMac/classB/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classB/NucleoL476/main.c
+@@ -600,8 +600,10 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+     printf( "DATA RATE   : DR_%d\r\n", mcpsConfirm->Datarate );
+ 
+     mibGet.Type  = MIB_CHANNELS;
++    uint32_t freq = 0;
+     if( LoRaMacMibGetRequestConfirm( &mibGet ) == LORAMAC_STATUS_OK )
+     {
++        freq = mibGet.Param.ChannelList[mcpsConfirm->Channel].Frequency;
+         printf( "U/L FREQ    : %lu\r\n", mibGet.Param.ChannelList[mcpsConfirm->Channel].Frequency );
+     }
+ 
+@@ -631,6 +633,22 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
+         }
+         printf("\r\n");
+     }
++    
++    printf( "@@@>TX\r\n" );
++    printf( "FCNT=%lu\r\n", mcpsConfirm->UpLinkCounter );
++    printf( "CLASS=%c\r\n", "ABC"[mibReq.Param.Class] );
++    printf( "PORT=%d\r\n", AppData.Port );
++    printf( "TX_POWER=%d\r\n", mcpsConfirm->TxPower );
++    printf( "DR=%d\r\n", mcpsConfirm->Datarate );
++    printf( "DATA=" );
++    PrintHexBuffer( AppData.Buffer, AppData.BufferSize );
++    printf( "FREQ=%lu\r\n", freq );
++    if( AppData.MsgType == LORAMAC_HANDLER_CONFIRMED_MSG ) {
++        printf( "TYPE=CONFIRMED\r\nACK=%s\r\n", ( mcpsConfirm->AckReceived != 0 ) ? "1" : "0" );
++    } else {
++        printf( "TYPE=UNCONFIRMED\r\n" );
++    }
++    printf( "@@@<TX\r\n" );
+ 
+     printf( "\r\n" );
+ }
+@@ -909,6 +927,18 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
+     printf( "RX RSSI     : %d\r\n", mcpsIndication->Rssi );
+     printf( "RX SNR      : %d\r\n", mcpsIndication->Snr );
+ 
++    printf( "@@@>RX\r\n" );
++    printf( "FCNT=%lu\r\n", mcpsIndication->DownLinkCounter );
++    printf( "DR=%d\r\n", mcpsIndication->RxDatarate );
++    printf( "RSSI=%d\r\n", mcpsIndication->Rssi );
++    printf( "SNR=%d\r\n", mcpsIndication->Snr );
++    printf( "DATA=" );
++    PrintHexBuffer( mcpsIndication->Buffer, mcpsIndication->BufferSize );
++    printf( "WINDOW=%s\r\n", slotStrings[mcpsIndication->RxSlot] );
++    printf( "PORT=%d\r\n", mcpsIndication->Port );
++
++    printf( "@@@<RX\r\n" );
++
+     printf( "\r\n" );
+ }
+ 
+@@ -946,6 +976,10 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
+                 LoRaMacMibGetRequestConfirm( &mibGet );
+                 printf( "DATA RATE   : DR_%d\r\n", mibGet.Param.ChannelsDatarate );
+                 printf( "\r\n" );
++
++                printf( "@@@!JOINED\r\n" );
++                printf( "@@@!JOINED-OTAA\r\n" );
++
+                 // Status is OK, node has joined the network
+ #if defined( USE_BEACON_TIMING )
+                 DeviceState = DEVICE_STATE_REQ_BEACON_TIMING;
+@@ -1020,6 +1054,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
+                 LoRaMacMibSetRequestConfirm( &mibReq );
+ 
+                 printf( "\r\n\r\n###### ===== Switch to Class B done. ==== ######\r\n\r\n" );
++                printf( "@@@CLASS=B\r\n");
+ 
+                 WakeUpState = DEVICE_STATE_SEND;
+                 DeviceState = WakeUpState;
+@@ -1067,6 +1102,7 @@ static void MlmeIndication( MlmeIndication_t *mlmeIndication )
+             LoRaMacMibSetRequestConfirm( &mibReq );
+ 
+             printf( "\r\n\r\n###### ===== Switch to Class A done. ==== ######\r\n\r\n" );
++            printf( "@@@CLASS=A\r\n");
+ 
+             // Switch to class A again
+ #if defined( USE_BEACON_TIMING )
+@@ -1093,11 +1129,24 @@ static void MlmeIndication( MlmeIndication_t *mlmeIndication )
+                 printf( "RX RSSI     : %d\r\n", mlmeIndication->BeaconInfo.Rssi );
+                 printf( "RX SNR      : %d\r\n", mlmeIndication->BeaconInfo.Snr );
+                 printf( "\r\n" );
++                printf( "@@@>BEACON\r\n" );
++                printf( "RECEIVED=1\r\n" );
++                printf( "GPSTIME=%lu\r\n", mlmeIndication->BeaconInfo.Time.Seconds );
++                printf( "RSSI=%d\r\n", mlmeIndication->BeaconInfo.Rssi );
++                printf( "SNR=%d\r\n", mlmeIndication->BeaconInfo.Snr );
++                printf( "INFODESC=%d\r\n", mlmeIndication->BeaconInfo.GwSpecific.InfoDesc );
++                printf( "INFO=" );
++                PrintHexBuffer( mlmeIndication->BeaconInfo.GwSpecific.Info, 6 );
++                printf( "\r\n" );
++                printf( "@@@<BEACON\r\n" );
+             }
+             else
+             {
+                 TimerStop( &LedBeaconTimer );
+                 printf( "\r\n###### ===== BEACON NOT RECEIVED ==== ######\r\n" );
++                printf( "@@@>BEACON\r\n" );
++                printf( "RECEIVED=0\r\n" );
++                printf( "@@@<BEACON\r\n" );
+             }
+             break;
+         }
+@@ -1141,6 +1190,7 @@ int main( void )
+     WakeUpState = DEVICE_STATE_START;
+ 
+     printf( "###### ===== ClassB demo application v1.0.RC1 ==== ######\r\n\r\n" );
++    printf("@@@!REBOOT\r\n");
+ 
+     while( 1 )
+     {
+@@ -1328,6 +1378,9 @@ int main( void )
+                     printf( " %02X", AppSKey[i] );
+                 }
+                 printf( "\n\r\n" );
++                
++                printf( "@@@!JOINED\r\n" );
++                printf( "@@@!JOINED-ABP\r\n" );
+ 
+                 mibReq.Type = MIB_NETWORK_ACTIVATION;
+                 mibReq.Param.NetworkActivation = ACTIVATION_TYPE_ABP;
+diff --git a/src/mac/LoRaMac.c b/src/mac/LoRaMac.c
+index 3388a336..4ba365c8 100644
+--- a/src/mac/LoRaMac.c
++++ b/src/mac/LoRaMac.c
+@@ -30,6 +30,8 @@
+  *
+  * \author    Johannes Bruder ( STACKFORCE )
+  */
++#include <stdio.h>
++
+ #include "utilities.h"
+ #include "region/Region.h"
+ #include "LoRaMacClassB.h"
+@@ -2151,12 +2153,26 @@ static void ProcessMacCommands( uint8_t *payload, uint8_t macIndex, uint8_t comm
+                     status = RegionLinkAdrReq( MacCtx.NvmCtx->Region, &linkAdrReq, &linkAdrDatarate,
+                                                &linkAdrTxPower, &linkAdrNbRep, &linkAdrNbBytesParsed );
+ 
++                    printf( "@@@ADRREQ>\r\n" );
+                     if( ( status & 0x07 ) == 0x07 )
+                     {
++                        printf( "STATUS=OK\r\n" );
+                         MacCtx.NvmCtx->MacParams.ChannelsDatarate = linkAdrDatarate;
++                        printf( "DATARATE=%d\r\n", linkAdrDatarate );
+                         MacCtx.NvmCtx->MacParams.ChannelsTxPower = linkAdrTxPower;
++                        printf( "TXPOWER=%d\r\n", linkAdrTxPower );
+                         MacCtx.NvmCtx->MacParams.ChannelsNbTrans = linkAdrNbRep;
++                        printf( "NBREP=%u\r\n", linkAdrNbRep );
++                    }
++                    else
++                    {
++                        printf( "STATUS=ERROR\r\n" );
++                        printf( "DATARATE=%d\r\n", MacCtx.NvmCtx->MacParams.ChannelsDatarate );
++                        printf( "TXPOWER=%d\r\n", MacCtx.NvmCtx->MacParams.ChannelsTxPower );
++                        printf( "NBREP=%u\r\n", MacCtx.NvmCtx->MacParams.ChannelsNbTrans );
++
+                     }
++                    printf( "@@@ADRREQ<\r\n" );
+ 
+                     // Add one single answer to the buffer
+                     LoRaMacCommandsAddCmd( MOTE_MAC_LINK_ADR_ANS, &status, 1 );
+-- 
+2.20.1
+

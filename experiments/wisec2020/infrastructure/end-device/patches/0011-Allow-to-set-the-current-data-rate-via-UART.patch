@@ -1,0 +1,30 @@
+From d07b2e9e58b4694228920c8b75599bc61a5428f3 Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Sun, 26 Jan 2020 18:29:48 +0100
+Subject: [PATCH 11/14] Allow to set the current data rate via UART
+
+---
+ src/apps/LoRaMac/classA/NucleoL476/main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/apps/LoRaMac/classA/NucleoL476/main.c b/src/apps/LoRaMac/classA/NucleoL476/main.c
+index f50b61ca..43d28b75 100644
+--- a/src/apps/LoRaMac/classA/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classA/NucleoL476/main.c
+@@ -1252,6 +1252,13 @@ int main( void )
+                     else if (c == 'r') {
+                         BoardResetMcu();
+                     }
++                    else if (c >= '0' && c <= '5') {
++                        MibRequestConfirm_t mibReq;
++                        mibReq.Type = MIB_CHANNELS_DATARATE;
++                        mibReq.Param.ChannelsDatarate = (int8_t)(c - '0');
++                        LoRaMacMibSetRequestConfirm( &mibReq );
++                        printf( "@@@DR=%d\r\n", mibReq.Param.ChannelsDatarate );
++                    }
+                 }
+ 
+                 if( NvmCtxMgmtStore( ) == NVMCTXMGMT_STATUS_SUCCESS )
+-- 
+2.20.1
+

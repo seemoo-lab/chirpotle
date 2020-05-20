@@ -1,0 +1,57 @@
+From 46143589123d8cadca2d3ed1848d8c8d7b412a82 Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:23:28 +0100
+Subject: [PATCH 05/14] Allow disabling nbTrans in LinkADRReq
+
+---
+ .vscode/settings.json  | 3 +++
+ src/mac/CMakeLists.txt | 3 +++
+ src/mac/LoRaMac.c      | 4 ++++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+index 8be1ae57..3be095d3 100644
+--- a/.vscode/settings.json
++++ b/.vscode/settings.json
+@@ -33,6 +33,9 @@
+         // Switch for Class B support of LoRaMac:
+         "CLASSB_ENABLED":"ON",
+ 
++        // Ignore the value of nbTrans in the LinkADRReq command, and use a default of 1.
++        "DISABLE_LINK_ADR_NB_REP": "OFF",
++
+         // Select the active region for which the stack will be initialized.
+         // You can choose between:
+         // LORAMAC_REGION_EU868, LORAMAC_REGION_US915, ..
+diff --git a/src/mac/CMakeLists.txt b/src/mac/CMakeLists.txt
+index 70eab69b..6e006049 100644
+--- a/src/mac/CMakeLists.txt
++++ b/src/mac/CMakeLists.txt
+@@ -35,6 +35,9 @@ option(REGION_IN865 "Region IN865" OFF)
+ option(REGION_RU864 "Region RU864" OFF)
+ set(REGION_LIST REGION_EU868 REGION_US915 REGION_CN779 REGION_EU433 REGION_AU915 REGION_AS923 REGION_CN470 REGION_KR920 REGION_IN865 REGION_RU864)
+ 
++# Allow to override the nbRep value in LinkADRReq
++option(DISABLE_LINK_ADR_NB_REP "Ignore nbRep in LinkADRReq command" OFF)
++
+ #---------------------------------------------------------------------------------------
+ # Target
+ #---------------------------------------------------------------------------------------
+diff --git a/src/mac/LoRaMac.c b/src/mac/LoRaMac.c
+index 4ba365c8..aebb7cb8 100644
+--- a/src/mac/LoRaMac.c
++++ b/src/mac/LoRaMac.c
+@@ -2153,6 +2153,10 @@ static void ProcessMacCommands( uint8_t *payload, uint8_t macIndex, uint8_t comm
+                     status = RegionLinkAdrReq( MacCtx.NvmCtx->Region, &linkAdrReq, &linkAdrDatarate,
+                                                &linkAdrTxPower, &linkAdrNbRep, &linkAdrNbBytesParsed );
+ 
++#ifdef DISABLE_LINK_ADR_NB_REP
++                    linkAdrNbRep = 1;
++#endif
++
+                     printf( "@@@ADRREQ>\r\n" );
+                     if( ( status & 0x07 ) == 0x07 )
+                     {
+-- 
+2.20.1
+

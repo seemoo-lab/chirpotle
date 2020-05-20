@@ -1,0 +1,26 @@
+From ed83759fa399cd9664cf2f7e7398ad6d9dc7d3da Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:12:09 +0100
+Subject: [PATCH 01/14] Adjust build settings
+
+---
+ .vscode/c_cpp_properties.json | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/.vscode/c_cpp_properties.json b/.vscode/c_cpp_properties.json
+index 735cf181..4a679255 100644
+--- a/.vscode/c_cpp_properties.json
++++ b/.vscode/c_cpp_properties.json
+@@ -10,7 +10,8 @@
+                 ]
+             },
+             "cStandard": "c11",
+-            "cppStandard": "c++17"
++            "cppStandard": "c++17",
++            "configurationProvider": "vector-of-bool.cmake-tools"
+         }
+     ],
+     "version": 4
+-- 
+2.20.1
+

@@ -1,0 +1,25 @@
+From 91416ed6f2c744928c2ed5dff03d2290e735d9cd Mon Sep 17 00:00:00 2001
+From: Frank Hessel <frank@fhessel.de>
+Date: Thu, 23 Jan 2020 11:24:44 +0100
+Subject: [PATCH 06/14] Use 32s as default beacon ping slot periodicity
+
+---
+ src/apps/LoRaMac/classB/NucleoL476/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/apps/LoRaMac/classB/NucleoL476/main.c b/src/apps/LoRaMac/classB/NucleoL476/main.c
+index bc2921a1..ef479604 100644
+--- a/src/apps/LoRaMac/classB/NucleoL476/main.c
++++ b/src/apps/LoRaMac/classB/NucleoL476/main.c
+@@ -69,7 +69,7 @@ extern Uart_t Uart2;
+  * \remark periodicity is equal to 2^LORAWAN_DEFAULT_PING_SLOT_PERIODICITY seconds
+  *         example: 2^3 = 8 seconds. The end-device will open an Rx slot every 8 seconds.
+  */
+-#define LORAWAN_DEFAULT_PING_SLOT_PERIODICITY       0
++#define LORAWAN_DEFAULT_PING_SLOT_PERIODICITY       5
+ 
+ /*!
+  * LoRaWAN confirmed messages
+-- 
+2.20.1
+
