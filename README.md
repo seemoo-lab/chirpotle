@@ -214,3 +214,22 @@ Therefore, the `install` task supports a `--dev` flag:
 ```
 
 If you've already installed the framework in the default virtual environment (`env` in the repository root), you can just delete that folder and install again.
+
+## License
+
+We provide the ChirpOTLE framework under the [GNU General Public License, Version 3](LICENSE).
+However, the repository contains (modified) third-party code and tools which has been published using a different licenses:
+
+| Component                       | License                                                                   | Directory/Files                                              |
+| ------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| esp-idf                         | [Apache License, Version 2](submodules/esp-idf/LICENSE)¹                  | `submodules/esp-idf`                                         |
+| RIOT                            | [GNU Lesser Public General License, Version 2.1](submodules/RIOT/LICENSE) | `submodules/RIOT`                                            |
+| TPy                             | n/a                                                                       | `submodules/tpy`                                             |
+| xtensa-esp32-elf for RIOT       | n/a                                                                       | `submodules/xtensa-esp32-elf`                                |
+| ubjson (deprecated RIOT module) | [GNU Lesser Public General License, Version 2.1](submodules/RIOT/LICENSE)²| `node/companion-app/riot-modules/{incude/ubjson.h|ubjson/*}` |
+| ChirpStack Docker config  | [MIT License](experiments/wisec2020/infrastructure/network/chirpstack/LICENSE)² | `experiments/wisec2020/infrastructure/network/chirpstack`    |
+| LoRaMAC node      | [Revised BSD license](experiments/wisec2020/infrastructure/node/LoRaMAC-node/LICENSE)¹² | `experiments/wisec2020/infrastructure/node/LoRaMAC-node/`    |
+
+¹ The submodule may contain submodules on its own, which again is published under different licenses, so please also check the description of the submodule.
+
+² We modified this component and publish the changes under the same license.
