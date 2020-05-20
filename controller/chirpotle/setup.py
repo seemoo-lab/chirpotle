@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='chirpotle',
       version='0.0.1',
       description='A LoRaWAN security evaluation framework',
       author='Frank Hessel',
       author_email='fhessel@seemoo.tu-darmstadt.de',
-      packages=['chirpotle'],
+      packages=find_packages(exclude=['tests','scripts']),
       install_requires=[
         'tpycontrol',     # RPC interface to the nodes
         'bullet',         # CLI node pickers etc.
