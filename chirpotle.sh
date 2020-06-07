@@ -13,17 +13,34 @@ function chirpotle_check_requirements {
   if [[ -z "$PYTHON" ]]; then
     echo "No Python 3 installation was found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH or make the PYTHON environment variable point to the executable." >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
     exit 1
   fi
   if ! ($PYTHON -V 2>&1 | grep "Python 3" > /dev/null); then
     echo "No installation of Python 3 could be found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH." >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
     exit 1
   fi
   if ! ($PYTHON -c "import venv" &> /dev/null); then
     echo "Missing Python 3 module \"venv\". Please install it and make it available to your python installation." >&2
     echo "Currently using Python from: $PYTHON" >&2
     echo "Use a different python installation by pointing the PYTHON environment variable to the executable." >&2
+    echo "Quick fix (Debian): sudo apt install python3-venv" >&2
+    exit 1
+  fi
+
+  # Check installed GCC platforms
+  if [[ -z "$(which arm-linux-gnueabihf-gcc)" ]]; then
+    echo "No installation of GCC for arm-linux-gnueabihf was found." >&2
+    echo "It is required to cross-compile the binaries for ARM-based platforms like the Raspberry Pi" >&2
+    echo "Quick fix (Debian): sudo apt install arm-linux-gnueabihf-gcc" >&2
+    exit 1
+  fi
+  if [[ -z "$(which arm-none-eabi-gcc)" ]]; then
+    echo "No installation of GCC for arm-none-eabi was found." >&2
+    echo "It is required to prepare firmware images for ARM-based MCUs like Adafruit's Feather M0" >&2
+    echo "Quick fix (Debian): sudo apt install arm-none-eabi-gcc" >&2
     exit 1
   fi
 }
@@ -160,6 +177,18 @@ function chirpotle_deploy {
     "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
   if [[ "$?" != "0" ]]; then
     echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
+    exit 1
+  fi
+
+  # Build native-raspi (SPI mode)
+  (export PATH="$REPODIR/scripts/uname-hook-crosscompile:$PATH" && PRECONF=native-raspi make -C "$APPDIR" clean all)
+  if [[ "$?" != "0" ]]; then
+    echo "Building the companion application failed for (native-raspi, uart)." >&2
+    exit 1
+  fi
+  (mkdir -p "$APPDIR/dist/native-raspi" && cp "$APPDIR/bin/native-raspi"/*.elf "$APPDIR/dist/native-raspi/")
+  if [[ "$?" != "0" ]]; then
+    echo "Creating distribution of companion application failed for (native-raspi, uart)." >&2
     exit 1
   fi
 

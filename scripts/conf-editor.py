@@ -333,7 +333,24 @@ usually be /dev/spidev0.0 or /dev/spidev0.1 depending on the CS pin you use.
 (Have a look at the pinout for that
         ''')
         dev = Input("🔌  SPI device to use: ").launch()
-        return {"conntype": "spi", "dev": dev}
+        print('''
+Select the variant for the hardware configuration. Analog to the firmware for
+external MCUs, this variant must match the node's architecture (eg. arm or x86)
+and the wiring of the LoRa module to the node.
+        ''')
+        firmwares = {
+            "Raspberry Pi with Dragino LoRa/GPS HAT": "native-raspi",
+        }
+        firmware = Bullet(
+            prompt="Which firmware variant should be used?",
+            choices = list(firmwares.keys()),
+            **default_props
+        ).launch()
+        return {
+            "conntype": "spi",
+            "dev": dev,
+            "firmware": firmwares[firmware]
+        }
     else:
         print('''
 Select the UART device to use. For a USB-to-Serial adapter, this is usually

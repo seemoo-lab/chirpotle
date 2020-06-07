@@ -20,7 +20,9 @@
 #          following parameters:
 #            --spi=0:0:/dev/spidev0.0 --gpio=/dev/gpiochip0 --uart-tty=<tty>
 ifeq ($(PRECONF),native-raspi)
-	TARGET_ARCH  = arm-linux-gnueabihf
+	BOARD        ?= native
+	BINDIR       ?= $(CURDIR)/bin/native-raspi
+	TARGET_ARCH  ?= arm-linux-gnueabihf
 	LORA_SPI_BUS ?= "SPI_DEV(0)"
 	LORA_SPI_CS  ?= "GPIO_PIN(0, 25)"
 	LORA_GPIO_RESET ?= "GPIO_PIN(0, 17)"
@@ -33,6 +35,10 @@ ifeq ($(PRECONF),native-raspi)
 	# USEMODULE += shell
 	# USEMODULE += shell_commands
 	# USEMODULE += ps
+
+	# Use the SPI and GPIO interface of the Raspberry Pi
+	FEATURE_REQUIRED = periph_spi
+	FEATURE_REQUIRED = periph_gpio
 endif
 
 # ------------------------------------------------------------------------------

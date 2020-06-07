@@ -344,6 +344,7 @@ class LoRaControllerSPI(LoRaControllerInterface):
   def __init__(self, dev, startscript = None, **kwargs):
     super().__init__(name="LoRaSPI@%s" % (dev), **kwargs)
     self._dev = dev
+    self._firmware = kwargs['firmware'] if 'firmware' in kwargs else 'native-raspi'
     self._startscript = startscript
 
   def _con_setup(self):
@@ -363,7 +364,7 @@ class LoRaControllerSPI(LoRaControllerInterface):
 
     # Run daemon
     cmd = [
-      os.path.join(os.path.dirname(__file__), 'bin', 'lora_controller.elf'),
+      os.path.join('/opt/chirpotle/firmwares', self._firmware , 'chirpotle-companion.elf'),
       # Map Input/Output to a PTS device as replacement for the serial connection
       '-c', self._ptsfilename, # -c /dev/pts/1
       # Connect to local SPI port

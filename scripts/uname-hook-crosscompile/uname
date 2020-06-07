@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# This script is a proxy to the system's uname to allow cross-compiling the
+# RIOT native board for other platforms like the Raspberry Pi. Depending on
+# the current value of TARGET_ARCH, it will either call the system's uname
+# or return faked values.
+# This is required as the RIOT build environment assumes "native" to be
+# built for the same host.
+
+if [[ -z "$TARGET_ARCH" ]]; then
+    # Use system's uname. We strip the current dir ("uname-hook-crosscompile")
+    # from the path
+    STRIPPEDPATH="$(echo "$PATH" | sed -E 's#(^|:)[^:]+/uname-hook-crosscompile:##')"
+    echo "$STRIPPEDPATH"
+    (export PATH="$STRIPPEDPATH" && uname "$@")
+    exit $?
+elif [[ "$TARGET_ARCH" == "arm-linux-gnueabihf" ]]; then
+    KERNEL_NAME=Linux
+    NODE_NAME=riot
+    MACHINE_NAME="armv7l"
+    OS_NAME="GNU/Linux"
+    # kind-of arbitrary, but RIOT doesn't seem to interpret this anyway
+    KERNEL_RELEASE="4.19.66-v7+"
+    KERNEL_VERSION="#1253 SMP Thu Aug 15 11:49:46 BST 2019"
+else
+    # Unknown architecture
+    exit 1
+fi
+
+USE_KERNEL_NAME=0
+USE_NODE_NAME=0
+USE_KERNEL_RELEASE=0
+USE_KERNEL_VERSION=0
+USE_MACHINE_NAME=0
+USE_OS_NAME=0
+
+while [[ $# -gt 0 ]] && [[ -z "$ACTION" ]]
+do
+  case "$1" in
+    -s|--kernel-name)
+      shift
+      USE_KERNEL_NAME=1
+    ;;
+    -n|--nodename)
+      shift
+      USE_NODE_NAME=1
+    ;;
+    -r|--kernel-release)
+      shift
+      USE_KERNEL_RELEASE=1
+    ;;
+    -v|--kernel-version)
+      shift
+      USE_KERNEL_VERSION=1
+    ;;
+    -m|--machine)
+      shift
+      USE_MACHINE_NAME=1
+    ;;
+    -o|--operating-system)
+      shift
+      USE_OS_NAME=1
+    ;;
+    -a|--all)
+      shift
+      USE_KERNEL_NAME=1
+      USE_NODE_NAME=1
+      USE_KERNEL_RELEASE=1
+      USE_KERNEL_VERSION=1
+      USE_MACHINE_NAME=1
+      USE_OS_NAME=1
+    ;;
+    *)
+      print "Unknown parameter: $1"
+      exit 1
+    ;;
+  esac
+done
+
+OUTPUT=""
+if [[ "$USE_KERNEL_NAME" == "1" ]]; then OUTPUT="$KERNEL_NAME"; fi
+if [[ "$USE_NODE_NAME" == "1" ]]; then OUTPUT="$OUTPUT $NODE_NAME"; fi
+if [[ "$USE_KERNEL_RELEASE" == "1" ]]; then OUTPUT="$OUTPUT $KERNEL_RELEASE"; fi
+if [[ "$USE_KERNEL_VERSION" == "1" ]]; then OUTPUT="$OUTPUT $KERNEL_VERSION"; fi
+if [[ "$USE_MACHINE_NAME" == "1" ]]; then OUTPUT="$OUTPUT $MACHINE_NAME"; fi
+if [[ "$USE_OS_NAME" == "1" ]]; then OUTPUT="$OUTPUT $OS_NAME"; fi
+
+if [[ -z "$OUTPUT" ]]; then
+  echo "$KERNEL_NAME"
+else
+  echo "$OUTPUT" | sed -E 's#^ +##'
+fi

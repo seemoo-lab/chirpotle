@@ -17,12 +17,6 @@ EXTERNAL_MODULES_BASE ?= $(CURDIR)/../../riot-modules
 EXTERNAL_MODULE_DIRS += $(EXTERNAL_MODULES_BASE)
 INCLUDES += -I$(EXTERNAL_MODULES_BASE)/include
 
-# If we want to cross-compile for the Pi, we need to use our copy of the native
-# board, where we are able to change the compilers to their arm variants.
-ifeq ($(TARGET_ARCH),arm-linux-gnueabihf)
-	RIOTBOARD ?= ../../riot-boards
-endif
-
 # ------------------------------------------------------------------------------
 # Debug and development settings
 # ------------------------------------------------------------------------------
