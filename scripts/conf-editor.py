@@ -102,7 +102,7 @@ def ctrl_get_nodeinfo(ctrl):
             .replace(".conf", "")
     } for s in ctrl.sections() if s!='DEFAULT'}
 
-def node_edit(conf, ctrl, nodename):
+def noderef_edit(conf, ctrl, nodename):
     """
     Edit a node within a controller config
     :param conf: The overall configuration (used to retrieve node profiles)
@@ -213,7 +213,7 @@ Note: You may use "localhost", "127.0.0.1" or "::1" as hostname, but nodes with
                 }
             else: # Update node
                 nodename = list(ninfo.values())[choices.index(res)]['name']
-                newnodename, newconf = node_edit(conf, ctrl, nodename)
+                newnodename, newconf = noderef_edit(conf, ctrl, nodename)
                 if newnodename is not None and newconf is not None:
                     ctrl.remove_section(nodename)
                     ctrl.add_section(newnodename)
