@@ -2,6 +2,12 @@
 
 _A LoRaWAN Security Evaluation Framework_
 
+The ChirpOTLE framework provides tools for the deployment and management of a LoRa testbed based on COTS hardware.
+It allows managing LoRa field nodes from a central controller and to orchestrate experiments and tests using a Python 3 interface.
+
+By collocating the nodes with a LoRaWAN network, the built-in functions for receiving, transmitting, jamming, and sniffing can be used to study their effects on the network under test.
+With its dissector and predefined building blocks like wormholes, the framework allows for quick vulnerability assessment in LoRaWAN networks as well as for the evaluation of attempts for their mitigation.
+
 ## Basic Setup
 
 The framework is managed through the `chirpotle.sh` shell script.
@@ -210,6 +216,12 @@ Furthermore, you need to install Python3 with pip on each node.
 You can check if your nodes meet the requirements by calling `./chirpotle.sh deploycheck`.
 The output will also suggest quick fixes in case some of the requirements are not met.
 
+Currently supported hardware:
+
+* Raspberry Pi with [Dragino LoRa GPS HAT](https://wiki.dragino.com/index.php?title=Lora/GPS_HAT)
+* [Pycom LoPy 4](https://pycom.io/product/lopy4/) with external USB-to-Serial converter
+* [Adafruit Feather M0 LoRa](https://www.adafruit.com/product/3178) (currently no remote flashing of the firmware)
+
 ## Development
 
 If you want to modify the framework, you need to install it in development mode for changes to be immediately available.
@@ -220,6 +232,31 @@ Therefore, the `install` task supports a `--dev` flag:
 ```
 
 If you've already installed the framework in the default virtual environment (`env` in the repository root), you can just delete that folder and install again.
+
+## Read Our Paper
+
+The ChirpOTLE framework has been published at [ACM WiSec '20](https://wisec2020.ins.jku.at/) with our paper:
+
+Frank Hessel, Lars Almon, and Flor Álvarez. 2020. ChirpOTLE: A Framework for Practical LoRaWAN Security Evaluation. In _13th ACM Conference on Security and Privacy in Wireless and Mobile Networks (WiSec '20), July 8–10, 2020, Linz (Virtual Event), Austria_. ACM, New York, NY, USA, 11 pages. https://doi.org/10.1145/3395351.3399423
+
+A [preprint](https://arxiv.org/abs/2005.11555) is available.
+Scripts and data for all experiments from the paper can be found in [experiments/wisec2020](experiments/wisec2020/README.md).
+If you use our work for your research, please cite the paper:
+
+```
+@inproceedings{chirpotle2020,
+  title     = {ChirpOTLE: A Framework for Practical LoRaWAN Security Evaluation},
+  author    = {Hessel, Frank and Almon, Lars and Álvarez, Flor},
+  booktitle = {Proceedings of the 13th Conference on Security and Privacy in Wireless and Mobile Networks},
+  date      = {2020},
+  month     = jul,
+  address   = {Linz (Virtual Event), Austria},
+  doi       = {10.1145/3395351.3399423},
+  publisher = {ACM},
+  series    = {WiSec '20},
+  url       = {https://doi.org/10.1145/3395351.3399423},
+}
+```
 
 ## License
 

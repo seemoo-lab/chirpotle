@@ -1,7 +1,10 @@
 # ACM WiSec 2020
 
-This directory contains experiments and results from our paper *ChirpOTLE: A Framework for Practical LoRaWAN Security Evaluation* as presented on [ACM WiSec 2020](https://wisec2020.ins.jku.at).
-We provide all required to replicate our post-processing and the scripts to re-run our experiments.
+This directory contains experiments and results from our [ACM WiSec 2020](https://wisec2020.ins.jku.at) paper:
+
+Frank Hessel, Lars Almon, and Flor Álvarez. 2020. ChirpOTLE: A Framework for Practical LoRaWAN Security Evaluation. In _13th ACM Conference on Security and Privacy in Wireless and Mobile Networks (WiSec '20), July 8–10, 2020, Linz (Virtual Event), Austria_. ACM, New York, NY, USA, 11 pages. https://doi.org/10.1145/3395351.3399423
+
+Here, we provide all data required to replicate our post-processing and the scripts to re-run our experiments.
 
 ## ADR Spoofing
 
@@ -122,7 +125,7 @@ Run the following command on the controller:
 
 ```bash
 ./chirpotle.sh deploy --conf wisec2020
-./chirpotle.sh restardnodes --conf wisec2020
+./chirpotle.sh restartnodes --conf wisec2020
 ```
 
 To forward the serial connections on loranode2 and loranode3 via TCP, you can use [a script provided by `pyserial`](https://pyserial.readthedocs.io/en/latest/examples.html#tcp-ip-serial-bridge) (make sure to `apt install python3-serial` before).
