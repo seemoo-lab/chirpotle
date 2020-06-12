@@ -181,7 +181,7 @@ function chirpotle_deploy {
   fi
 
   # Build native-raspi (SPI mode)
-  (export PATH="$REPODIR/scripts/uname-hook-crosscompile:$PATH" && PRECONF=native-raspi make -C "$APPDIR" clean all)
+  (export PATH="$REPODIR/scripts/uname-hook-crosscompile:$PATH" && CONTINUE_ON_EXPECTED_ERRORS=1 PRECONF=native-raspi make -C "$APPDIR" clean all)
   if [[ "$?" != "0" ]]; then
     echo "Building the companion application failed for (native-raspi, uart)." >&2
     exit 1
