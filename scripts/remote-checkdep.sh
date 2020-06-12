@@ -34,7 +34,7 @@ fi
 
 # This will fail for distributions using "python" for Python 3, but so will the TPy install script
 CHECK="Python 3 installed"
-PYTHON3VER="$(ssh "${SSHOPTS[@]}" "$NODE_HOSTNAME" python3 -V | grep 'Python 3')"
+PYTHON3VER="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" python3 -V | grep 'Python 3')"
 if [[ ! -z "$PYTHON3VER" ]]; then
   print_success "$NODE_HOSTNAME" "$CHECK"
 else
@@ -42,7 +42,7 @@ else
 fi
 
 CHECK="pip for Python 3 installed"
-PYTHON3VER="$(ssh "${SSHOPTS[@]}" "$NODE_HOSTNAME" pip3 -V | grep 'python 3')"
+PYTHON3VER="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" pip3 -V | grep 'python 3')"
 if [[ ! -z "$PYTHON3VER" ]]; then
   print_success "$NODE_HOSTNAME" "$CHECK"
 else
@@ -50,7 +50,7 @@ else
 fi
 
 CHECK="HackRF tools installed"
-HACKRF="$(ssh "${SSHOPTS[@]}" "$NODE_HOSTNAME" which hackrf_transfer)"
+HACKRF="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" which hackrf_transfer)"
 if [[ ! -z "$HACKRF" ]]; then
   print_success "$NODE_HOSTNAME" "$CHECK"
 else
