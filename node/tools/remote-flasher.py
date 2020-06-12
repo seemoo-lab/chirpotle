@@ -69,6 +69,9 @@ for modname in [s for s in conf.sections() if s != 'TPyNode']:
         elif mc['firmware'] in ['lopy4-uart']:
             print("Module %s: Using ESP32 flasher" % modname)
             flash_esp32(mc['dev'], mc['firmware'])
+        elif mc['firmware'] in ['native-raspi']:
+            print("Module %s: Using local process with %s, no flashing required"
+                % (modname, mc['firmware']))
         else:
             print("Module %s: Unknown firmware: %s" % (modname, mc['firmware']))
     else:
