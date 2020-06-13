@@ -732,10 +732,10 @@ int lora_modem_standby(lora_modem_t *modem)
         uint8_t irqs = lm_write_reg(modem, REG127X_LORA_IRQFLAGS, 0xff);
         SPI_RELEASE(modem);
         if (flags!=0xff) {
-            printf("Going to standby. IRQFLAGSMASK was still 0x%02x\n", flags);
+            DEBUG("Going to standby. IRQFLAGSMASK was still 0x%02x\n", flags);
         }
         if (irqs) {
-            printf("Going to standby. IRQFLAGS was still 0x%02x\n", flags);
+            DEBUG("Going to standby. IRQFLAGS was still 0x%02x\n", flags);
         }
     }
     modem->jammer_active = false;
