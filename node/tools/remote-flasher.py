@@ -4,6 +4,7 @@ import csv
 import os
 import subprocess
 import sys
+import time
 
 def flash_esp32(port, fwname):
     """
@@ -54,6 +55,41 @@ def flash_esp32(port, fwname):
     if rc_esptool != 0:
         raise RuntimeError("Could not flash %s" % fwname)
 
+def flash_feather_m0(port, fwname):
+    fwdir = os.path.join("/opt/chirpotle/firmwares", fwname)
+    # Hack that resets the device by changing the baud rate to 1200
+    cmd_reset = ["stty",
+        "-F", port,
+        "raw",
+        "ispeed", "1200",
+        "ospeed", "1200",
+        "cs8",
+        "-cstopb",
+        "ignpar",
+        "eol", "255",
+        "eof", "255"
+    ]
+    # Use bossa for flashing (installed during deploy), params according to RIOT
+    cmd_flash = ["/opt/bossa/bin/bossac",
+        "-p", port,     # serial device
+        "-o", "0x2000", # offset in flash
+        "-e",           # erase flash
+        "-i",           # print info
+        "-w",           # write file to flash
+        "-v",           # verify flash
+        "-b",           # boot flag
+        "-R",           # reset MCU
+        os.path.join(fwdir, "chirpotle-companion.bin")
+    ]
+    rc_reset = subprocess.Popen(cmd_reset).wait(timeout = 20)
+    if rc_reset != 0:
+        raise RuntimeError("Resetting device on %s failed (using 1200 baud hack"
+            % port)
+    time.sleep(2)
+    rc_flash = subprocess.Popen(cmd_flash).wait(timeout = 180)
+    if rc_flash != 0:
+        raise RuntimeError("Could not flash %s" % fwname)
+
 configfile = sys.argv[1]
 conf = configparser.ConfigParser()
 conf.read(configfile)
@@ -69,6 +105,9 @@ for modname in [s for s in conf.sections() if s != 'TPyNode']:
         elif mc['firmware'] in ['lopy4-uart']:
             print("Module %s: Using ESP32 flasher" % modname)
             flash_esp32(mc['dev'], mc['firmware'])
+        elif mc['firmware'] in ['lora-feather-m0']:
+            print("Module %s: Using Bossac flasher for feather" % modname)
+            flash_feather_m0(mc['dev'], mc['firmware'])
         elif mc['firmware'] in ['native-raspi']:
             print("Module %s: Using local process with %s, no flashing required"
                 % (modname, mc['firmware']))

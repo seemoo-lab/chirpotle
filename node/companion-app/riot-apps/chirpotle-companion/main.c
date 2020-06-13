@@ -23,8 +23,10 @@
 
 #if defined(LORA_INTERFACE_TCP)
 #include "lora_if_tcp.h"
-#else
+#elif defined(LORA_INTERFACE_UART)
 #include "lora_if_uart.h"
+#elif defined(LORA_INTERFACE_STDIO)
+#include "lora_if_stdio.h"
 #endif
 
 /* Assign the active interface to lora_interface */
@@ -32,10 +34,13 @@
 /** Structure for the interface */
 const lora_interface_t *lora_interface = &lora_interface_tcp;
 const char if_name[] = "TCP";
-#else
+#elif defined(LORA_INTERFACE_UART)
 /** Structure for the interface */
 const lora_interface_t *lora_interface = &lora_interface_uart;
 const char if_name[] = "UART";
+#elif defined(LORA_INTERFACE_STDIO)
+const lora_interface_t *lora_interface = &lora_interface_stdio;
+const char if_name[] = "STDIO";
 #endif
 
 #ifndef LORA_SPI_BUS

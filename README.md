@@ -211,7 +211,12 @@ The framework was tested on Debian Buster, but it should work on most other Linu
 
 Calling `./chirpotle.sh deploy` will install the framework globally on the node using an SSH connection as user `root`.
 Therefore, the public SSH key of the user running the ChirpOTLE controller must be added to root's `authorized_keys` file on the node.
-Furthermore, you need to install Python3 with pip on each node.
+Furthermore, you need to install Python3 with pip, git, make and gcc on each node.
+For Debian-based systems, you can run:
+
+```bash
+apt install python3 python3-pip git build-essential
+```
 
 You can check if your nodes meet the requirements by calling `./chirpotle.sh deploycheck`.
 The output will also suggest quick fixes in case some of the requirements are not met.
@@ -220,7 +225,7 @@ Currently supported hardware:
 
 * Raspberry Pi with [Dragino LoRa GPS HAT](https://wiki.dragino.com/index.php?title=Lora/GPS_HAT)
 * [Pycom LoPy 4](https://pycom.io/product/lopy4/) with external USB-to-Serial converter
-* [Adafruit Feather M0 LoRa](https://www.adafruit.com/product/3178) (currently no remote flashing of the firmware)
+* [Adafruit Feather M0 LoRa](https://www.adafruit.com/product/3178)
 
 ## Development
 

@@ -61,6 +61,7 @@ endif
 #            https://learn.adafruit.com/adafruit-feather-m0-radio-with-lora-radio-module/power-management
 ifeq ($(PRECONF),lora-feather-m0)
 	BOARD           = feather-m0
+	BINDIR         ?= $(CURDIR)/bin/lora-feather-m0
 
 	# Only one SPI bus
 	LORA_SPI_BUS    ?= "SPI_DEV(0)"
@@ -78,13 +79,13 @@ ifeq ($(PRECONF),lora-feather-m0)
 	LORA_GPIO_SNIFFER ?= "GPIO_PIN(PA,20)"
 	LORA_GPIO_JAMMER  ?= "GPIO_PIN(PA,7)"
 
-	# Interface is uart, and when have only one serial port, so no shell.
-	INTERFACE               ?= uart
-	LORA_UART_DAEMON_DEVICE ?= "UART_DEV(0)"
-
-	# Null module for STDIO, so UART_DEV(0) remains usable for the communication
-	# of TPy with the board
-	USEMODULE += stdio_null
+	# The board will communicate via stdio, as no UART_DEV is available
+	INTERFACE ?= stdio
+	USEMODULE += stdio_cdc_acm
+	USEMODULE += boards_common_samd21-arduino-bootloader
+	USEMODULE += usb_board_reset
+	CFLAGS += -DUSB_CONFIG_VID="0x239a"
+	CFLAGS += -DUSB_CONFIG_PID="0x000b"
 endif
 
 # ------------------------------------------------------------------------------

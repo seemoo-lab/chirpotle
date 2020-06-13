@@ -47,15 +47,16 @@ INTERFACE ?= uart
 ifeq ($(INTERFACE),uart)
 	USEMODULE += lora_if_uart
 	CFLAGS += -DLORA_INTERFACE_UART
-else
-ifeq ($(INTERFACE),tcp)
+else ifeq ($(INTERFACE),tcp)
 	USEMODULE += lora_if_tcp
 	CFLAGS += -DLORA_INTERFACE_TCP
 	# Allow more than 2 IP addresses
 	CFLAGS += -DGNRC_NETIF_IPV6_ADDRS_NUMOF=4
+else ifeq ($(INTERFACE),stdio)
+	USEMODULE += lora_if_stdio
+	CFLAGS += -DLORA_INTERFACE_STDIO
 else
 $(error Unknown interface type: $(INTERFACE). Available options: uart, tcp)
-endif
 endif
 $(info Interface type: $(INTERFACE))
 

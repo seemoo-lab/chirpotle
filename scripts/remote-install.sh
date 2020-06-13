@@ -36,6 +36,11 @@ print_log "Installing additional dependencies"
 ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "pip3 install -r /opt/chirpotle/modules/requirements.txt"
 if [[ "$?" != "0" ]]; then print_log "Installing dependencies failed"; exit 1; fi
 
+# Clone and build bossa, if not already done
+print_log "Building bossa"
+ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "if [[ ! -d /opt/bossa ]]; then git clone -b 1.9 https://github.com/shumatech/BOSSA.git /opt/bossa && make -C /opt/bossa strip-bossac; fi"
+if [[ "$?" != "0" ]]; then print_log "Cloning and building bossa failed"; exit 1; fi
+
 # RIOT binaries
 print_log "Copying firmware"
 scp "${SSHOPTS[@]}" -r "$REPODIR/node/companion-app/riot-apps/chirpotle-companion/dist"/* "root@$NODE_HOSTNAME:/opt/chirpotle/firmwares/"

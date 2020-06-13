@@ -49,6 +49,23 @@ else
   print_failure "$NODE_HOSTNAME" "$CHECK" "Please install pip3 on the node (Debian: apt install python3-pip)"
 fi
 
+CHECK="git installed"
+GITBIN="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" which git)"
+if [[ ! -z "$GITBIN" ]]; then
+  print_success "$NODE_HOSTNAME" "$CHECK"
+else
+  print_failure "$NODE_HOSTNAME" "$CHECK" "Please install git on the node (Debian: apt install git)"
+fi
+
+CHECK="gcc and make installed"
+GCCBIN="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" which gcc)"
+MAKEBIN="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" which make)"
+if [[ ! -z "$GCCBIN" ]] || [[ ! -z "$MAKEBIN" ]]; then
+  print_success "$NODE_HOSTNAME" "$CHECK"
+else
+  print_failure "$NODE_HOSTNAME" "$CHECK" "Please install gcc and make on the node (Debian: apt install build-essential)"
+fi
+
 CHECK="HackRF tools installed"
 HACKRF="$(ssh "${SSHOPTS[@]}" root@"$NODE_HOSTNAME" which hackrf_transfer)"
 if [[ ! -z "$HACKRF" ]]; then

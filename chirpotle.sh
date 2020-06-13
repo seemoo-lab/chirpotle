@@ -180,6 +180,18 @@ function chirpotle_deploy {
     exit 1
   fi
 
+  # Build Feather M0 (UART mode)
+  PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
+  if [[ "$?" != "0" ]]; then
+    echo "Building the companion application failed for (Feather M0, uart)." >&2
+    exit 1
+  fi
+  (mkdir -p "$APPDIR/dist/lora-feather-m0" && cp "$APPDIR/bin/lora-feather-m0"/*.bin "$APPDIR/dist/lora-feather-m0/")
+  if [[ "$?" != "0" ]]; then
+    echo "Creating distribution of companion application failed for (Feather M0, uart)." >&2
+    exit 1
+  fi
+
   # Build native-raspi (SPI mode)
   (export PATH="$REPODIR/scripts/uname-hook-crosscompile:$PATH" && CONTINUE_ON_EXPECTED_ERRORS=1 PRECONF=native-raspi make -C "$APPDIR" clean all)
   if [[ "$?" != "0" ]]; then

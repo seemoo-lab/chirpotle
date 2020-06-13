@@ -367,6 +367,7 @@ flashing the firmware automatically. If you want to do that manually, select
             ''')
         firmwares = {
             "LoPy 4 via UART": "lopy4-uart",
+            "LoRa Feather M0": "lora-feather-m0",
         }
         firmware = Bullet(
             prompt="Which firmware should be flashed to the MCU?",
