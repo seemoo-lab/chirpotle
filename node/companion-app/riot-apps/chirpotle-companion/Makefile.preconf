@@ -23,6 +23,7 @@ ifeq ($(PRECONF),native-raspi)
 	BOARD        ?= native
 	BINDIR       ?= $(CURDIR)/bin/native-raspi
 	TARGET_ARCH  ?= arm-linux-gnueabihf
+	TARGET_OS    ?= Linux
 	LORA_SPI_BUS ?= "SPI_DEV(0)"
 	LORA_SPI_CS  ?= "GPIO_PIN(0, 25)"
 	LORA_GPIO_RESET ?= "GPIO_PIN(0, 17)"
