@@ -22,12 +22,23 @@
 ifeq ($(PRECONF),native-raspi)
 	BOARD        ?= native
 	BINDIR       ?= $(CURDIR)/bin/native-raspi
+
+	# Build an ARM binary for the Pi
 	TARGET_ARCH  ?= arm-linux-gnueabihf
 	TARGET_OS    ?= Linux
+
+	# The GCC defaults on Raspbian differ:
+	CFLAGS       += -march=armv6+fp
+	CFLAGS       += -mfpu=vfp
+	CFLAGS       += -marm
+	CFLAGS       += -mtp=soft
+
+	# Configure SPI
 	LORA_SPI_BUS ?= "SPI_DEV(0)"
 	LORA_SPI_CS  ?= "GPIO_PIN(0, 25)"
-	LORA_GPIO_RESET ?= "GPIO_PIN(0, 17)"
+
 	# Interrupts aren't fully supported by now, so we don't assign GPIO7.
+	LORA_GPIO_RESET ?= "GPIO_PIN(0, 17)"
 
 	INTERFACE    ?= uart
 
