@@ -98,6 +98,7 @@ function chirpotle_deploy {
   # Default parameters
   CONFIGNAME="default"
   INCLUDE_LOCALHOST=0
+  export FIRMWARE_ONLY=0
 
   # Parameter parsing
   while [[ $# -gt 0 ]]
@@ -110,7 +111,7 @@ function chirpotle_deploy {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh deploy [--conf <config name>] [--help] [--include-localhost]"
+          echo "  Usage: chirpotle.sh deploy [--conf <config name>] [--firmware-only] [--help] [--include-localhost]"
           echo ""
           echo "  Setup a virtual environment and install ChirpOTLE and its dependencies."
           echo "  Use the global --env command to specify a custom location for the"
@@ -124,6 +125,8 @@ function chirpotle_deploy {
           echo "    The configuration that will be deployed (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
           echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
+          echo "  --firmware-only"
+          echo "    Only re-flash the firmware (requires a full deploy before)."
           echo "  -h, --help"
           echo "    Show this help and quit."
           echo "  --include-localhost"
@@ -132,6 +135,10 @@ function chirpotle_deploy {
           echo "    the software globally (assuming you don't want that on yourcontroller)."
           echo "    This option disables this check."
           exit 0
+        ;;
+        --firmware-only)
+          export FIRMWARE_ONLY=1
+          shift
         ;;
         --include-localhost)
           INCLUDE_LOCALHOST=1
@@ -151,61 +158,7 @@ function chirpotle_deploy {
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
 
-  # Build and Bundle the TPy Node
-  # -----------------------------
-  make -C "$REPODIR/submodules/tpy/node" sdist
-  if [[ "$?" != "0" ]]; then
-    echo "Building TPy Node failed." >&2
-    exit 1
-  fi
-
-  # Build the companion application for various toolchains
-  # ------------------------------------------------------
-  # Toolchain for ESP32
-  export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
-  export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
-  APPDIR="$REPODIR/node/companion-app/riot-apps/chirpotle-companion"
-  mkdir -p "$APPDIR/dist"
-
-  # Build LoPy4 (UART mode)
-  PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
-  if [[ "$?" != "0" ]]; then
-    echo "Building the companion application failed for (LoPy4, uart)." >&2
-    exit 1
-  fi
-  (mkdir -p "$APPDIR/dist/lopy4-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
-    "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
-  if [[ "$?" != "0" ]]; then
-    echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
-    exit 1
-  fi
-
-  # Build Feather M0 (UART mode)
-  PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
-  if [[ "$?" != "0" ]]; then
-    echo "Building the companion application failed for (Feather M0, uart)." >&2
-    exit 1
-  fi
-  (mkdir -p "$APPDIR/dist/lora-feather-m0" && cp "$APPDIR/bin/lora-feather-m0"/*.bin "$APPDIR/dist/lora-feather-m0/")
-  if [[ "$?" != "0" ]]; then
-    echo "Creating distribution of companion application failed for (Feather M0, uart)." >&2
-    exit 1
-  fi
-
-  # Build native-raspi (SPI mode)
-  PRECONF=native-raspi make -C "$APPDIR" clean all
-  if [[ "$?" != "0" ]]; then
-    echo "Building the companion application failed for (native-raspi, uart)." >&2
-    exit 1
-  fi
-  (mkdir -p "$APPDIR/dist/native-raspi" && cp "$APPDIR/bin/native-raspi"/*.elf "$APPDIR/dist/native-raspi/")
-  if [[ "$?" != "0" ]]; then
-    echo "Creating distribution of companion application failed for (native-raspi, uart)." >&2
-    exit 1
-  fi
-
-  # Deploy
-  # ------
+  # Process localhost configuration
   export CONFDIR="$CONFDIR"
   export CONFFILE="$CONFFILE" # require original file for the lookup of node configuration files during deployment
   TMPCONFFILE="$CONFFILE"
@@ -214,13 +167,71 @@ function chirpotle_deploy {
     "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
   fi
 
-  # Plain TPy
-  tpy deploy -d "$TMPCONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
-  if [[ "$?" != "0" ]]; then
-    echo "Deploying TPy to the nodes failed. Check the output above." >&2
-    if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
-    exit 1
-  fi
+  # Full deploy or only re-flashing the firmware?
+  if [[ "$FIRMWARE_ONLY" != "1" ]]; then
+    # Build and Bundle the TPy Node
+    # -----------------------------
+    make -C "$REPODIR/submodules/tpy/node" sdist
+    if [[ "$?" != "0" ]]; then
+      echo "Building TPy Node failed." >&2
+      exit 1
+    fi
+
+    # Build the companion application for various toolchains
+    # ------------------------------------------------------
+    # Toolchain for ESP32
+    export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
+    export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
+    APPDIR="$REPODIR/node/companion-app/riot-apps/chirpotle-companion"
+    mkdir -p "$APPDIR/dist"
+
+    # Build LoPy4 (UART mode)
+    PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
+    if [[ "$?" != "0" ]]; then
+      echo "Building the companion application failed for (LoPy4, uart)." >&2
+      exit 1
+    fi
+    (mkdir -p "$APPDIR/dist/lopy4-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
+      "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
+    if [[ "$?" != "0" ]]; then
+      echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
+      exit 1
+    fi
+
+    # Build Feather M0 (UART mode)
+    PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
+    if [[ "$?" != "0" ]]; then
+      echo "Building the companion application failed for (Feather M0, uart)." >&2
+      exit 1
+    fi
+    (mkdir -p "$APPDIR/dist/lora-feather-m0" && cp "$APPDIR/bin/lora-feather-m0"/*.bin "$APPDIR/dist/lora-feather-m0/")
+    if [[ "$?" != "0" ]]; then
+      echo "Creating distribution of companion application failed for (Feather M0, uart)." >&2
+      exit 1
+    fi
+
+    # Build native-raspi (SPI mode)
+    PRECONF=native-raspi make -C "$APPDIR" clean all
+    if [[ "$?" != "0" ]]; then
+      echo "Building the companion application failed for (native-raspi, uart)." >&2
+      exit 1
+    fi
+    (mkdir -p "$APPDIR/dist/native-raspi" && cp "$APPDIR/bin/native-raspi"/*.elf "$APPDIR/dist/native-raspi/")
+    if [[ "$?" != "0" ]]; then
+      echo "Creating distribution of companion application failed for (native-raspi, uart)." >&2
+      exit 1
+    fi
+
+    # Deploy
+    # ------
+    # Plain TPy
+    tpy deploy -d "$TMPCONFFILE" -p "$REPODIR/submodules/tpy/node/dist/tpynode-latest.tar.gz"
+    if [[ "$?" != "0" ]]; then
+      echo "Deploying TPy to the nodes failed. Check the output above." >&2
+      if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
+      exit 1
+    fi
+  fi # !FIRMWARE_ONLY
 
   # Customize TPy for ChirpOTLE
   tpy script -d "$TMPCONFFILE" -s "$REPODIR/scripts/remote-install.sh"
@@ -231,6 +242,8 @@ function chirpotle_deploy {
   fi
 
   if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
+
+  echo "Nodes have been stopped during deployment. Remember calling \"chirpotle.sh restartnodes\" before using the framework."
 } # end of chirpotle_deploy
 
 function chirpotle_deploycheck {
@@ -712,7 +725,7 @@ function chirpotle_restartnodes {
   RC=$?
   if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
   exit $RC
-} # end of chirpotle_tpy
+} # end of chirpotle_restartnodes
 
 function chirpotle_tpy {
   # Enter virtual environment

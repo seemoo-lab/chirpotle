@@ -18,28 +18,30 @@ if [[ "$?" != "0" ]]; then
   exit 1
 fi
 
-# Delete an recreate /opt/talonpy-lora
-print_log "Recreating /opt/chirpotle"
-ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "if [ -d /opt/chirpotle ]; then rm -rf /opt/chirpotle; fi; mkdir -p /opt/chirpotle/nodeconf; mkdir -p /opt/chirpotle/modules; mkdir -p /opt/chirpotle/firmwares; mkdir -p /opt/chirpotle/tools"
-if [[ "$?" != "0" ]]; then print_log "Creating /opt/chirpotle failed"; exit 1; fi
+if [[ "$FIRMWARE_ONLY" != "1" ]]; then
+  # Delete an recreate /opt/talonpy-lora
+  print_log "Recreating /opt/chirpotle"
+  ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "if [ -d /opt/chirpotle ]; then rm -rf /opt/chirpotle; fi; mkdir -p /opt/chirpotle/nodeconf; mkdir -p /opt/chirpotle/modules; mkdir -p /opt/chirpotle/firmwares; mkdir -p /opt/chirpotle/tools"
+  if [[ "$?" != "0" ]]; then print_log "Creating /opt/chirpotle failed"; exit 1; fi
 
-scp "${SSHOPTS[@]}" "$CONFDIR/nodeconf"/* "root@$NODE_HOSTNAME:/opt/chirpotle/nodeconf/"
-if [[ "$?" != "0" ]]; then print_log "Copying node configurations failed"; exit 1; fi
+  scp "${SSHOPTS[@]}" "$CONFDIR/nodeconf"/* "root@$NODE_HOSTNAME:/opt/chirpotle/nodeconf/"
+  if [[ "$?" != "0" ]]; then print_log "Copying node configurations failed"; exit 1; fi
 
-scp "${SSHOPTS[@]}" "$REPODIR/node/remote-modules"/*.{py,md,txt} "root@$NODE_HOSTNAME:/opt/chirpotle/modules/"
-if [[ "$?" != "0" ]]; then print_log "Copying custom TPy modules failed"; exit 1; fi
+  scp "${SSHOPTS[@]}" "$REPODIR/node/remote-modules"/*.{py,md,txt} "root@$NODE_HOSTNAME:/opt/chirpotle/modules/"
+  if [[ "$?" != "0" ]]; then print_log "Copying custom TPy modules failed"; exit 1; fi
 
-scp "${SSHOPTS[@]}" "$REPODIR/node/tools"/* "root@$NODE_HOSTNAME:/opt/chirpotle/tools/"
-if [[ "$?" != "0" ]]; then print_log "Copying node tools failed"; exit 1; fi
+  scp "${SSHOPTS[@]}" "$REPODIR/node/tools"/* "root@$NODE_HOSTNAME:/opt/chirpotle/tools/"
+  if [[ "$?" != "0" ]]; then print_log "Copying node tools failed"; exit 1; fi
 
-print_log "Installing additional dependencies"
-ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "pip3 install -r /opt/chirpotle/modules/requirements.txt"
-if [[ "$?" != "0" ]]; then print_log "Installing dependencies failed"; exit 1; fi
+  print_log "Installing additional dependencies"
+  ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "pip3 install -r /opt/chirpotle/modules/requirements.txt"
+  if [[ "$?" != "0" ]]; then print_log "Installing dependencies failed"; exit 1; fi
 
-# Clone and build bossa, if not already done
-print_log "Building bossa"
-ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "if [[ ! -d /opt/bossa ]]; then git clone -b 1.9 https://github.com/shumatech/BOSSA.git /opt/bossa && make -C /opt/bossa strip-bossac; fi"
-if [[ "$?" != "0" ]]; then print_log "Cloning and building bossa failed"; exit 1; fi
+  # Clone and build bossa, if not already done
+  print_log "Building bossa"
+  ssh "${SSHOPTS[@]}" "root@$NODE_HOSTNAME" "if [[ ! -d /opt/bossa ]]; then git clone -b 1.9 https://github.com/shumatech/BOSSA.git /opt/bossa && make -C /opt/bossa strip-bossac; fi"
+  if [[ "$?" != "0" ]]; then print_log "Cloning and building bossa failed"; exit 1; fi
+fi # !FIRMWARE_ONLY
 
 # RIOT binaries
 print_log "Copying firmware"
