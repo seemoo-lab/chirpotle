@@ -517,6 +517,82 @@ function chirpotle_localnode {
   if [[ ! -z "$TMPCONFFILE" ]] && [[ -f "$TMPCONFFILE" ]]; then rm "$TMPCONFFILE"; fi
 } # end of chirpotle_localnode
 
+# Launch a Jupyter Notebook server
+function chirpotle_notebook {
+  # Default parameters
+  CONFIGNAME="default"
+  NOTEBOOK="$REPODIR/notebook"
+
+  # Parameter parsing
+  while [[ $# -gt 0 ]] && [[ -z "$SCRIPTNAME" ]]; do
+    KEY="$1"
+    case "$KEY" in
+        -c|--conf)
+          CONFIGNAME="$2"
+          shift
+          shift
+        ;;
+        -h|--help)
+          echo "  Usage: chirpotle.sh [...] run [--conf <config name>] [--help] [--notebook <notebook dir>]"
+          echo ""
+          echo "  Open a Jupyter Notebook to use with ChirpOTLE."
+          echo ""
+          echo "  Optional arguments:"
+          echo "  -c, --conf"
+          echo "    The configuration that will be used (defaults to \"default\")"
+          echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
+          echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
+          echo "  -h, --help"
+          echo "    Show this help and quit."
+          echo "  -n, --notebook"
+          echo "    Notebook folder. Will be created if it does not exist."
+          exit 0
+        ;;
+        -n|--notebook)
+          NOTEBOOK="$2"
+          shift
+          shift
+        ;;
+        *)
+          echo "Invalid argument: $KEY"
+          exit 1
+        ;;
+    esac
+  done
+
+  # Validate config name and get absolute path
+  export CONFFILE=$(chirpotle_check_hostconf "$CONFIGNAME") || exit 1
+
+  # Enter virtual environment
+  source "$ENVDIR/bin/activate"
+
+  # Check for notebook and install it
+  if ! ( python -c "import notebook" 2> /dev/null ); then
+    pip install notebook
+  fi
+  if ! ( python -c "import notebook" 2> /dev/null ); then
+    echo "Installing notebook failed." >&2
+    exit 1
+  fi
+
+  # Create directory if not existing
+  if [[ ! -d "$NOTEBOOK" ]]; then
+    if [[ -e "$NOTEBOOK" ]]; then
+      echo "Path $NOTEBOOK already exists, but is not a directory" >&2
+      exit 1
+    fi
+    mkdir -p "$NOTEBOOK"
+    if [[ "$?" != "0" ]]; then
+      echo "Could not create $NOTEBOOK" >&2
+      exit 1
+    fi
+    cp -r "$REPODIR/templates/notebook"/* "$NOTEBOOK/"
+  fi
+
+  (cd "$REPODIR" && jupyter notebook --notebook-dir="$NOTEBOOK")
+
+} # end of chirpotle_notebook
+
 # Run a script in the virtual environment
 function chirpotle_run {
   # Default parameters
@@ -657,6 +733,7 @@ function chirpotle_usage {
   echo "    install      - Install controller on this host in a virtual environment"
   echo "    interactive  - Run an interactive evaluation session"
   echo "    localnode    - Start a local instance of ChirpOTLE node"
+  echo "    notebook     - Start a Jupyter Notebook server"
   echo "    restartnodes - (Re)start the remote ChirpOTLE nodes"
   echo "    run          - Run a script in the virtual environment"
   echo "    tpy          - Run a TPy command directly"
@@ -707,6 +784,10 @@ do
     localnode)
       shift
       ACTION=chirpotle_localnode
+    ;;
+    notebook)
+      shift
+      ACTION=chirpotle_notebook
     ;;
     restartnodes)
       shift

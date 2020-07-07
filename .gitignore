@@ -11,3 +11,4 @@ dist/
 # Local configuration and virtual environment
 /env/
 /conf/
+/notebook/

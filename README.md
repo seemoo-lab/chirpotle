@@ -189,6 +189,21 @@ To run one of the example scripts, you can use the `run` task with a python scri
 ./chirpotle.sh run --conf testconf example.py
 ```
 
+## Getting Started with Jupyter Notebooks
+
+The framework also comes with an integration for Jupyter notebooks.
+After creating you configuration like mentioned above, you can just run:
+
+```bash
+./chirpotle.sh deploy --conf testconf
+./chirpotle.sh restartnodes --conf testconf
+./chirpotle.sh notebook --conf testconf
+```
+
+On the first run, the `notebook` action will install Jupyter notebook in the virtual environment.
+The default notebook folder is called `notebook` and created in the repository root.
+It also contains an `examples` folder with notebooks that show you how to setup your experiments and how to integrate the framework with data visualization tools like `matplotlib` to create a seamless workflow.
+
 ## System Requirements
 
 Most of the software that is required to run the framework is managed by the framework in the virtual environment.
