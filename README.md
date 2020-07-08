@@ -1,8 +1,6 @@
-# ChirpOTLE
+![ChirpOTLE](assets/chirpotle.png)
 
-_A LoRaWAN Security Evaluation Framework_
-
-The ChirpOTLE framework provides tools for the deployment and management of a LoRa testbed based on COTS hardware.
+ChirpOTLE is a practical LoRaWAN security evaluation framework that provides tools for the deployment and management of a LoRa testbed based on COTS hardware.
 It allows managing LoRa field nodes from a central controller and to orchestrate experiments and tests using a Python 3 interface.
 
 By collocating the nodes with a LoRaWAN network, the built-in functions for receiving, transmitting, jamming, and sniffing can be used to study their effects on the network under test.
