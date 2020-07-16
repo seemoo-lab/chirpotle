@@ -294,3 +294,11 @@ However, the repository contains (modified) third-party code and tools which has
 ¹ The submodule may contain submodules on its own, which again is published under different licenses, so please also check the description of the submodule.
 
 ² We modified this component and publish the changes under the same license.
+
+## Powered by
+
+[![Logo: TU Darmstadt](assets/logo_tuda.png)](https://www.tu-darmstadt.de)
+[![Logo: Secure Mobile Networking Lab](assets/logo_seemoo.png)](https://www.seemoo.de)
+[![Logo: CYSEC](assets/logo_cysec.png)](https://www.cysec.de)
+[![Logo: ATHENE](assets/logo_athene.png)](https://www.athene-center.de)
+[![Logo: emergenCITY](assets/logo_emergencity.png)](https://www.emergencity.de)
