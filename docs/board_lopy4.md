@@ -101,9 +101,6 @@ Navigate to that `dist` folder mentioned in step 2.
 From there, run the following command via esptool:
 
 ```bash
-# Clear NVM 
-esptool erase_region 0x9000 0x6000
-# Write partition table and new application
 esptool write_flash  0x8000 partitions.bin \
                     0x10000 chirpotle-companion.elf.bin
 ```
