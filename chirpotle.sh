@@ -2,6 +2,13 @@
 
 REPODIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+function containsElement {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
 function chirpotle_check_requirements {
   # Check for Python 3 and set it to $PYTHON
   if [[ -z "$PYTHON" ]]; then
@@ -98,6 +105,7 @@ function chirpotle_deploy {
   # Default parameters
   CONFIGNAME="default"
   INCLUDE_LOCALHOST=0
+  BUILD_ALL=0
   export FIRMWARE_ONLY=0
 
   # Parameter parsing
@@ -105,13 +113,18 @@ function chirpotle_deploy {
   do
     KEY="$1"
     case "$KEY" in
+        -b|--build-all)
+          BUILD_ALL=1
+          shift
+          shift
+        ;;
         -c|--conf)
           CONFIGNAME="$2"
           shift
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh deploy [--conf <config name>] [--firmware-only] [--help] [--include-localhost]"
+          echo "  Usage: chirpotle.sh deploy [--build-all] [--conf <config name>] [--firmware-only] [--help] [--include-localhost]"
           echo ""
           echo "  Setup a virtual environment and install ChirpOTLE and its dependencies."
           echo "  Use the global --env command to specify a custom location for the"
@@ -121,6 +134,9 @@ function chirpotle_deploy {
           echo "    globally. Make sure that your SSH key is deployed on all nodes as"
           echo "    authorized_key for user root and global installation suits your setup."
           echo ""
+          echo "  -b, --build-all"
+          echo "    Normally, only firmwares which area required for the given"
+          echo "    will be built. Passing this flag builds all firmwares."
           echo "  -c, --conf"
           echo "    The configuration that will be deployed (defaults to \"default\")"
           echo "    Refers to a filename in the conf/hostconf folder, without the .conf"
@@ -179,6 +195,9 @@ function chirpotle_deploy {
 
     # Build the companion application for various toolchains
     # ------------------------------------------------------
+    # Find used firmwares
+    USED_FIRMWARES="$($REPODIR/scripts/list-used-firmware.py "$CONFDIR" "$CONFFILE")"
+
     # Toolchain for ESP32
     export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
     export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
@@ -186,40 +205,46 @@ function chirpotle_deploy {
     mkdir -p "$APPDIR/dist"
 
     # Build LoPy4 (UART mode)
-    PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
-    if [[ "$?" != "0" ]]; then
-      echo "Building the companion application failed for (LoPy4, uart)." >&2
-      exit 1
-    fi
-    (mkdir -p "$APPDIR/dist/lopy4-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
-      "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
-    if [[ "$?" != "0" ]]; then
-      echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
-      exit 1
+    if $(containsElement "lopy4-uart" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+      PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
+      if [[ "$?" != "0" ]]; then
+        echo "Building the companion application failed for (LoPy4, uart)." >&2
+        exit 1
+      fi
+      (mkdir -p "$APPDIR/dist/lopy4-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
+        "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/lopy4-uart/")
+      if [[ "$?" != "0" ]]; then
+        echo "Creating distribution of companion application failed for (LoPy4, uart)." >&2
+        exit 1
+      fi
     fi
 
     # Build Feather M0 (UART mode)
-    PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
-    if [[ "$?" != "0" ]]; then
-      echo "Building the companion application failed for (Feather M0, uart)." >&2
-      exit 1
-    fi
-    (mkdir -p "$APPDIR/dist/lora-feather-m0" && cp "$APPDIR/bin/lora-feather-m0"/*.bin "$APPDIR/dist/lora-feather-m0/")
-    if [[ "$?" != "0" ]]; then
-      echo "Creating distribution of companion application failed for (Feather M0, uart)." >&2
-      exit 1
+    if $(containsElement "lora-feather-m0" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+      PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
+      if [[ "$?" != "0" ]]; then
+        echo "Building the companion application failed for (Feather M0, uart)." >&2
+        exit 1
+      fi
+      (mkdir -p "$APPDIR/dist/lora-feather-m0" && cp "$APPDIR/bin/lora-feather-m0"/*.bin "$APPDIR/dist/lora-feather-m0/")
+      if [[ "$?" != "0" ]]; then
+        echo "Creating distribution of companion application failed for (Feather M0, uart)." >&2
+        exit 1
+      fi
     fi
 
     # Build native-raspi (SPI mode)
-    PRECONF=native-raspi make -C "$APPDIR" clean all
-    if [[ "$?" != "0" ]]; then
-      echo "Building the companion application failed for (native-raspi, uart)." >&2
-      exit 1
-    fi
-    (mkdir -p "$APPDIR/dist/native-raspi" && cp "$APPDIR/bin/native-raspi"/*.elf "$APPDIR/dist/native-raspi/")
-    if [[ "$?" != "0" ]]; then
-      echo "Creating distribution of companion application failed for (native-raspi, uart)." >&2
-      exit 1
+    if $(containsElement "native-raspi" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+      PRECONF=native-raspi make -C "$APPDIR" clean all
+      if [[ "$?" != "0" ]]; then
+        echo "Building the companion application failed for (native-raspi, uart)." >&2
+        exit 1
+      fi
+      (mkdir -p "$APPDIR/dist/native-raspi" && cp "$APPDIR/bin/native-raspi"/*.elf "$APPDIR/dist/native-raspi/")
+      if [[ "$?" != "0" ]]; then
+        echo "Creating distribution of companion application failed for (native-raspi, uart)." >&2
+        exit 1
+      fi
     fi
 
     # Deploy
