@@ -1,0 +1,27 @@
+name: Test Installation and Firmware Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test-install-deploy-run:
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Installation
+        run: ./chirpotle.sh install
+      - name: Build all firmwares
+        run: ./chirpotle.sh deploy --conf default --build-all
+      - name: Try scripting mode
+        run: ./chirpotle.sh run --conf default .github/test-script.py
