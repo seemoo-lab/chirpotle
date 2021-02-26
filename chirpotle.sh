@@ -43,7 +43,7 @@ function chirpotle_check_req_gcc_arm_linux {
   if [[ -z "$(which arm-linux-gnueabihf-gcc)" ]]; then
     echo "No installation of GCC for arm-linux-gnueabihf was found." >&2
     echo "It is required to cross-compile the binaries for ARM-based platforms like the Raspberry Pi" >&2
-    echo "Quick fix (Debian): sudo apt install arm-linux-gnueabihf-gcc" >&2
+    echo "Quick fix (Debian): sudo apt install gcc-arm-linux-gnueabihf" >&2
     exit 1
   fi
   GCC_VER="$(arm-linux-gnueabihf-gcc -dumpversion)"
@@ -67,7 +67,7 @@ function chirpotle_check_req_gcc_arm_none {
   if [[ -z "$(which arm-none-eabi-gcc)" ]]; then
     echo "No installation of GCC for arm-none-eabi was found." >&2
     echo "It is required to prepare firmware images for ARM-based MCUs like Adafruit's Feather M0" >&2
-    echo "Quick fix (Debian): sudo apt install arm-none-eabi-gcc" >&2
+    echo "Quick fix (Debian): sudo apt install gcc-arm-none-eabi" >&2
     exit 1
   fi
 }
