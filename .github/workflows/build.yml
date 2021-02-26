@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add known dependencies
-        run: apt install arm-linux-gnueabihf-gcc arm-none-eabi-gcc
+        run: sudo apt install arm-linux-gnueabihf-gcc arm-none-eabi-gcc
       - name: Installation
         run: ./chirpotle.sh install
       - name: Build all firmwares
