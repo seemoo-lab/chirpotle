@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python -i
+#!/usr/bin/env python
 import sys
 import chirpotle
 from chirpotle.context import tpy_from_context

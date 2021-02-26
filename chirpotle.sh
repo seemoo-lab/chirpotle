@@ -519,7 +519,7 @@ function chirpotle_interactive {
   source "$ENVDIR/bin/activate"
 
   # Run the script
-  "$REPODIR/scripts/interactive-session.py"
+  python -i "$REPODIR/scripts/interactive-session.py"
 
 } # end of chirpotle_interactive
 
