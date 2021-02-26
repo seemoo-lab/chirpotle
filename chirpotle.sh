@@ -36,14 +36,34 @@ function chirpotle_check_requirements {
     echo "Quick fix (Debian): sudo apt install python3-venv" >&2
     exit 1
   fi
+}
 
-  # Check installed GCC platforms
+function chirpotle_check_req_gcc_arm_linux {
+  # Check GCC for ARM-based Linux platforms (e.g. Raspberry Pi)
   if [[ -z "$(which arm-linux-gnueabihf-gcc)" ]]; then
     echo "No installation of GCC for arm-linux-gnueabihf was found." >&2
     echo "It is required to cross-compile the binaries for ARM-based platforms like the Raspberry Pi" >&2
     echo "Quick fix (Debian): sudo apt install arm-linux-gnueabihf-gcc" >&2
     exit 1
   fi
+  GCC_VER="$(arm-linux-gnueabihf-gcc -dumpversion)"
+  MIN_VER="8.0.0"
+  COMPARE_RES="$($REPODIR/scripts/compare-version.py "$MIN_VER" "$GCC_VER")"
+  if [[ "$?" != "0" ]]; then
+    echo "Could not retrieve the version of your GCC for arm-linux-gnueabihf"
+    echo "  Used executable: $(which arm-linux-gnueabihf-gcc)"
+    exit 1
+  fi
+  if [[ "$COMPARE_RES" == ">" ]]; then
+    echo "Your installation of GCC for arm-linux-gnueabihf is too old"
+    echo "  Your version:    $GCC_VER ($(which arm-linux-gnueabihf-gcc))"
+    echo "  Minimum version: $MIN_VER"
+    exit 1
+  fi
+}
+
+function chirpotle_check_req_gcc_arm_none {
+  # Check GCC for ARM-based bare-metal platforms (e.g. Feather M0)
   if [[ -z "$(which arm-none-eabi-gcc)" ]]; then
     echo "No installation of GCC for arm-none-eabi was found." >&2
     echo "It is required to prepare firmware images for ARM-based MCUs like Adafruit's Feather M0" >&2
@@ -185,6 +205,29 @@ function chirpotle_deploy {
 
   # Full deploy or only re-flashing the firmware?
   if [[ "$FIRMWARE_ONLY" != "1" ]]; then
+
+    # Check dependencies for firmware build
+    # -------------------------------------
+    # Find used firmwares and platforms
+    USED_FIRMWARES="$($REPODIR/scripts/list-used-firmwares.py firmwares "$CONFDIR" "$CONFFILE")"
+    USED_PLATFORMS="$($REPODIR/scripts/list-used-firmwares.py platforms "$CONFDIR" "$CONFFILE")"
+
+    # Toolchain for ESP32
+    if $(containsElement "esp32" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+      export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
+      export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
+    fi
+
+    # Toolchain for bare-metal ARM
+    if $(containsElement "arm_none" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+      chirpotle_check_req_gcc_arm_none
+    fi
+
+    # Toolchain for Linux ARM
+    if $(containsElement "arm_linux" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+      chirpotle_check_req_gcc_arm_linux
+    fi
+
     # Build and Bundle the TPy Node
     # -----------------------------
     make -C "$REPODIR/submodules/tpy/node" sdist
@@ -195,12 +238,6 @@ function chirpotle_deploy {
 
     # Build the companion application for various toolchains
     # ------------------------------------------------------
-    # Find used firmwares
-    USED_FIRMWARES="$($REPODIR/scripts/list-used-firmware.py "$CONFDIR" "$CONFFILE")"
-
-    # Toolchain for ESP32
-    export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
-    export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
     APPDIR="$REPODIR/node/companion-app/riot-apps/chirpotle-companion"
     mkdir -p "$APPDIR/dist"
 
