@@ -20,20 +20,30 @@ function chirpotle_check_requirements {
   if [[ -z "$PYTHON" ]]; then
     echo "No Python 3 installation was found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH or make the PYTHON environment variable point to the executable." >&2
-    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv python3-setuptools" >&2
     exit 1
   fi
   if ! ($PYTHON -V 2>&1 | grep "Python 3" > /dev/null); then
     echo "No installation of Python 3 could be found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH." >&2
-    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv python3-setuptools" >&2
     exit 1
   fi
-  if ! ($PYTHON -c "import venv" &> /dev/null); then
-    echo "Missing Python 3 module \"venv\". Please install it and make it available to your python installation." >&2
+  check_req_python_module "$PYTHON" pip python3-pip
+  check_req_python_module "$PYTHON" setuptools python3-setuptools
+  check_req_python_module "$PYTHON" venv python3-venv
+}
+
+function check_req_python_module {
+  # Parameters: python_executable module_name
+  PYTHON="$1"
+  MODULENAME="$2"
+  DEBMODULE="$3"
+  if ! ($PYTHON -c "import $MODULENAME" &> /dev/null); then
+    echo "Missing Python 3 module \"$MODULENAME\". Please install it and make it available to your python installation." >&2
     echo "Currently using Python from: $PYTHON" >&2
     echo "Use a different python installation by pointing the PYTHON environment variable to the executable." >&2
-    echo "Quick fix (Debian): sudo apt install python3-venv" >&2
+    echo "Quick fix (Debian): sudo apt install $DEBMODULE" >&2
     exit 1
   fi
 }

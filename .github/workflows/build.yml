@@ -20,9 +20,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add known dependencies
+        # Only _explicit_ dependencies, which chirpotle.sh will show as "quick fixes" if you miss them,
+        # to make sure we're not missing dependencies.
         run: |
           sudo apt update
-          sudo apt install -y gcc-arm-linux-gnueabihf gcc-arm-none-eabi
+          sudo apt install -y python3 python3-pip python3-venv python3-setuptools gcc-arm-linux-gnueabihf gcc-arm-none-eabi
       - name: Installation
         run: ./chirpotle.sh install
       - name: Build all firmwares
