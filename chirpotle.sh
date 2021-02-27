@@ -20,17 +20,16 @@ function chirpotle_check_requirements {
   if [[ -z "$PYTHON" ]]; then
     echo "No Python 3 installation was found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH or make the PYTHON environment variable point to the executable." >&2
-    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv python3-setuptools" >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
     exit 1
   fi
   if ! ($PYTHON -V 2>&1 | grep "Python 3" > /dev/null); then
     echo "No installation of Python 3 could be found." >&2
     echo "Make sure to intall Python 3 and make it available on PATH." >&2
-    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv python3-setuptools" >&2
+    echo "Quick fix (Debian): sudo apt install python3 python3-pip python3-venv" >&2
     exit 1
   fi
   check_req_python_module "$PYTHON" pip python3-pip
-  check_req_python_module "$PYTHON" setuptools python3-setuptools
   check_req_python_module "$PYTHON" venv python3-venv
 }
 
@@ -467,6 +466,10 @@ function chirpotle_install {
 
   # Enter the virtual environment. From here on, we use python instead of the global $PYTHON
   source "$ENVDIR/bin/activate"
+
+  # Install additional packages required for this script to work
+  pip install setuptools packaging
+  if [[ $? != 0 ]]; then echo "Could not install Python modules required for managing the framework. Check the output above." >&2; exit 1; fi
 
   # Install TPy
   (cd "$REPODIR/submodules/tpy/controller" && python setup.py $INSTALLMODE)
