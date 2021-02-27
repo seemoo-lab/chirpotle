@@ -48,25 +48,45 @@ function check_req_python_module {
 }
 
 function chirpotle_check_req_gcc_arm_linux {
-  # Check GCC for ARM-based Linux platforms (e.g. Raspberry Pi)
-  if [[ -z "$(which arm-linux-gnueabihf-gcc)" ]]; then
-    echo "No installation of GCC for arm-linux-gnueabihf was found." >&2
-    echo "It is required to cross-compile the binaries for ARM-based platforms like the Raspberry Pi" >&2
-    echo "Quick fix (Debian): sudo apt install gcc-arm-linux-gnueabihf" >&2
-    exit 1
+  TOOLSDIR="$REPODIR/tools"
+  GCCDIR="$TOOLSDIR/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf"
+  if [[ ! -d "$GCCDIR" ]]; then
+    # GCC 8.3.0 is the current version on Raspberry Pi OS (buster) (2021-02-27)
+    ARM_LINUX_URL=https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-arm-linux-gnueabihf.tar.xz
+    ARM_LINUX_MD5=650dc30f7e937fa12e37ea70ff6e10dd
+    DLFILENAME="$TOOLSDIR/gcc-arm-linux-gnueabihf.tar.xz"
+    echo "Downloading gcc-arm-linux-gnueabihf from $ARM_LINUX_URL"
+    mkdir -p "$TOOLSDIR"
+    curl -L -o "$DLFILENAME" "$ARM_LINUX_URL"
+    if [[ $? != 0 ]] || [[ ! -f "$DLFILENAME" ]]; then
+      echo "Could not download gcc-arm-linux-gnueabihf from $ARM_LINUX_URL"
+      exit 1
+    fi
+    if ! (echo "$ARM_LINUX_MD5" "$DLFILENAME" | md5sum -c); then
+      echo "Checksum mismatch for gcc-arm-linux-gnueabihf from $ARM_LINUX_URL"
+      exit 1
+    fi
+    tar -C "$TOOLSDIR" -Jxf "$DLFILENAME"
+    if [[ $? != 0 ]] || [[ ! -d "$GCCDIR" ]]; then
+      echo "Could not extract gcc-arm-linux-gnueabihf from $ARM_LINUX_URL"
+      exit 1
+    fi
+    rm "$DLFILENAME"
   fi
+  export PATH="$GCCDIR/bin:$PATH"
   GCC_VER="$(arm-linux-gnueabihf-gcc -dumpversion)"
-  MIN_VER="7.0.0"
-  COMPARE_RES="$($REPODIR/scripts/compare-version.py "$MIN_VER" "$GCC_VER")"
+  EXPECTED_VER="8.3.0"
+  COMPARE_RES="$($REPODIR/scripts/compare-version.py "$GCC_VER" "$EXPECTED_VER")"
   if [[ "$?" != "0" ]]; then
-    echo "Could not retrieve the version of your GCC for arm-linux-gnueabihf"
+    echo "Could not retrieve the version of your GCC for arm-linux-gnueabihf-gcc"
     echo "  Used executable: $(which arm-linux-gnueabihf-gcc)"
     exit 1
   fi
-  if [[ "$COMPARE_RES" == ">" ]]; then
-    echo "Your installation of GCC for arm-linux-gnueabihf is too old"
-    echo "  Your version:    $GCC_VER ($(which arm-linux-gnueabihf-gcc))"
-    echo "  Minimum version: $MIN_VER"
+  if [[ "$COMPARE_RES" != "=" ]]; then
+    echo "Your installation of arm-linux-gnueabihf-gcc does not match the expected version."
+    echo "(it should be auto-installed in $GCCDIR)"
+    echo "  Your version:     $GCC_VER (used: $(which arm-linux-gnueabihf-gcc))"
+    echo "  Expected version: $EXPECTED_VER"
     exit 1
   fi
 }
