@@ -56,7 +56,7 @@ function chirpotle_check_req_gcc_arm_linux {
     exit 1
   fi
   GCC_VER="$(arm-linux-gnueabihf-gcc -dumpversion)"
-  MIN_VER="8.0.0"
+  MIN_VER="7.0.0"
   COMPARE_RES="$($REPODIR/scripts/compare-version.py "$MIN_VER" "$GCC_VER")"
   if [[ "$?" != "0" ]]; then
     echo "Could not retrieve the version of your GCC for arm-linux-gnueabihf"
