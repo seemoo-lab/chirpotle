@@ -72,11 +72,46 @@ function chirpotle_check_req_gcc_arm_linux {
 }
 
 function chirpotle_check_req_gcc_arm_none {
-  # Check GCC for ARM-based bare-metal platforms (e.g. Feather M0)
-  if [[ -z "$(which arm-none-eabi-gcc)" ]]; then
-    echo "No installation of GCC for arm-none-eabi was found." >&2
-    echo "It is required to prepare firmware images for ARM-based MCUs like Adafruit's Feather M0" >&2
-    echo "Quick fix (Debian): sudo apt install gcc-arm-none-eabi" >&2
+  TOOLSDIR="$REPODIR/tools"
+  GCCDIR="$TOOLSDIR/gcc-arm-none-eabi-9-2019-q4-major"
+  if [[ ! -d "$GCCDIR" ]]; then
+    # Download the matching ARM none GCC for the riot docker build file
+    # https://github.com/RIOT-OS/riotdocker/
+    ARM_NONE_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2
+    ARM_NONE_MD5=fe0029de4f4ec43cf7008944e34ff8cc
+    DLFILENAME="$TOOLSDIR/gcc-arm-none-eabi.tar.bz2"
+    echo "Downloading gcc-arm-none-eabi from $ARM_NONE_URL"
+    mkdir -p "$TOOLSDIR"
+    curl -L -o "$DLFILENAME" "$ARM_NONE_URL"
+    if [[ $? != 0 ]] || [[ ! -f "$DLFILENAME" ]]; then
+      echo "Could not download gcc-arm-none-eabi from $ARM_NONE_URL"
+      exit 1
+    fi
+    if ! (echo "$ARM_NONE_MD5" "$DLFILENAME" | md5sum -c); then
+      echo "Checksum mismatch for gcc-arm-none-eabi from $ARM_NONE_URL"
+      exit 1
+    fi
+    tar -C "$TOOLSDIR" -jxf "$DLFILENAME"
+    if [[ $? != 0 ]] || [[ ! -d "$GCCDIR" ]]; then
+      echo "Could not extract gcc-arm-none-eabi from $ARM_NONE_URL"
+      exit 1
+    fi
+    rm "$DLFILENAME"
+  fi
+  export PATH="$GCCDIR/bin:$PATH"
+  GCC_VER="$(arm-none-eabi-gcc -dumpversion)"
+  EXPECTED_VER="9.2.1"
+  COMPARE_RES="$($REPODIR/scripts/compare-version.py "$GCC_VER" "$EXPECTED_VER")"
+  if [[ "$?" != "0" ]]; then
+    echo "Could not retrieve the version of your GCC for arm-none-eabi-gcc"
+    echo "  Used executable: $(which arm-none-eabi-gcc)"
+    exit 1
+  fi
+  if [[ "$COMPARE_RES" != "=" ]]; then
+    echo "Your installation of arm-none-eabi-gcc does not match the expected version."
+    echo "(it should be auto-installed in $GCCDIR)"
+    echo "  Your version:     $GCC_VER (used: $(which arm-none-eabi-gcc))"
+    echo "  Expected version: $EXPECTED_VER"
     exit 1
   fi
 }
