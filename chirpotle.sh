@@ -292,22 +292,22 @@ function chirpotle_deploy {
     # Check dependencies for firmware build
     # -------------------------------------
     # Find used firmwares and platforms
-    USED_FIRMWARES="$($REPODIR/scripts/list-used-firmwares.py firmwares "$CONFDIR" "$CONFFILE")"
-    USED_PLATFORMS="$($REPODIR/scripts/list-used-firmwares.py platforms "$CONFDIR" "$CONFFILE")"
+    USED_FIRMWARES=" $($REPODIR/scripts/list-used-firmwares.py firmwares "$CONFDIR" "$CONFFILE") "
+    USED_PLATFORMS=" $($REPODIR/scripts/list-used-firmwares.py platforms "$CONFDIR" "$CONFFILE") "
 
     # Toolchain for ESP32
-    if $(containsElement "esp32" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_PLATFORMS" =~ " esp32 " ]] || [[ $BUILD_ALL == 1 ]]; then
       export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
       export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
     fi
 
     # Toolchain for bare-metal ARM
-    if $(containsElement "arm_none" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_PLATFORMS" =~ " arm_none " ]] || [[ $BUILD_ALL == 1 ]]; then
       chirpotle_check_req_gcc_arm_none
     fi
 
     # Toolchain for Linux ARM
-    if $(containsElement "arm_linux" "$USED_PLATFORMS") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_PLATFORMS" =~ " arm_linux " ]] || [[ $BUILD_ALL == 1 ]]; then
       chirpotle_check_req_gcc_arm_linux
     fi
 
@@ -325,7 +325,7 @@ function chirpotle_deploy {
     mkdir -p "$APPDIR/dist"
 
     # Build LoPy4 (UART mode)
-    if $(containsElement "lopy4-uart" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_FIRMWARES" =~ " lopy4-uart " ]] || [[ $BUILD_ALL == 1 ]]; then
       PRECONF=lopy4-uart make -C "$APPDIR" clean all preflash
       if [[ "$?" != "0" ]]; then
         echo "Building the companion application failed for (LoPy4, uart)." >&2
@@ -340,7 +340,7 @@ function chirpotle_deploy {
     fi
 
     # Build Feather M0 (UART mode)
-    if $(containsElement "lora-feather-m0" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_FIRMWARES" =~ " lora-feather-m0 " ]] || [[ $BUILD_ALL == 1 ]]; then
       PRECONF=lora-feather-m0 make -C "$APPDIR" clean all
       if [[ "$?" != "0" ]]; then
         echo "Building the companion application failed for (Feather M0, uart)." >&2
@@ -354,7 +354,7 @@ function chirpotle_deploy {
     fi
 
     # Build native-raspi (SPI mode)
-    if $(containsElement "native-raspi" "$USED_FIRMWARES") || [[ $BUILD_ALL == 1 ]]; then
+    if [[ "$USED_FIRMWARES" =~ " native-raspi " ]] || [[ $BUILD_ALL == 1 ]]; then
       PRECONF=native-raspi make -C "$APPDIR" clean all
       if [[ "$?" != "0" ]]; then
         echo "Building the companion application failed for (native-raspi, uart)." >&2
