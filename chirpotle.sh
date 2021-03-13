@@ -695,7 +695,7 @@ function chirpotle_notebook {
           shift
         ;;
         -h|--help)
-          echo "  Usage: chirpotle.sh [...] run [--conf <config name>] [--help] [--notebook <notebook dir>]"
+          echo "  Usage: chirpotle.sh [...] notebook [--conf <config name>] [--help] [--notebook <notebook dir>]"
           echo ""
           echo "  Open a Jupyter Notebook to use with ChirpOTLE."
           echo ""
@@ -706,7 +706,7 @@ function chirpotle_notebook {
           echo "    suffix. Use \"chirpotle.sh confeditor\" to edit configurations."
           echo "  -h, --help"
           echo "    Show this help and quit."
-          echo "  -n, --notebook"
+          echo "  -n, --notebook <notebook-dir>"
           echo "    Notebook folder. Will be created if it does not exist."
           exit 0
         ;;
