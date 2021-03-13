@@ -177,6 +177,25 @@ function chirpotle_check_hostconf {
   echo "$ABSPATH"
 }
 
+function chirpotle_confdump {
+  # Enter virtual environment
+  source "$ENVDIR/bin/activate"
+
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "  Usage: chirpotle.sh confdump [confname]"
+    echo ""
+    echo "  Dump all (or a specific configuration) to stdout."
+    echo ""
+    echo "  confname"
+    echo "    Optional: Configration to dump. If not present, all"
+    echo "    configurations will be shown."
+    exit 0
+  fi
+
+  # Launch editor
+  "$REPODIR/scripts/conf-dump.py" "$CONFDIR" "$1"
+} # end of chirpotle_confdump
+
 function chirpotle_confeditor {
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
@@ -869,6 +888,7 @@ function chirpotle_usage {
   echo "  Usage: chirpotle.sh [--confdir <dir>] [--envdir <dir>] <command> [--help]"
   echo ""
   echo "  Where <command> is one of:"
+  echo "    confdump     - Dump all (or one specific) configuration to stdout"
   echo "    confeditor   - Launch interactive configration editor"
   echo "    deploy       - Deploy ChirpOTLE to nodes"
   echo "    deploycheck  - Check requirements on ChirpOTLE nodes"
@@ -904,6 +924,10 @@ CHECKREQ=1 # Check requirements, can be disabled by --skipcheck
 while [[ $# -gt 0 ]] && [[ -z "$ACTION" ]]
 do
   case "$1" in
+    confdump)
+      shift
+      ACTION=chirpotle_confdump
+    ;;
     confeditor)
       shift
       ACTION=chirpotle_confeditor
