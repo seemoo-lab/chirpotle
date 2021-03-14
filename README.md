@@ -237,7 +237,7 @@ The output will also suggest quick fixes in case some of the requirements are no
 Currently supported hardware:
 
 * Raspberry Pi with [Dragino LoRa GPS HAT](https://wiki.dragino.com/index.php?title=Lora/GPS_HAT)
-* [Pycom LoPy 4](https://pycom.io/product/lopy4/) with external USB-to-Serial converter
+* [Pycom LoPy 4](https://pycom.io/product/lopy4/) with external USB-to-Serial converter ([Documentation](docs/board_lopy4.md))
 * [Adafruit Feather M0 LoRa](https://www.adafruit.com/product/3178)
 
 ## Development
