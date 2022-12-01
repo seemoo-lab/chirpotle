@@ -13,6 +13,7 @@ from .base import (\
 
 from .util import (\
   aes128_cmac,
+  hexToStr,
   extractBytes,
   replaceBytes
 )
