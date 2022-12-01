@@ -209,7 +209,8 @@ However, some preparations have to be made to bootstrap the management.
 
 ### Controller
 
-For the basic installation of the controller, you need to install Python 3 and the `venv` module.
+For the basic installation of the controller, Python >=3.9 is required, pip and the `venv` module must be present.
+Earlier versions might still work but are no longer supported.
 Everything else will be fetched by the installer and be placed in the virtual environment.
 
 If you do not want to use your system's default python (the installer will check first for `python3`, then for `python` on your path), you can specify the `PYTHON` environment variable during installation to point to a specific executable:
@@ -218,7 +219,7 @@ If you do not want to use your system's default python (the installer will check
 PYTHON=/opt/my-python/bin/python ./chirpotle.sh install
 ```
 
-The framework was tested on Debian Buster, but it should work on most other Linux distributions as well.
+The framework was tested on Debian Bullseye and we check basic functionality in GitHub Actions for Ubuntu 22.04 and 20.04, but it should work on most other Linux distributions as well.
 
 ### Nodes
 

@@ -545,6 +545,10 @@ function chirpotle_install {
   pip install setuptools packaging
   if [[ $? != 0 ]]; then echo "Could not install Python modules required for managing the framework. Check the output above." >&2; exit 1; fi
 
+  # Upgrade pip to the latest version
+  pip install --upgrade pip
+  if [[ $? != 0 ]]; then echo "Could not upgrade pip. Check the output above." >&2; exit 1; fi
+
   # Install TPy
   (cd "$REPODIR/submodules/tpy/controller" && python setup.py $INSTALLMODE)
   if [[ $? != 0 ]]; then echo "Installing TPy Controller failed. Check the output above." >&2; exit 1; fi
