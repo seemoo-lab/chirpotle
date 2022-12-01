@@ -13,6 +13,7 @@ setup(name='chirpotle',
         'crcmod==1.7',    # CRC calculation (e.g. beacons)
         'gpstime==0.3.3', # timestamps are GPS timestamps
         'colorama==0.4.4',# Colorful text output in scripts
+        'scipy==1.8.0',   # Calculations of sensitiviy etc.
       ],
       scripts=[
         'scripts/beaconclock',

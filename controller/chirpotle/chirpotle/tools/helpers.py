@@ -1,5 +1,8 @@
 import math
 import time
+
+from scipy.constants import Boltzmann
+
 from chirpotle.dissect.base import LoRaWANMessage
 from typing import List
 
@@ -117,6 +120,59 @@ def calc_lora_airtime(payload_length, spreadingfactor=7, bandwidth=125,
     ), 0)
   t_payload = symbol_time * payload_symb_nb
   return t_payload + t_preamble
+
+def calc_lora_bitrate(spreadingfactor=7, bandwidth=125, codingrate=5):
+    """
+    Calculates the effective LoRa bitrate (ignoring preamble, header and CRC)
+    for a given spreading factor, bandwidth and coding rate.
+
+    This value represents the maximum channel capacity if one would be able to
+    permanently stream data at the specific parameters.
+
+    The returned value is in bit/s.
+    """
+    symbol_time = calc_lora_symboltime(spreadingfactor, bandwidth)
+    bits_per_symbol = spreadingfactor
+    bit_per_sec = 1000 / symbol_time * bits_per_symbol
+    bit_per_sec_after_fec = bit_per_sec * (4/codingrate)
+    return bit_per_sec_after_fec
+
+def calc_lora_minsnr(spreadingfactor = 7):
+    """
+    Returns the minimum demodulator SNR for a specific spreading factor
+
+    Values from the SX1276 datasheet, section 4.1.1.2
+
+    Returns values in dBm
+    """
+    return {
+        6:   -5.0,
+        7:   -7.5,
+        8:  -10.0,
+        9:  -12.5,
+        10: -15.0,
+        11: -17.5,
+        12: -20.0,
+    }[spreadingfactor]
+
+def calc_lora_sensitivity(spreadingfactor = 7, bandwidth = 125,
+    rx_noise_figure = 6, temp_kelvin = 293):
+    """
+    Returns the receiver sensitivity in dBm
+
+    Calculation based on "AN1200.22: LoRa Modulation Basics", Chapter 4.2
+
+    :param spreadingfactor: The spreading factor used for transmission. Default: 7
+    :param bandwidth: The bandwidth (kHz) used for transmission. Default: 125
+    :param rx_noise_figure: Receiver architecture noise figure in dB, Default: 6 (for SX1272/76)
+    :param temp_kelvin: Temperature (Kelvin) of the receiver. Default: 293 (~20°C)
+    """
+    noise_floor = 10 * math.log10(
+        Boltzmann
+        * temp_kelvin
+        * (bandwidth * 1000)
+        * 1000)
+    return noise_floor + rx_noise_figure + calc_lora_minsnr(spreadingfactor)
 
 def seq_eq(seq1, seq2):
   it1=iter(seq1)
