@@ -240,6 +240,7 @@ Currently supported hardware:
 * Raspberry Pi with [Dragino LoRa GPS HAT](https://wiki.dragino.com/index.php?title=Lora/GPS_HAT)
 * [Pycom LoPy 4](https://pycom.io/product/lopy4/) with external USB-to-Serial converter ([Documentation](docs/board_lopy4.md))
 * [Adafruit Feather M0 LoRa](https://www.adafruit.com/product/3178)
+* [LILYGO T-Beam](https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series), v1.1
 
 ## Development
 

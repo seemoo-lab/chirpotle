@@ -339,6 +339,21 @@ function chirpotle_deploy {
       fi
     fi
 
+    # Build T-Beam (UART mode)
+    if [[ "$USED_FIRMWARES" =~ " t-beam-uart " ]] || [[ $BUILD_ALL == 1 ]]; then
+      PRECONF=t-beam-uart make -C "$APPDIR" clean all preflash
+      if [[ "$?" != "0" ]]; then
+        echo "Building the companion application failed for (T-Beam, uart)." >&2
+        exit 1
+      fi
+      (mkdir -p "$APPDIR/dist/t-beam-uart" && cp "$REPODIR/submodules/RIOT/cpu/esp32/bin/bootloader.bin" \
+        "$APPDIR/bin/esp32-wroom-32/partitions.csv" "$APPDIR/bin/esp32-wroom-32"/*.bin "$APPDIR/dist/t-beam-uart/")
+      if [[ "$?" != "0" ]]; then
+        echo "Creating distribution of companion application failed for (T-Beam, uart)." >&2
+        exit 1
+      fi
+    fi
+
     # Build Feather M0 (UART mode)
     if [[ "$USED_FIRMWARES" =~ " lora-feather-m0 " ]] || [[ $BUILD_ALL == 1 ]]; then
       PRECONF=lora-feather-m0 make -C "$APPDIR" clean all

@@ -366,8 +366,9 @@ flashing the firmware automatically. If you want to do that manually, select
 "None".
             ''')
         firmwares = {
-            "LoPy 4 via UART": "lopy4-uart",
-            "LoRa Feather M0": "lora-feather-m0",
+            "Pycom LoPy 4 via UART": "lopy4-uart",
+            "Adafruit LoRa Feather M0": "lora-feather-m0",
+            "LILYGO T-Beam v1.1 via UART": "t-beam-uart",
         }
         firmware = Bullet(
             prompt="Which firmware should be flashed to the MCU?",
