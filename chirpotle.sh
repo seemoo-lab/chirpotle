@@ -406,6 +406,97 @@ function chirpotle_deploy {
   echo "Nodes have been stopped during deployment. Remember calling \"chirpotle.sh restartnodes\" before using the framework."
 } # end of chirpotle_deploy
 
+
+function chirpotle_flash {
+  # Default parameters
+  FIRMWARE=""
+  PORT="/dev/ttyUSB0"
+
+  # Parameter parsing
+  while [[ $# -gt 0 ]]
+  do
+    KEY="$1"
+    case "$KEY" in
+        -p|--port)
+          PORT="$2"
+          shift
+          shift
+        ;;
+        -h|--help)
+          echo "  Usage: chirpotle.sh flash [--port <serial port>] <firmware>"
+          echo ""
+          echo "  Build the firmware and flash it to a locally connected board."
+          echo ""
+          echo "  firmware"
+          echo "    The name of the firmware variant."
+          echo "    Currently, the available options are:"
+          grep -E '^ifeq \(\$\(PRECONF\),([^\)]+)\)' "$REPODIR/node/companion-app/riot-apps/chirpotle-companion/Makefile.preconf" \
+            | sed -E 's/^ifeq \(\$\(PRECONF\),([^\)]+)\)$/     - \1/'
+          echo ""
+          echo "  -p, --port"
+          echo "    The port the board is connected to"
+          echo "    Default: /dev/ttyUSB0"
+          exit 0
+        ;;
+        *)
+          if [[ "$FIRMWARE" == "" ]]; then
+            FIRMWARE="$1"
+            shift
+          else
+            echo "Unexpected argument: $KEY" >&2
+            echo "Call chirpotle.sh flash --help for usage information." >&2
+            exit 1
+          fi
+        ;;
+    esac
+  done
+
+  # Enter virtual environment
+  source "$ENVDIR/bin/activate"
+
+  # Process localhost configuration
+  export CONFDIR="$CONFDIR"
+  export CONFFILE="$CONFFILE" # require original file for the lookup of node configuration files during deployment
+  TMPCONFFILE="$CONFFILE"
+  if [[ "$INCLUDE_LOCALHOST" == "0" ]]; then
+    TMPCONFFILE="/tmp/$CONFIGNAME-$$.tmp"
+    "$REPODIR/scripts/exclude-localhost.py" "$CONFFILE" > "$TMPCONFFILE"
+  fi
+
+  # Check dependencies for firmware build
+  # -------------------------------------
+  # Find used platform
+  PLATFORM=" $($REPODIR/scripts/list-used-firmwares.py platform-for "$FIRMWARE") "
+
+  # Toolchain for ESP32
+  if [[ "$PLATFORM" == " esp32 " ]]; then
+    export ESP32_SDK_DIR="$REPODIR/submodules/esp-idf"
+    export PATH="$REPODIR/submodules/xtensa-esp32-elf/bin:$PATH"
+  fi
+
+  # Toolchain for bare-metal ARM
+  if [[ "$USED_PLATFORMS" == " arm_none " ]]; then
+    chirpotle_check_req_gcc_arm_none
+  fi
+
+  # Toolchain for Linux ARM
+  if [[ "$USED_PLATFORMS" =~ " arm_linux " ]]; then
+    chirpotle_check_req_gcc_arm_linux
+  fi
+
+  # Build the companion application for various toolchains
+  # ------------------------------------------------------
+  APPDIR="$REPODIR/node/companion-app/riot-apps/chirpotle-companion"
+
+  # Build LoPy4 (UART mode)
+  PRECONF="$FIRMWARE" PORT="$PORT" make -C "$APPDIR" clean all flash
+  if [[ "$?" != "0" ]]; then
+    echo "Building the companion application failed for $FIRMWARE" >&2
+    exit 1
+  fi
+
+} # end of chirpotle_flash
+
 function chirpotle_deploycheck {
   # Default parameters
   CONFIGNAME="default"
@@ -911,6 +1002,7 @@ function chirpotle_usage {
   echo "    confeditor   - Launch interactive configration editor"
   echo "    deploy       - Deploy ChirpOTLE to nodes"
   echo "    deploycheck  - Check requirements on ChirpOTLE nodes"
+  echo "    flash        - Flash a preconfigured firmware to a locally connected board"
   echo "    help         - Show this information"
   echo "    install      - Install controller on this host in a virtual environment"
   echo "    interactive  - Run an interactive evaluation session"
@@ -958,6 +1050,10 @@ do
     deploycheck)
       shift
       ACTION=chirpotle_deploycheck
+    ;;
+    flash)
+      shift
+      ACTION=chirpotle_flash
     ;;
     install)
       shift
