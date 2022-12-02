@@ -50,6 +50,7 @@ else:
         "lora-feather-m0": "arm_none",
         "lopy4-uart": "esp32",
         "lopy4": "esp32",
+        "t-beam-uart": "esp32",
         "native-raspi": "arm_linux",
     }
     used_platforms = set()

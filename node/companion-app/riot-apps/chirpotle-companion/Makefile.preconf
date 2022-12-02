@@ -240,7 +240,38 @@ ifeq ($(PRECONF),lopy4-uart)
 endif
 
 # ------------------------------------------------------------------------------
-# esp32-generic: Generic ESP32 board manually wired to a transceiver
+# t-beam: TTGO/LILYGO T-Beam ESP32 board manually wired to a transceiver
+# ------------------------------------------------------------------------------
+# The TTGO/LILYGO T-Beam is an ESP32-based board with GPS and LoRa module on it.
+# The following configuration is based on the LILYGO variant, Rev 1.1:
+# - https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/assets/image/t-beam_v1.1_pinmap.jpg
+# - https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/schematic/LilyGo_TBeam_V1.1.pdf
+#
+# Sadly, DIO3 is not connected on these boards.
+ifeq ($(PRECONF),t-beam-uart)
+	# Use the generic wroom-32 board as basis
+	BOARD           = esp32-wroom-32
+
+	# For simplicity: Same SPI pins as for the ESP32
+	LORA_SPI_BUS    ?= "SPI_DEV(0)"
+	CFLAGS          += -DSPI0_SCK=GPIO5
+	CFLAGS          += -DSPI0_MISO=GPIO19
+	CFLAGS          += -DSPI0_MOSI=GPIO27
+	LORA_SPI_CS     ?= GPIO18
+	LORA_GPIO_RESET ?= GPIO23
+ 
+	LORA_GPIO_DIO0  ?= GPIO26
+
+	# Jam on button press
+	LORA_GPIO_JAMMER ?= GPIO38
+
+	# We use the TCP interface over WiFi
+	INTERFACE       ?= uart
+
+endif
+
+# ------------------------------------------------------------------------------
+# esp32-generic: Generic ESP32 board with LoRa and GPS, v1.1
 # ------------------------------------------------------------------------------
 # Setup is very similar to the LoPy, but you can use any ESP32 DevBoard and
 # connect a LoRa Transceiver to it, like the [Dragino LoRa Bee](https://wiki.dragino.com/index.php?title=Lora_BEE)
