@@ -89,6 +89,10 @@ LORA_GPIO_DIO3 ?= "GPIO_UNDEF"
 LORA_GPIO_SNIFFER ?= "GPIO_UNDEF"
 LORA_GPIO_JAMMER  ?= "GPIO_UNDEF"
 
+# This GPIO is used to trigger a synchronized transmission via an external line,
+# configured using the transmit_on_gpio_trigger()
+LORA_GPIO_TRIGGER_TX ?= "GPIO_UNDEF"
+
 # If the board supports GPIOs and/or GPIO interrupts, we want to have them.
 # Except for native, where IRQs aren't stable yet.
 ifneq ($(BOARD),native)
@@ -135,6 +139,7 @@ CFLAGS += -DLORA_GPIO_DIO4=$(LORA_GPIO_DIO4)
 CFLAGS += -DLORA_GPIO_DIO5=$(LORA_GPIO_DIO5)
 CFLAGS += -DLORA_GPIO_SNIFFER=$(LORA_GPIO_SNIFFER)
 CFLAGS += -DLORA_GPIO_JAMMER=$(LORA_GPIO_JAMMER)
+CFLAGS += -DLORA_GPIO_TRIGGER_TX=$(LORA_GPIO_TRIGGER_TX)
 CFLAGS += -DLORA_UART_DAEMON_DEVICE=$(LORA_UART_DAEMON_DEVICE)
 CFLAGS += -DLORA_UART_DAEMON_BAUDRATE=$(LORA_UART_DAEMON_BAUDRATE)
 CFLAGS += -DLORA_TCP_DAEMON_PORT=$(LORA_TCP_DAEMON_PORT)

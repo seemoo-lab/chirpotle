@@ -151,7 +151,11 @@ int lora_modem_enable_rc_jammer(lora_modem_t *modem, lora_jammer_trigger_t trigg
             DEBUG("lora_modem: Unknown trigger type ID: %d\n", trigger);
             return LORA_MODEM_ERROR_UNSUPPORTED_JAMMER_TRIGGER;
     }
-    modem->tx_prepared = false;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    if (modem->active_tasks.prepared_tx) {
+        lm_disable_gpio_tx(modem);
+    }
+#endif
     if (modem->jammer_trigger != LORA_JAMMER_TRIGGER_NONE) {
         lm_jammer_disable_trigger(modem);
     }
@@ -200,7 +204,12 @@ int lora_modem_enable_sniffer(lora_modem_t *modem, uint8_t *pattern, uint8_t *ma
             break;
     }
 
-    modem->tx_prepared = false;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    if (modem->active_tasks.prepared_tx) {
+        lm_disable_gpio_tx(modem);
+    }
+#endif
+
     if (modem->active_tasks.sniffer == true) {
         lm_stop_sniffer(modem);
     }
@@ -290,8 +299,14 @@ int lora_modem_init(lora_modem_t *modem)
     modem->jammer_prepared = false;
     modem->jammer_plength = 0x40;
     modem->jammer_active = false;
-    /* Prepares transmissions */
-    modem->tx_prepared = false;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    /* Triggered transmission = initially off */
+    modem->gpio_tx_len = 0;
+    modem->gpio_tx_prepared = false;
+    memset(modem->gpio_tx_payload, 0, LORA_PAYLOAD_MAX_LENGTH);
+    modem->gpio_tx_trigmsg.type = LORAMODEM_MTYPE_TRIGGER_MESSAGE;
+    memset(&(modem->gpio_tx_trigtimer), 0, sizeof(modem->gpio_tx_trigtimer));
+#endif
     /* Sniffer configuration */
     modem->sniffer_action = LORA_SNIFFER_ACTION_NONE;
     /* Set all active tasks to false */
@@ -404,7 +419,6 @@ int lora_modem_init(lora_modem_t *modem)
 
 int lora_modem_receive(lora_modem_t *modem)
 {
-    modem->tx_prepared = false;
     return lm_enable_receiver(modem, true);
 }
 
@@ -518,38 +532,25 @@ int lora_modem_get_txcrc(lora_modem_t *modem)
     return -1;
 }
 
-int lora_modem_prepare_tx(lora_modem_t *modem, lora_frame_t *frame)
+#ifdef MODULE_PERIPH_GPIO_IRQ
+void lora_modem_transmit_on_gpio(lora_modem_t *modem, lora_frame_t *frame, uint64_t delay)
 {
-    if (lora_modem_standby(modem) != 0) {
-        return -1;
-    }
-    if (SPI_ACQUIRE(modem) == SPI_OK) {
-        lm_write_reg(modem, REG127X_LORA_PAYLOADLENGTH, frame->length);
-        lm_write_reg(modem, REG127X_LORA_FIFOADDRPTR,
-            lm_read_reg(modem, REG127X_LORA_FIFOTXBASEADDR));
-        lm_write_reg_burst(modem, REG127X_FIFO, frame->payload, frame->length);
-        SPI_RELEASE(modem);
-        modem->tx_prepared = true;
-        return 0;
-    }
-    return -1;
-}
-
-int lora_modem_transmit_prepared(lora_modem_t *modem, bool await)
-{
-    if (modem->tx_prepared && SPI_ACQUIRE(modem) == SPI_OK) {
-        lm_set_opmode(modem, LORA_OPMODE_TX);
-        modem->tx_done_ack_pid = await ? thread_getpid() : KERNEL_PID_UNDEF;
-        lm_enable_irq(modem, LORA_IRQ_TXDONE, isr_reset_state_after_tx);
-        modem->tx_prepared = false;
-        SPI_RELEASE(modem);
-        if (await) {
-            thread_sleep();
+    if (frame->length > 0) {
+        if (modem->active_tasks.jammer) {
+            lm_jammer_disable_trigger(modem);
         }
-        return 0;
+        if (modem->active_tasks.sniffer) {
+            lm_stop_sniffer(modem);
+        }
+        memcpy(modem->gpio_tx_payload, frame->payload, frame->length);
+        modem->gpio_tx_len = frame->length;
+        modem->gpio_tx_delay = delay;
+        lm_prepare_transmission(modem, frame);
+    } else {
+        lm_disable_gpio_tx(modem);
     }
-    return -1;
 }
+#endif
 
 int lora_modem_set_opmode(lora_modem_t *modem, lora_opmode_t opmode)
 {
@@ -661,6 +662,12 @@ int lora_modem_set_explicitheader(lora_modem_t *modem, bool explicitheader)
 void lora_modem_set_jammer_plength(lora_modem_t *modem, uint8_t length)
 {
     modem->jammer_plength = length;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    // Need to disable prepared tx, as the payload register cannot be changed otherwise
+    if (modem->active_tasks.prepared_tx) {
+        lm_disable_gpio_tx(modem);
+    }
+#endif
     if (SPI_ACQUIRE(modem) == SPI_OK) {
         lm_write_reg(modem, REG127X_LORA_PAYLOADLENGTH, length);
         SPI_RELEASE(modem);
@@ -726,6 +733,11 @@ int lora_modem_standby(lora_modem_t *modem)
     if (active_tasks.jammer) {
         lm_jammer_disable_trigger(modem);
     }
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    if (active_tasks.prepared_tx) {
+        lm_disable_gpio_tx(modem);
+    }
+#endif
     if (SPI_ACQUIRE(modem)==SPI_OK) {
         /* Reset all IRQs */
         uint8_t flags = lm_write_reg(modem, REG127X_LORA_IRQFLAGSMASK, 0xff);
@@ -748,7 +760,9 @@ int lora_modem_transmit(lora_modem_t *modem, lora_frame_t *frame,
     /* If the scheduled time is in the past (or 0 = no time), send immediately */
     uint64_t now = xtimer_now_usec64();
     DEBUG("lora_modem: now=%llu sched=%llu -> ", now, time);
-    modem->tx_prepared = false;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    modem->gpio_tx_prepared = false;
+#endif
     if (time < now) {
         DEBUG("transmitting now\n");
         return lm_transmit_now(modem, frame, blocking);
@@ -801,6 +815,12 @@ static void *_modemthread(void *arg)
             DEBUG("%s: Got MTYPE_TRIGGER_JAMMER\n", thread_getname(thread_getpid()));
             lm_jammer_jam_frame(modem);
         }
+#ifdef MODULE_PERIPH_GPIO_IRQ
+        else if (msg.type == LORAMODEM_MTYPE_TRIGGER_MESSAGE) {
+            DEBUG("%s: Got LORAMODEM_MTYPE_TRIGGER_MESSAGE\n", thread_getname(thread_getpid()));
+            lm_transmit_prepared_frame(modem);
+        }
+#endif
         else if (msg.type == LORAMODEM_MTYPE_SIGNAL_SNIFFER) {
             DEBUG("%s: Got MTYPE_SIGNAL_SNIFFER\n", thread_getname(thread_getpid()));
             lm_start_sniffing(modem);

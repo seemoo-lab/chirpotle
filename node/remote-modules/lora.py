@@ -785,3 +785,33 @@ class LoRa(TPyModule):
     res = self._call_daemon({"transmit_frame": req})
     logger.info("Got response: %(message)s (code=%(code)d)", res['status'])
     return res['status']['code']
+
+  @Pyro4.expose
+  def transmit_on_gpio_trigger(self, payload, delay = 0):
+    """
+    Prepare the transmission of a frame so that it can be sent by an external,
+    GPIO-based trigger.
+
+    Putting the device in `standby()` will unarm the trigger.
+
+    Currently, the operating mode of the modem is not changes, so it is not set
+    to fstx.
+
+    :param payload: The payload to send
+    :param delay: The delay after the GPIO trigger in Microseconds
+    """
+    if not isinstance(payload, (list, tuple)):
+      raise TypeError("payload must be a sequence of bytes")
+    if len(payload)>255:
+      raise ValueError("payload must not exceed 255 bytes")
+    if not all(isinstance(b,int) and 0 <= b <= 255 for b in payload):
+      raise ValueError("Elements of payload must be within 0..255")
+    if not isinstance(delay, int) or delay < 0:
+      raise ValueError("delay must be either None or positiv int")
+    req = {
+      "payload": payload,
+      "delay": delay,
+    }
+    res = self._call_daemon({"transmit_on_gpio_trigger": req})
+    logger.info("Got response: %(message)s (code=%(code)d)", res['status'])
+    return res['status']['code']

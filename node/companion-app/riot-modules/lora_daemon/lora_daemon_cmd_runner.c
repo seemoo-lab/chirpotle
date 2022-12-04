@@ -83,6 +83,13 @@ static void _cmd_transmit_frame(
     lora_daemon_res_t *res
 );
 
+/** Handler function for the transmit_on_gpio_trigger command */
+static void _cmd_transmit_on_gpio_trigger(
+    lora_modem_t *modem,
+    lora_daemon_req_transmit_on_gpio_trigger_t *req,
+    lora_daemon_res_t *res
+);
+
 /** Writes an error response object to the response */
 static void _raise_error(const char* msg, lora_daemon_res_t *res);
 
@@ -152,6 +159,10 @@ void lora_daemon_run_cmd(lora_daemon_t *daemon, lora_daemon_req_t *req, lora_dae
         case LORA_DAEMON_REQ_TRANSMIT_FRAME:
             DEBUG("%s: Running command transmit_frame\n", daemon->name);
             _cmd_transmit_frame(modem, &(req->params.transmit_frame), res);
+            break;
+        case LORA_DAEMON_REQ_TRANSMIT_ON_GPIO_TRIGGER:
+            DEBUG("%s: Running command transmit_on_gpio_trigger\n", daemon->name);
+            _cmd_transmit_on_gpio_trigger(modem, &(req->params.transmit_on_gpio_trigger), res);
             break;
         default:
             DEBUG("%s: Unknown command, cannot run.\n", daemon->name);
@@ -506,6 +517,25 @@ static void _cmd_transmit_frame(
         default:
             _raise_error("Could not send frame", res);
     }
+}
+
+static void _cmd_transmit_on_gpio_trigger(
+    lora_modem_t *modem,
+    lora_daemon_req_transmit_on_gpio_trigger_t *req,
+    lora_daemon_res_t *res)
+{
+// In case the application is compiled without GPIO IRQ support,
+// we cannot trigger a transmission based on that, so we return
+// an error directly.
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    lora_frame_t frame;
+    frame.length = req->length;
+    frame.payload = req->payload;
+    lora_modem_transmit_on_gpio(modem, &frame, req->delay);
+    _return_status("Triggered transmission configured", 0, res);
+#else
+    _raise_error("GPIO IRQ support unavailable", res);
+#endif
 }
 
 static void _raise_error(const char* msg, lora_daemon_res_t *res)

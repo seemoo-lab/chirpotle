@@ -62,8 +62,59 @@ void lm_restore_after_transmit(lora_modem_t *modem)
         lm_jammer_enable_trigger(modem, modem->jammer_trigger);
         DEBUG("%s: Restored jammer\n", thread_getname(thread_getpid()));
     }
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    if (modem->active_tasks.prepared_tx) {
+        lora_frame_t frame;
+        frame.length = modem->gpio_tx_len;
+        frame.payload = modem->gpio_tx_payload;
+        lm_prepare_transmission(modem, &frame);
+    }
+#endif
     DEBUG("%s: Restoring done\n", thread_getname(thread_getpid()));
 }
+
+#ifdef MODULE_PERIPH_GPIO_IRQ
+void lm_disable_gpio_tx(lora_modem_t *modem)
+{
+    modem->gpio_tx_len = 0;
+    modem->gpio_tx_prepared = false;
+    modem->active_tasks.prepared_tx = false;
+}
+
+void lm_prepare_transmission(lora_modem_t *modem, lora_frame_t *frame)
+{
+    if (SPI_ACQUIRE(modem) == SPI_OK) {
+        lm_write_reg(modem, REG127X_LORA_PAYLOADLENGTH, frame->length);
+        lm_write_reg(modem, REG127X_LORA_FIFOADDRPTR,
+            lm_read_reg(modem, REG127X_LORA_FIFOTXBASEADDR));
+        lm_write_reg_burst(modem, REG127X_FIFO, frame->payload, frame->length);
+        SPI_RELEASE(modem);
+        modem->gpio_tx_prepared = true;
+        modem->active_tasks.prepared_tx = true;
+    }
+}
+
+void lm_transmit_prepared_frame(lora_modem_t *modem)
+{
+    if (modem->gpio_tx_prepared) {
+        if (SPI_ACQUIRE(modem) == SPI_OK) {
+            
+            // Interrupt to enable the tx done interrupt that restores the state.
+            // No need to clear rx done, as its mutual exclusive to tx done
+            // The interrupt will take care of re-preparation
+            lm_enable_irq(modem, LORA_IRQ_TXDONE, isr_reset_state_after_tx);
+            lm_disable_irq(modem, LORA_IRQ_VALID_HEADER);
+
+            lm_set_opmode(modem, LORA_OPMODE_TX);
+            modem->gpio_tx_prepared = false;
+
+            SPI_RELEASE(modem);
+        }
+    } else {
+        DEBUG("%s: Could not transmit prepared frame, modem not prepared\n", thread_getname(thread_getpid()));
+    }
+}
+#endif
 
 int lm_transmit_now(lora_modem_t *modem, lora_frame_t *frame, bool blocking)
 {
@@ -107,8 +158,6 @@ int lm_transmit_now(lora_modem_t *modem, lora_frame_t *frame, bool blocking)
             xtimer_set_wakeup(&(modem->tx_done_timer), 5000000, thread_getpid());
             thread_sleep();
         }
-
-        printf(":: TX %d byte\n", frame->length);
 
         return 0;
     }

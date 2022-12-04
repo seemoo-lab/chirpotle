@@ -81,6 +81,9 @@ typedef enum {
 
     /** Command to transmit a frame */
     LORA_DAEMON_REQ_TRANSMIT_FRAME,
+
+    /** Command to prepare a GPIO-triggered transmission */
+    LORA_DAEMON_REQ_TRANSMIT_ON_GPIO_TRIGGER,
 } lora_daemon_reqtype_t;
 
 /** Type of the response object */
@@ -240,7 +243,7 @@ typedef struct lora_daemon_req_standby {
     uint8_t filler;
 } lora_daemon_req_standby_t;
 
-/** Request getting the current channel config */
+/** Request to transmit a frame */
 typedef struct lora_daemon_req_transmit_frame {
     /** The payload to transmit */
     uint8_t payload[LORA_PAYLOAD_MAX_LENGTH];
@@ -253,6 +256,16 @@ typedef struct lora_daemon_req_transmit_frame {
     /** True if the call should wait for txdone */
     bool blocking;
 } lora_daemon_req_transmit_frame_t;
+
+/** Request to transmit based on a GPIO Trigger */
+typedef struct lora_daemon_req_transmit_on_gpio_trigger {
+    /** The payload to transmit */
+    uint8_t payload[LORA_PAYLOAD_MAX_LENGTH];
+    /** Size of the payload */
+    size_t length;
+    /** The time to wait after getting the trigger before transmitting */
+    uint64_t delay;
+} lora_daemon_req_transmit_on_gpio_trigger_t;
 
 /** Generic error object if the request failedc */
 typedef struct lora_daemon_res_error {
@@ -334,6 +347,7 @@ typedef struct lora_daemon_req {
         lora_daemon_req_set_txcrc_t set_txcrc;
         lora_daemon_req_standby_t standby;
         lora_daemon_req_transmit_frame_t transmit_frame;
+        lora_daemon_req_transmit_on_gpio_trigger_t transmit_on_gpio_trigger;
     } params;
 
 } lora_daemon_req_t;

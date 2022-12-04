@@ -102,6 +102,9 @@ void lm_jammer_jam_frame(lora_modem_t *modem)
 void lm_jammer_prepare_jamming(lora_modem_t *modem)
 {
     if (modem->active_tasks.jammer == true &&
+#ifdef MODULE_PERIPH_GPIO_IRQ
+        modem->active_tasks.prepared_tx == false &&
+#endif
         modem->active_tasks.rx == false &&
         modem->active_tasks.sniffer == false &&
         modem->active_tasks.tx == false) {

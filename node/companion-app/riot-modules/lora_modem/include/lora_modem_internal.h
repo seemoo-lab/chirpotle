@@ -48,6 +48,10 @@ enum {
      * Restore the modem state after a transmission
      */
     LORAMODEM_MTYPE_TX_RESTORE,
+    /**
+     * Transmit a prepared message based on a GPIO trigger
+     */
+    LORAMODEM_MTYPE_TRIGGER_MESSAGE,
 };
 
 /**

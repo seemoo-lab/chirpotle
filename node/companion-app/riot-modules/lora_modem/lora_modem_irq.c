@@ -84,6 +84,8 @@ static void _isr_dio_all(void *arg);
 #ifdef MODULE_PERIPH_GPIO_IRQ
 /* Interrupt routine that triggers the jammer by external input */
 static void _isr_trigger_jammer(void *arg);
+/* Interrupt routine that is used to schedule frame transmission */
+static void _isr_trigger_transmission(void *arg);
 #endif
 
 /**
@@ -302,6 +304,17 @@ void lm_init_gpios(lora_modem_t *modem)
     }
     else {
         DEBUG("lora_modem: Jammer GPIO trigger unavailable: no line configured\n");
+    }
+    if (modem->gpio_trigger_tx != GPIO_UNDEF) {
+        if(gpio_init_int(modem->gpio_trigger_tx, GPIO_IN, GPIO_RISING,
+            _isr_trigger_transmission, modem) != 0) {
+            DEBUG("lora_modem: Cloud not setup IRQ on external transmission trigger\n");
+            modem->gpio_trigger_tx = GPIO_UNDEF;
+        } else {
+            DEBUG("lora_modem: Configured external transmission trigger\n");
+        }
+    } else {
+        DEBUG("lora_modem: External transmission trigger unavailable, no line configured\n");
     }
 #else
     /* Without GPIO_IRQ by hardware no external trigger */
@@ -685,6 +698,20 @@ static void _isr_trigger_jammer(void *arg)
         }
     }
     DEBUG("%s: isr_trigger_jammer leave\n", thread_getname(thread_getpid()));
+}
+
+static void _isr_trigger_transmission(void *arg)
+{
+    lora_modem_t *modem = arg;
+    if (modem->active_tasks.prepared_tx) {
+        // If a frame is configured, schedule the message.
+        // We check for preparation when the message is received.
+        xtimer_set_msg64(
+            &(modem->gpio_tx_trigtimer),
+            modem->gpio_tx_delay,
+            &(modem->gpio_tx_trigmsg),
+            modem->modem_thread_pid);
+    }
 }
 #endif
 
