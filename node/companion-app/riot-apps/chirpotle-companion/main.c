@@ -66,6 +66,9 @@ const char if_name[] = "STDIO";
 #ifndef LORA_GPIO_JAMMER
 #define LORA_GPIO_JAMMER GPIO_UNDEF
 #endif
+#ifndef LORA_GPIO_TRIGGER_TX
+#define LORA_GPIO_TRIGGER_TX GPIO_UNDEF
+#endif
 #endif
 
 /** Structure for the modem */
@@ -111,6 +114,9 @@ int main(void)
     modem.gpio_dio3  = LORA_GPIO_DIO3;
     modem.gpio_sniffer = LORA_GPIO_SNIFFER;
     modem.gpio_jammer = LORA_GPIO_JAMMER;
+#endif
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    modem.gpio_trigger_tx = LORA_GPIO_TRIGGER_TX;
 #endif
     printf("Initializing modem... ");
     int modem_init_res = lora_modem_init(&modem);

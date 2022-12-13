@@ -240,6 +240,9 @@ typedef struct lora_tx_queue_entry {
 typedef struct lora_modem_active_tasks {
     volatile bool rx;
     volatile bool tx;
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    volatile bool prepared_tx;
+#endif
     volatile bool sniffer;
     volatile bool jammer;
 } lora_modem_active_tasks_t;
@@ -280,6 +283,26 @@ typedef struct lora_modem {
     gpio_t gpio_sniffer;
     /** GPIO input used to trigger the jammer */
     gpio_t gpio_jammer;
+#endif
+
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    /** GPIO input used to trigger transmission */
+    gpio_t gpio_trigger_tx;
+    /**
+     * Length of the payload configured for GPIO-triggered transmission.
+     * (0 = no transmission should happen)
+     */
+    volatile uint8_t gpio_tx_len;
+    /** Payload of the GPIO-triggered transmission*/
+    uint8_t gpio_tx_payload[LORA_PAYLOAD_MAX_LENGTH];
+    /** Delay after which the payload should be sent */
+    uint64_t gpio_tx_delay;
+    /** Is the transmission prepared? */
+    bool gpio_tx_prepared;
+    /** Message that is used to trigger the transmission */
+    msg_t gpio_tx_trigmsg;
+    /** Timer for the delay */
+    xtimer_t gpio_tx_trigtimer;
 #endif
 
     /** Value of the DIO_MAPPING1 register (used to determine which interrupt has fired) */
@@ -375,9 +398,6 @@ typedef struct lora_modem {
     /** True while the jammer is active to debounce the trigger */
     volatile bool jammer_active;
 
-    /** True, if a tx is prepared in the modem's FIFO */
-    bool tx_prepared;
-
 #ifdef MODULE_LORA_MODEM_JAMMER_UDP
     /** IPv6 to send the triggers to (from the sniffer) */
     uint8_t sniffer_addr[16];
@@ -427,6 +447,9 @@ int lora_modem_configure_gain(lora_modem_t *modem,
 /**
  * Enables the externally triggered jammer and configures the trigger type.
  *
+ * If the node was configured to transmit a frame on GPIO input, this will be disabled
+ * in favor of the jammer.
+ * 
  * @param[in]    modem          Modem descriptor
  * @param[in]    trigger        Trigger type
  * @return       0              Success
@@ -437,6 +460,9 @@ int lora_modem_enable_rc_jammer(lora_modem_t *modem, lora_jammer_trigger_t trigg
 /**
  * Enables the sniffer and configures optional actions when a frame arrives.
  *
+ * If the node was configured to transmit a frame on GPIO input, this will be disabled
+ * in favor of the sniffing mode.
+ * 
  * @param[in]    modem          Modem descriptor
  * @param[in]    pattern        The pattern that must match in the frame
  * @param[in]    mask           The mask that is applied to the pattern (only high bits will be compared)
@@ -520,19 +546,6 @@ int lora_modem_get_syncword(lora_modem_t *modem);
 
 int lora_modem_get_txcrc(lora_modem_t *modem);
 
-/**
- * Prepares the transmission of a message so that it can be sent immediately
- * without any further preparation time.
- *
- * Cancels any other task on the modem, like calling lora_modem_standby().
- *
- * @param[in] modem Modem descriptor
- * @param[in] frame Payload
- * @return 0 success
- * @return !=0 failure
- */
-int lora_modem_prepare_tx(lora_modem_t *modem, lora_frame_t *frame);
-
 int lora_modem_receive(lora_modem_t *modem);
 
 int lora_modem_set_bandwidth(lora_modem_t *modem, lora_bandwidth_t bw);
@@ -567,6 +580,15 @@ int lora_modem_set_invertiqrx(lora_modem_t *modem, bool invertiq);
  */
 int lora_modem_set_invertiqtx(lora_modem_t *modem, bool invertiq);
 
+/**
+ * Configures the payload length for jamming payload.
+ * 
+ * Prepared frame transmission via lora_modem_transmit_on_gpio will be disabled
+ * when this function is called, as it interacts directly with the payload length
+ * register, which needs to be locked for preparing transmissions
+ * 
+ * @param[in] length The length of the payload
+ */
 void lora_modem_set_jammer_plength(lora_modem_t *modem, uint8_t length);
 
 int lora_modem_set_modulation(lora_modem_t *modem, lora_modulation_t mod);
@@ -595,17 +617,21 @@ int lora_modem_standby(lora_modem_t *modem);
 int lora_modem_transmit(lora_modem_t *modem, lora_frame_t *frame,
     uint64_t time, bool blocking);
 
+#ifdef MODULE_PERIPH_GPIO_IRQ
 /**
- * Transmits a previously prepared frame
- *
- * The modem must not be used for other actions between the calls to
- * lora_modem_prepare_tx and lora_modem_transmit_prepared.
+ * Configure a frame to be sent when the trigger GPIO is pulled high
+ * 
+ * The prepared frame will be sent on GPIO high until either the modem is set to standby
+ * or the function is called again with an empty payload.
+ * 
+ * If a jammer or sniffer is configured, it will be disabled.
  *
  * @param[in] modem The modem descriptor
- * @param[in] await The function will sleep until txdone
- * @return 0 on success
+ * @param[in] frame The frame to transmit on trigger
+ * @param[in] delay Optional delay between receiving trigger and transmitting
  */
-int lora_modem_transmit_prepared(lora_modem_t *modem, bool await);
+void lora_modem_transmit_on_gpio(lora_modem_t *modem, lora_frame_t *frame, uint64_t delay);
+#endif
 
 /** Dumps the content of the FIFO to stdout */
 void lora_modem_dump_fifo(lora_modem_t *modem);

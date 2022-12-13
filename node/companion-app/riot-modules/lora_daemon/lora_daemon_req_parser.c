@@ -75,6 +75,13 @@ void _set_param_transmit_frame(
     const ubjson_type_t type,
     const ssize_t content);
 
+void _set_param_transmit_on_gpio_trigger(
+    ubjson_cookie_t *__restrict cookie,
+    lora_daemon_req_transmit_on_gpio_trigger_t *req,
+    const char * param_name,
+    const ubjson_type_t type,
+    const ssize_t content);
+
 /**
  * Tries to read the command name from the parameter and to set the type in req
  * accordingly. Returns 0 if a valid command name was used
@@ -250,6 +257,9 @@ void _set_parameter(
             break;
         case LORA_DAEMON_REQ_TRANSMIT_FRAME:
             _set_param_transmit_frame(cookie, &(req->params.transmit_frame), param_name, type, content);
+            break;
+        case LORA_DAEMON_REQ_TRANSMIT_ON_GPIO_TRIGGER:
+            _set_param_transmit_on_gpio_trigger(cookie, &(req->params.transmit_on_gpio_trigger), param_name, type, content);
             break;
         case LORA_DAEMON_REQ_FETCH_FRAME:
         case LORA_DAEMON_REQ_GET_LORA_CHANNEL:
@@ -534,6 +544,37 @@ void _set_param_transmit_frame(
     }
 }
 
+void _set_param_transmit_on_gpio_trigger(
+    ubjson_cookie_t *__restrict cookie,
+    lora_daemon_req_transmit_on_gpio_trigger_t *req,
+    const char * param_name,
+    const ubjson_type_t type,
+    const ssize_t content)
+{
+    if(strcmp("payload", param_name) == 0 && type == UBJSON_ENTER_ARRAY) {
+        req->length = 0;
+        _ubjson_parse_array(cookie, req->payload, &(req->length), LORA_PAYLOAD_MAX_LENGTH);
+    }
+    else if(strcmp("delay", param_name) == 0) {
+        if (type == UBJSON_TYPE_INT32) {
+            int32_t val = 0;
+            ubjson_get_i32(cookie, content, &val);
+            req->delay = (uint64_t)val;
+        }
+        else if (type == UBJSON_TYPE_INT64) {
+            int64_t val = 0;
+            ubjson_get_i64(cookie, content, &val);
+            req->delay = (uint64_t)val;
+        }
+        else {
+            _ubjson_skip_entity(cookie, type, content);
+        }
+    }
+    else {
+        _ubjson_skip_entity(cookie, type, content);
+    }
+}
+
 int _set_reqtype(lora_daemon_req_t *req, char *command_name)
 {
     if (strcmp("configure_gain", command_name) == 0) {
@@ -592,6 +633,11 @@ int _set_reqtype(lora_daemon_req_t *req, char *command_name)
         req->type = LORA_DAEMON_REQ_TRANSMIT_FRAME;
         req->params.transmit_frame.length = 0;
         req->params.transmit_frame.time_set = false;
+    }
+    else if (strcmp("transmit_on_gpio_trigger", command_name) == 0) {
+        req->type = LORA_DAEMON_REQ_TRANSMIT_ON_GPIO_TRIGGER;
+        req->params.transmit_on_gpio_trigger.length = 0;
+        req->params.transmit_on_gpio_trigger.delay = 0;
     }
     else {
         return 1;

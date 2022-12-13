@@ -232,6 +232,7 @@ ifeq ($(PRECONF),lopy4-uart)
 	LORA_GPIO_DIO3  ?= GPIO23
 
 	LORA_GPIO_SNIFFER ?= GPIO4
+	LORA_GPIO_TRIGGER_TX ?= GPIO15
 
 	# We use the TCP interface over WiFi
 	INTERFACE       ?= uart
@@ -263,7 +264,8 @@ ifeq ($(PRECONF),t-beam-uart)
 	LORA_GPIO_DIO0  ?= GPIO26
 
 	# Jam on button press
-	LORA_GPIO_JAMMER ?= GPIO38
+	LORA_GPIO_JAMMER ?= GPIO_UNDEF
+	LORA_GPIO_TRIGGER_TX ?= GPIO38
 
 	# We use the TCP interface over WiFi
 	INTERFACE       ?= uart

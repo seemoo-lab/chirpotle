@@ -25,6 +25,31 @@ int lm_stop_transmission(lora_modem_t *modem);
  */
 void lm_restore_after_transmit(lora_modem_t *modem);
 
+#ifdef MODULE_PERIPH_GPIO_IRQ
+/**
+ * Disable GPIO-trigger based transmission
+ */
+void lm_disable_gpio_tx(lora_modem_t *modem);
+
+/**
+ * Prepare the transmission of a frame, so that it can be immediately sent when
+ * a LORAMODEM_MTYPE_TRIGGER_MESSAGE is received by the main thread
+ * 
+ * @param[in] modem Modem descriptor
+ * @param[in] frame The frame to load in the modem
+ */
+void lm_prepare_transmission(lora_modem_t *modem, lora_frame_t *frame);
+
+/**
+ * Transmit the frame that has been prepared using lm_prepare_transmission.
+ * 
+ * The frame will be prepared again after transmitting it.
+ * 
+ * @param[in] modem Modem descriptor
+ */
+void lm_transmit_prepared_frame(lora_modem_t *modem);
+#endif
+
 /**
  * Transmits a frame immediately.
  *

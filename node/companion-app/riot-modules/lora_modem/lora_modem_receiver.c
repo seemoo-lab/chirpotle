@@ -1,6 +1,7 @@
 #include "lora_modem_receiver.h"
 #include "lora_modem_internal.h"
 #include "lora_modem_irq.h"
+#include "lora_modem_transmitter.h"
 #include "lora_registers_common.h"
 
 #include <string.h>
@@ -158,4 +159,13 @@ void lm_frame_to_buffer(lora_modem_t *modem)
         SPI_RELEASE(modem);
         DEBUG("%s: Released ringbuffer and SPI\n", thread_getname(thread_getpid()));
     }
+#ifdef MODULE_PERIPH_GPIO_IRQ
+    /* If in tx-prepare mode, restore it */
+    if (modem->active_tasks.prepared_tx) {
+        lora_frame_t frame;
+        frame.payload = modem->gpio_tx_payload;
+        frame.length = modem->gpio_tx_len;
+        lm_prepare_transmission(modem, &frame);
+    }
+#endif
 }
