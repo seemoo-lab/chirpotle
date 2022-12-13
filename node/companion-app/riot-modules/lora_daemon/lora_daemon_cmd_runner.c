@@ -534,6 +534,8 @@ static void _cmd_transmit_on_gpio_trigger(
     lora_modem_transmit_on_gpio(modem, &frame, req->delay);
     _return_status("Triggered transmission configured", 0, res);
 #else
+    (void)modem;
+    (void)req;
     _raise_error("GPIO IRQ support unavailable", res);
 #endif
 }
