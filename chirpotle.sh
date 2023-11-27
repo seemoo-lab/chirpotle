@@ -439,6 +439,7 @@ function chirpotle_flash {
           exit 0
         ;;
         *)
+          # This is only called if manadatory argument exists. We need to check if firmware value is set after argument parsing.
           if [[ "$FIRMWARE" == "" ]]; then
             FIRMWARE="$1"
             shift
@@ -450,6 +451,11 @@ function chirpotle_flash {
         ;;
     esac
   done
+	
+  if [[ "$FIRMWARE" == "" ]]; then
+    echo "No firmware specified. Abort flash." >&2
+    echo "Call chirpotle.sh flash --help for usage information." >&2
+  fi
 
   # Enter virtual environment
   source "$ENVDIR/bin/activate"
