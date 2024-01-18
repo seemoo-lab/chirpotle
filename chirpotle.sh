@@ -916,6 +916,10 @@ function chirpotle_run {
     esac
   done
   # ... all other arguments (if any) are passed to the script as positional args
+  if [[ ! -e "$SCRIPTNAME" ]]; then
+    echo "Abort: Script '$SCRIPTNAME' could not be found."
+    exit 1
+  fi
   while [[ $# -gt 0 ]]; do
     POSITIONAL+=("$1")
     shift
